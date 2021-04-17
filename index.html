@@ -1,0 +1,383 @@
+<html>
+<head>
+  <title>FreeMazes3D</title>
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      cursor: none;
+    }
+    canvas {
+      outline: none;
+      width: 100%;
+      height: 100%;
+    }
+    #fps {
+      position: absolute;
+      background-color: black;
+      border: 2px solid white;
+      text-align: center;
+      font-size: 16px;
+      color: white;
+      top: 15px;
+      right: -10000;
+      width: 60px;
+      height: 20px;
+    }
+    #warning {
+      position: absolute;
+      line-height: 200px;
+      text-align: center;
+      top: 50%;
+      background-color: #808080;
+      color: #FFFFFF;
+      width: 1200px;
+      height: 200px;
+      left: -10000;
+      font-size: 50;
+      border-bottom: black 2px solid;
+      border-top: black 2px solid;
+      border-right: black 2px solid;
+      border-bottom-right-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+    #warn {
+      position: absolute;
+      top: 50%;
+      background-color: #663300;
+      padding: 15px;
+      color: #FFFFFF;
+      width: 600px;
+      height: 200px;
+      left: -10000;
+      font-size: 24;
+      border: black 2px solid;
+      border-radius: 15px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    #inventory {
+      position: absolute;
+      line-height: 40px;
+      text-align: center;
+      background-color: #808080;
+      color: #FFFFFF;
+      width: 200px;
+      height: 200px;
+      left: 0px;
+      bottom: 0px;
+      font-size: 20;
+      border-top: black 2px solid;
+      border-right: black 2px solid;
+      border-top-right-radius: 15px;
+    }
+    .version {
+      position: absolute;
+      color: #FFFFFF;
+      left: 5px;
+      bottom: 5px;
+      font-size: 12;
+    }
+    #menu_button {
+      position: absolute;
+      line-height: 40px;
+      text-align: center;
+      background-color: #FF0000;
+      color: #FFFFFF;
+      width: 100px;
+      height: 40px;
+      left: 0px;
+      font-size: 20;
+      border-bottom: black 2px solid;
+      border-right: black 2px solid;
+    }
+    #score {
+      position: absolute;
+      line-height: 40px;
+      text-align: center;
+      background-color: #808080;
+      color: #FFFFFF;
+      width: 200px;
+      height: 40px;
+      left: 100px;
+      font-size: 20;
+      border-bottom: black 2px solid;
+      border-right: black 2px solid;
+      border-bottom-right-radius: 15px;
+    }
+    #loading {
+      position: absolute;
+      background-color: #000000;
+      color: #FFFFFF;
+      width: 100%;
+      height: 100%;
+      left: 0px;
+      font-size: 30;
+    }
+    #loading_text {
+      position: absolute;
+      width: 100%;
+      height: 20%;
+      top: 25%;
+      font-size: 80;
+      text-align: center;
+    }
+    #menu {
+      position: absolute;
+      text-align: center;
+      background-color: #808080;
+      color: #FFFFFF;
+      width: 100%;
+      height: 100%;
+      left: -10000px;
+      font-size: 20;
+    }
+    #difficulty {
+      position: absolute;
+      text-align: center;
+      background-color: #808080;
+      color: #FFFFFF;
+      width: 100%;
+      height: 100%;
+      left: -10000px;
+      font-size: 20;
+    }
+    #key_controls {
+      position: absolute;
+      text-align: center;
+      background-color: #808080;
+      color: #FFFFFF;
+      width: 100%;
+      height: 100%;
+      left: -10000px;
+      font-size: 20;
+    }
+    #scores {
+      position: absolute;
+      text-align: center;
+      background-color: #808080;
+      color: #FFFFFF;
+      width: 100%;
+      height: 100%;
+      left: -10000px;
+      font-size: 20;
+    }
+    #credits_list {
+      position: absolute;
+      text-align: center;
+      background-color: #808080;
+      color: #FFFFFF;
+      width: 100%;
+      height: 100%;
+      left: -10000px;
+      font-size: 20;
+    }
+    #the_list {
+      position: relative;
+      text-align: left;
+      left: 35%;
+    }
+    .game_title {
+      color: #0000FF;
+      font-size: 80;
+    }
+    #new_game {
+      color: #00FF00;
+      font-size: 50;
+    }
+    #controls {
+      color: #FF0000;
+      font-size: 50;
+    }
+    #high_scores {
+      color: #FF0000;
+      font-size: 50;
+    }
+    #credits {
+      color: #FF0000;
+      font-size: 50;
+    }
+    #exit_game {
+      color: #FF0000;
+      font-size: 50;
+    }
+    #easy {
+      color: #00FF00;
+      font-size: 50;
+    }
+    #medium {
+      color: #FF0000;
+      font-size: 50;
+    }
+    #hard {
+      color: #FF0000;
+      font-size: 50;
+    }
+    #back {
+      color: #FF0000;
+      font-size: 50;
+    }
+    #okay {
+      border-radius: 5px;
+      font-size: 24px;
+      background-color: #FF0000;
+      color: #000000;
+      border: 1px solid #000000;
+    	margin: 10px 10px;
+      padding: 15px;
+      line-height: 1.45;
+      width: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    #cancel {
+      border-radius: 5px;
+      font-size: 24px;
+      background-color: #00FF00;
+      color: #000000;
+      border: 1px solid #000000;
+    	margin: 10px 10px;
+      padding: 15px;
+      line-height: 1.45;
+      width: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    .back {
+      color: #00FF00;
+      font-size: 50;
+    }
+    table {
+      border-collapse: collapse;
+      width: 60%;
+      color: #FFFFFF;
+    }
+    td, th {
+      padding: 3px;
+      padding: 3px 7px 2px 7px;
+      border: 3px solid #FFFFFF;
+    }
+  </style>
+</head>
+<body>
+  <div id="fps">0</div>
+  <div id="warning"></div>
+  <div id="menu_button">Menu (F1)</div>
+  <div id="score">Score: 0</div>
+  <div id="inventory">
+    <div>Inventory:</div>
+    <div id="inventory_img"></div>
+    <div id="inventory_item_label"></div>
+  </div>
+  <div id="loading">
+    <div id="loading_text"><h3>Loading...</h3></div>
+  </div>
+  <div id="menu">
+    <div class="game_title"><b><i>FreeMazes3D</i></b></div>
+    <div id="new_game">New Game</div>
+    <div id="controls">Controls</div>
+    <div id="high_scores">High Scores</div>
+    <div id="credits">Credits</div>
+    <div id="exit_game">Exit Game</div>
+    <div class="version">Version 0.1</div>
+  </div>
+  <div id="difficulty">
+    <div class="game_title"><b><i>FreeMazes3D</i></b></div>
+    <div id="easy">Easy</div>
+    <div id="medium">Medium</div>
+    <div id="hard">Hard</div>
+    <div id="back">BACK</div>
+    <div class="version">Version 0.1</div>
+  </div>
+  <div id="warn">
+    <div id="warn_message"></div>
+    <br>
+    <span id="okay">Okay</span> <span id="cancel">Cancel</span>
+  </div>
+  <div id="key_controls">
+    <div class="game_title"><b><i>FreeMazes3D</i></b></div>
+    <h3>Key Controls:</h3>
+    <table align="center">
+      <tr>
+        <td>
+          W/A/S/D
+        </td>
+        <td>
+          movement
+        </td>
+      </tr>
+      <tr>
+        <td>
+          E
+        </td>
+        <td>
+          activate environment objects
+        </td>
+      </tr>
+      <tr>
+        <td>
+          [
+        </td>
+        <td>
+          toggle left through inventory
+        </td>
+      </tr>
+      <tr>
+        <td>
+          ]
+        </td>
+        <td>
+          toggle right through inventory
+        </td>
+      </tr>
+      <tr>
+        <td>
+          F
+        </td>
+        <td>
+          toggle frames per second
+        </td>
+      </tr>
+      <tr>
+        <td>
+          F1/ESC
+        </td>
+        <td>
+          view/close menu
+        </td>
+      </tr>
+    </table>
+    <div class="back">BACK</div>
+    <div class="version">Version 0.1</div>
+  </div>
+  <div id="scores">
+    <div class="game_title"><b><i>FreeMazes3D</i></b></div>
+    <h3>High Scores:</h3>
+    <table id="scores_list" align="center"></table>
+    <div class="back">BACK</div>
+    <div class="version">Version 0.1</div>
+  </div>
+  <div id="credits_list">
+    <div class="game_title"><b><i>FreeMazes3D</i></b></div>
+    <h3>Credits:</h3>
+    <div id="the_list">
+      <b>Game development:</b><br>
+      All scripting, 3d modeling, testing and game design – neytjs<br>
+      <br>
+      <b>3d engine:</b><br>
+      BabylonJS – the BabylonJS team (thanks guys!)<br>
+      <br>
+      <b>Sound effects (from opengameart.org):</b><br>
+      GUI Sound Effects – Lokif<br>
+      Inventory Sound Effects – artisticdude<br>
+      Atmospheric Interaction Sound Pack – legoluft<br>
+      Door Open, Door Close Set – qubodup<br>
+      Mouse Click – LFA<br>
+      Realization – Jason Dagenet<br>
+    </div>
+    <div class="back">BACK</div>
+    <div class="version">Version 0.1</div>
+  </div>
+  <div id="output"></div>
+  <script src="./dist/bundle.js"></script>
+</body>
+<html>
