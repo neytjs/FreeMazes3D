@@ -1,0 +1,45 @@
+import "@babylonjs/core/Physics/physicsEngineComponent";
+import {PhysicsImpostor} from "@babylonjs/core/Physics";
+import {DefaultCollisionCoordinator} from "@babylonjs/core/Collisions";
+import {Color3, Color4, Vector3, Vector4, Matrix, Space} from "@babylonjs/core/Maths/math";
+import {MeshBuilder} from "@babylonjs/core/Meshes";
+import {Mesh} from "@babylonjs/core/Meshes/mesh";
+import "@babylonjs/core/Meshes/meshBuilder";
+import {StandardMaterial} from "@babylonjs/core/Materials";
+import {Texture} from "@babylonjs/core/Materials/Textures";
+
+function generatePottedTree(x, z, scene) {
+  let pot = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 2, diameterBottom: 2, height: 1.5, tessellation: 12}, scene);
+  pot.position.y = 1;
+  pot.material = new StandardMaterial('texture1', scene);
+  pot.material.diffuseColor = new Color3(0.23, 0.19, 0.05);
+
+  var rim = MeshBuilder.CreateTorus("torus", {diameter: 2, thickness: 0.25});
+  rim.position.y = 1.75;
+  rim.material = new StandardMaterial('texture1', scene);
+  rim.material.diffuseColor = new Color3(0, 0, 0);
+
+  let trunk = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.25, diameterBottom: 0.25, height: 3, tessellation: 12}, scene);
+  trunk.position.y = 3;
+  trunk.material = new StandardMaterial('texture1', scene);
+  trunk.material.diffuseColor = new Color3(0.67, 0.66, 0.63);
+
+  let leaves = Mesh.CreateSphere("sphere", 8, 3, scene);
+  leaves.position.y = 5;
+  leaves.material = new StandardMaterial('texture1', scene);
+  leaves.material.diffuseColor = new Color3(0.15, 0.75, 0.23);
+
+  let barrier = MeshBuilder.CreateBox("barrier", {width: 3, height: 10, depth: 3}, scene);
+  barrier.position.y = 5;
+  barrier.material = new StandardMaterial('texture1', scene);
+  barrier.material.diffuseColor = new Color3(0.15, 0.75, 0.23);
+  barrier.material.alpha = 0;
+
+  let tree = Mesh.MergeMeshes([pot, rim, trunk, leaves, barrier], true, true, undefined, false, true);
+  tree.position.x = x + 3.5;
+  tree.position.z = z + 3.5;
+  tree.physicsImpostor = new PhysicsImpostor(barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
+  tree.checkCollisions = true;
+}
+
+export {generatePottedTree};
