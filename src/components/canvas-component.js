@@ -11,6 +11,7 @@ import {CannonJSPlugin} from "@babylonjs/core/Physics/Plugins";
 import {Vector3, Matrix} from "@babylonjs/core/Maths/math";
 import {Ray} from "@babylonjs/core/Culling";
 import {UniversalCamera} from "@babylonjs/core/Cameras/universalCamera";
+import {Sound} from "@babylonjs/core/Audio";
 import SceneGenerator from "./scenes/scene_generator.js";
 import {keyUp} from "./controls/keyUp.js";
 import {GUI_DisplayHighScores} from "./gui/gui_display_high_scores.js";
@@ -43,6 +44,23 @@ import {movingGreenOb4} from "./actions/movingGreenOb4.js";
 import {moveBlueOb4} from "./actions/moveBlueOb4.js";
 import {movingBlueOb4} from "./actions/movingBlueOb4.js";
 import {removeBarrierOb4} from "./actions/removeBarrierOb4.js";
+import {warnMessageOb5} from "./actions/warnMessageOb5.js";
+import {removeSpearOb5} from "./actions/removeSpearOb5.js";
+import {pushButtonsOb5} from "./actions/pushButtonsOb5.js";
+import {swingSpearOb5} from "./actions/swingSpearOb5.js";
+import {removeBarrierOb5} from "./actions/removeBarrierOb5.js";
+import {placeCrystalOb6} from "./actions/placeCrystalOb6.js";
+import {removeCrystalOb6} from "./actions/removeCrystalOb6.js";
+import {warnMessageOb7} from "./actions/warnMessageOb7.js";
+import {removeSpearOb7} from "./actions/removeSpearOb7.js";
+import {swingSpearOb7} from "./actions/swingSpearOb7.js";
+import {pushButtonsOb7} from "./actions/pushButtonsOb7.js";
+import {removeBarrierOb7} from "./actions/removeBarrierOb7.js";
+import {removeWateringCanOb8} from "./actions/removeWateringCanOb8.js";
+import {fillWateringCanOb8} from "./actions/fillWateringCanOb8.js";
+import {growPlantOb8} from "./actions/growPlantOb8.js";
+import {shrinkPlantOb8} from "./actions/shrinkPlantOb8.js";
+import {pourWaterOb8} from "./actions/pourWaterOb8.js";
 
 const remote = window.require('electron').remote;
 var app_path = remote.app.getAppPath('');
@@ -227,7 +245,7 @@ class Canvas extends Component {
     this.scene.activeCamera.attachControl(canvas);
 
     this.camera.position.y = 4;
-    this.camera.speed = 0.9;
+    this.camera.speed = 0.7;
     this.camera.keysUp = [87]; // w
     this.camera.keysDown = [83]; // s
     this.camera.keysLeft = [65]; // a
@@ -254,11 +272,26 @@ class Canvas extends Component {
       pushingButton: "",
       goingDown: true
     };
+    let player = {
+      holding: "",
+      swing_spear: false,
+      spear_forward: true
+    };
+    let pressedKeys = {
+      87: false,
+      83: false,
+      65: false,
+      68: false
+    };
     let solved = {
       solvedP1: 0,
       solvedP2: false,
       solvedP3: false,
-      solvedP4: false
+      solvedP4: false,
+      solvedP5: false,
+      solvedP6: false,
+      solvedP7: false,
+      solvedP8: false
     };
     let ob1 = {
       warned: false
@@ -282,12 +315,79 @@ class Canvas extends Component {
       green_played: false,
       blue_played: false
     };
+    let ob5 = {
+      warned: false,
+      ghost_part_counter: 0,
+      ghost_counter: 0,
+      swing_sound_counter: 0,
+      hit_sound_counter: 0,
+      holding: false,
+      starting_position: {},
+      starting_distance: [],
+      ghost1_crystal_hp: 100,
+      ghost2_crystal_hp: 100,
+      ghost3_crystal_hp: 100
+    };
+    let ob6 = {
+      holding: {},
+      just_accessed: false
+    };
+    let ob7 = {
+      warned: false,
+      power_counter: 0,
+      swing_sound_counter: 0,
+      hit_sound_counter: 0,
+      holding: false,
+      starting_position: {},
+      starting_distance: [],
+      power1_crystal_hp: 100,
+      power2_crystal_hp: 100,
+      power3_crystal_hp: 100
+    };
+    let ob8 = {
+      fruitTree: false,
+      pineTree: false,
+      cactus: false,
+      flower: false,
+      growing: false,
+      growing_name: "",
+      shrinking: false,
+      shrinking_name: "",
+      pouring: false,
+      water: 0,
+      water_counter: 0,
+      pouring_sound: false
+    };
     let current_secret = {
       secret: {}
     };
     let secret_moving = {
       motion: false
     };
+    document.addEventListener("click", () => {
+      if (player.holding !== "") {
+        player.swing_spear = true;
+      }
+    }, false);
+    document.addEventListener("keydown", () => {
+    // for pouring water in obstacle 8
+      if (event.keyCode === 69 && ob8.pouring === false && solved.solvedP8 === false) {
+        ob8.pouring = true;
+        if (ob8.water > 0) {
+          ob8.pouring_sound = new Sound("Sound", "./sound/loop_rain.ogg", this.scene, null, { loop: true, autoplay: true });
+        }
+      }
+    }, false);
+    document.addEventListener("keyup", () => {
+    // for pouring water in obstacle 8
+      if (event.keyCode === 69 && ob8.pouring === true) {
+        ob8.pouring = false;
+        if (ob8.pouring_sound) {
+          ob8.pouring_sound.dispose(true, true);
+          ob8.pouring_sound = null;
+        }
+      }
+    }, false);
 
     let handleCameraCollisions = () => {
       this.camera.onCollide = (colMesh) => {
@@ -303,8 +403,18 @@ class Canvas extends Component {
         collectGem(gem_objects, inventory, inventory_tracker, colMesh, this.scene);
       // for treasure collisions
         collectTreasure(treasure_objects, trasure_stats, colMesh, score, this.scene);
-      // or hint collision
+      // for hint collision
         hintMessageOb2(colMesh, ob2, this.scene);
+      // for ghost barrier collision
+        warnMessageOb5(colMesh, ob5, this.scene);
+      // for removing ghost spear
+        removeSpearOb5(colMesh, ob5, this.scene, this.camera, player);
+      // for hut barrier collision
+        warnMessageOb7(colMesh, ob7, this.scene);
+      // for removing hut spear
+        removeSpearOb7(colMesh, ob7, this.scene, this.camera, player);
+      // for removing the watering can
+        removeWateringCanOb8(colMesh, this.scene, this.camera, player);
       // for obstacle_objects items
         for (let i = 0, length = obstacle_objects.length; i < length; i++) {
           if (colMesh.uniqueId === obstacle_objects[i].id) {
@@ -328,6 +438,16 @@ class Canvas extends Component {
         this.scene.render();
       // for secrets
         moveSecretWall(secret_moving, current_secret, this.scene, secret_data);
+      // for swinging ghost spear
+        swingSpearOb5(ob5, this.scene, this.camera, solved, player);
+      // for swinging hut spear
+        swingSpearOb7(ob7, this.scene, this.camera, solved, player);
+      // for growing plants
+        growPlantOb8(this.scene, this.camera, ob8, solved, obstacle_objects, forcefield_objects, score, player);
+      // for shrinking plants
+        shrinkPlantOb8(this.scene, ob8);
+      // for pouring water
+        pourWaterOb8(solved, this.scene, this.camera, ob8);
 
         if (this.pressE === true) {
           let starting_position = {};
@@ -366,6 +486,16 @@ class Canvas extends Component {
                 pushButtonsOb3(hit, solved, buttons, this.scene);
               // for obstacle 4
                 pushButtonsOb4(hit, solved, buttons, this.scene);
+              // for obstacle 5
+                pushButtonsOb5(hit, solved, buttons, this.scene);
+              // for obstacle 7
+                pushButtonsOb7(hit, solved, buttons, this.scene);
+              // for placing a crystal in obstacle 6
+                placeCrystalOb6(hit.pickedMesh.name, obstacle_objects, forcefield_objects, this.scene, this.camera, solved, ob6, player, score);
+              // for removing a crystal in obstacle 6
+                removeCrystalOb6(hit.pickedMesh.name, obstacle_objects, this.scene, this.camera, solved, ob6, player);
+              // for filling the watering can in obstacle 8
+                fillWateringCanOb8(this.scene, solved, hit.pickedMesh.name, ob8, player);
               }
             }
             this.pressE = false;
@@ -396,6 +526,10 @@ class Canvas extends Component {
             moveGreenOb4(buttons, ob4);
             moveBlueOb4(buttons, ob4);
             removeBarrierOb4(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
+          // for obstacle 5
+            removeBarrierOb5(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
+          // for obstacle 7
+            removeBarrierOb7(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
             buttons.goingDown = false;
           } else if (pushButton.position.y < top_val && buttons.goingDown === false) {
             pushButton.position.y += 0.01;
