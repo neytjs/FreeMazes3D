@@ -9,10 +9,9 @@ import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 import {sphere_colors, pole_colors, cloneAndShuffleColors, cloneAndShufflePoleColors} from "../sphere_pole_colors.js";
 import {generateNavMesh, sendAgent, createCrowd} from "../sphere_pole_crowd.js";
+import {degrees} from "../../utilities/math.js";
 
 function sphereAgents(x, z, scene, global_objects, item_id, camera) {
-  let pie = 3.142;
-  let degrees = [(pie * 2), (pie * 5/3), (pie * 4/3), pie, (pie * 2/3), (pie / 3)]; // http://www.math.com/tables/geometry/circles.htm
   if (sphere_colors.length === 0) {
     cloneAndShuffleColors();
     cloneAndShufflePoleColors();
