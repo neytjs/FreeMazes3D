@@ -3,6 +3,12 @@ import {Sound} from "@babylonjs/core/Audio";
 function playSound(sound_file, time, scene, callback) {
   let sound_object = {};
   switch (sound_file) {
+    case "8bit_bomb_explosion":
+      sound_object = new Sound("Sound", "./sound/8bit_bomb_explosion.wav", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
     case "anchor_action_sum":
       sound_object = new Sound("Sound", "./sound/anchor_action_sum.wav", scene, null, {
         loop: false,
@@ -15,6 +21,12 @@ function playSound(sound_file, time, scene, callback) {
         autoplay: true
       });
     break;
+    case "bubble_01":
+      sound_object = new Sound("Sound", "./sound/bubble_01.ogg", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;      
     case "cloth_inventory":
       sound_object = new Sound("Sound", "./sound/cloth_inventory.wav", scene, null, {
         loop: false,
@@ -23,6 +35,12 @@ function playSound(sound_file, time, scene, callback) {
     break;
     case "DoorClose04":
       sound_object = new Sound("Sound", "./sound/DoorClose04.ogg", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
+    case "ghost":
+      sound_object = new Sound("Sound", "./sound/ghost.wav", scene, null, {
         loop: false,
         autoplay: true
       });
@@ -89,6 +107,18 @@ function playSound(sound_file, time, scene, callback) {
     break;
     case "sell_buy_item":
       sound_object = new Sound("Sound", "./sound/sell_buy_item.wav", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
+    case "swish_2":
+      sound_object = new Sound("Sound", "./sound/swish_2.wav", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
+    case "swish_4":
+      sound_object = new Sound("Sound", "./sound/swish_4.wav", scene, null, {
         loop: false,
         autoplay: true
       });
