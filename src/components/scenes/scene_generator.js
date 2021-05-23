@@ -13,13 +13,19 @@ import "@babylonjs/core/Meshes/meshBuilder";
 import {PiecesData} from "../assets/pieces_data.js";
 import {generateObjects} from "../assets/generate_objects.js";
 import {generateObstacles} from "../assets/generate_obstacles.js";
-import {map, length, width, total_areas, createEmptyMap, createMap, createMapAreas, setStartPosition, setExitPosition, generateKeys, generateGem, generateTreasure, generateSecrets, declareObstacles, declareDoors, storeExitPos, setMapSize} from "../generators/maze_generator.js";
+import {map, length, width, total_areas, createEmptyMap, createMap, createMapAreas,
+  setStartPosition, setExitPosition, generateKeys, generateGem, generateTreasure,
+  generateSecrets, declareObstacles, declareDoors, storeExitPos, setMapSize,
+  generateClutterLocations} from "../generators/maze_generator.js";
 import {wallColors} from "../assets/wall_colors.js";
 import {floorColors} from "../assets/floor_colors.js";
 import {skyColors} from "../assets/sky_colors.js";
 import {generateSecretArea} from "../assets/generate_secret_area.js";
 import {selectTreasure} from "../assets/select_treasure.js";
 import {selectPuzzle} from "../assets/select_puzzle.js";
+import {generateClutter} from "../assets/generateClutter.js";
+import {selectClutter} from "../assets/selectClutter.js";
+import {selectEnvironment} from "../assets/selectEnvironment.js";
 const remote = window.require('electron').remote;
 
 class SceneGenerator {
@@ -41,6 +47,7 @@ class SceneGenerator {
     var treasure = [];
     var doors = [];
     var updated_map = [];
+    var clutter = [];
 
     function generatePlayableMap() {
     // set the map size
@@ -85,9 +92,11 @@ class SceneGenerator {
             gem = generateGem(map_areas);
           // declare the doors
             doors = declareDoors(map_areas, obstacles, keys, exit_pos, total_areas);
-          // finally generate treasure
+          // generate treasure
             treasure = generateTreasure(start_pos, exit_pos, keys, gem, doors, updated_map);
             trasure_stats.treasure_total = treasure.length;
+          // finally generate clutter
+            clutter = generateClutterLocations(start_pos, exit_pos, keys, gem, doors, map_areas);
           }
         }
       }
@@ -139,10 +148,12 @@ class SceneGenerator {
 
     let easy_puzzles = selectPuzzle("easy");
     let hard_puzzles = selectPuzzle("hard");
+    let clutter_types = selectClutter();
+    let secret_environments = selectEnvironment();
 
     for (let i = 0, length = terrain_pieces.length; i < length; i++) {
       for (let j = 0, jlength = terrain_pieces[i].length; j < jlength; j++) {
-        var floor_tile = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+        let floor_tile = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
         floor_tile.position.x = (j * 70);
         floor_tile.position.z = (i * 70);
         floor_tile.material = new StandardMaterial('texture1', scene);
@@ -221,7 +232,7 @@ class SceneGenerator {
                       name: secretWall.name
                     };
                     secret_walls.push(secret_wall_data);
-                    generateSecretArea(j, i, secret_wall_data, scene, treasure_objects);
+                    generateSecretArea(j, i, secret_wall_data, scene, treasure_objects, secret_environments);
                   } else {
                     var wall = MeshBuilder.CreateBox("wall", {width: units, height: units, depth: units}, scene);
                     wall.position.y = 5;
@@ -313,6 +324,12 @@ class SceneGenerator {
             for (let t = 0, tlength = treasure.length; t < tlength; t++) {
               if (treasure[t].secret === false && treasure[t].pos.x === i && treasure[t].pos.y === j) {
                 generateObjects(selectTreasure(), (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, treasure_objects);
+              }
+            }
+          // check for clutter
+            for (let c = 0, clength = clutter.length; c < clength; c++) {
+              if (clutter[c].pos.x === i && clutter[c].pos.y === j) {
+                generateClutter(clutter_types[c], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene)
               }
             }
           }
