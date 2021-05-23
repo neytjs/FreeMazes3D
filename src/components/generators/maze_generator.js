@@ -10,5 +10,7 @@ import { declareObstacles } from './maze_generator/declare_obstacles.js';
 import { declareDoors } from './maze_generator/declare_doors.js';
 import { generateSecrets } from './maze_generator/generate_secrets.js';
 import { generateTreasure } from './maze_generator/generate_treasure.js';
+import { generateClutterLocations } from './maze_generator/generate_clutter_locations.js';
 
-export {map, length, width, total_areas, storeExitPos, setMapSize, exit_pos, createEmptyMap, createMap, createMapAreas, setStartPosition, setExitPosition, generateKeys, generateGem, generateTreasure, generateSecrets, declareObstacles, declareDoors};
+export {map, length, width, total_areas, storeExitPos, setMapSize, exit_pos, createEmptyMap, createMap, createMapAreas, setStartPosition,
+  setExitPosition, generateKeys, generateGem, generateTreasure, generateSecrets, declareObstacles, declareDoors, generateClutterLocations};
