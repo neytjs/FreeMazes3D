@@ -51,8 +51,6 @@ function generateSpear(status, spear_type, scene, x, z, camera) {
   if (status === "item") {
     let spearBarrier = MeshBuilder.CreateCylinder("spearBarrier", {diameter: 2.5, height: 10, tessellation: 8}, scene);
     spearBarrier.position.y = 5;
-    spearBarrier.position.x = x;
-    spearBarrier.position.z = z;
     spearBarrier.material = new StandardMaterial('texture1', scene);
     spearBarrier.material.alpha = 0;
     let spear = Mesh.MergeMeshes([shaft, blade1, blade2, spearBarrier], true, true, undefined, false, true);
