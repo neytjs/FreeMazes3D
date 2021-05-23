@@ -45,7 +45,7 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
     }
   }
 // F1 / ESC
-  if (key === 112 || key === 27) {
+  if ((key === 112 || key === 27) && warn_left < 0) {
     if (this.state.start) {
       if (menu_left === 0 || difficulty_left === 0) {
         if (menu_left === 0) {
@@ -270,6 +270,10 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
         }
       }
     }
+  }
+// FOR TESTING ONLY... (g)
+  if (key === 71) {
+    this.camera.applyGravity = true;
   }
 }
 
