@@ -10,9 +10,13 @@ var globals = {
   hallway: 100
 }
 var exit_pos = {x: 0, y: 0};
+var start_pos = {x: 0, y: 0};
 
 function storeExitPos(new_exit_pos) {
   exit_pos = new_exit_pos;
+}
+function storeStartPos(new_start_pos) {
+  start_pos = new_start_pos;
 }
 
 function setMapSize(size) {
@@ -35,4 +39,4 @@ function setMapSize(size) {
   }
 }
 
-export {map, length, width, total_areas, globals, storeExitPos, setMapSize, exit_pos};
+export {map, length, width, total_areas, globals, storeExitPos, storeStartPos, setMapSize, exit_pos, start_pos};

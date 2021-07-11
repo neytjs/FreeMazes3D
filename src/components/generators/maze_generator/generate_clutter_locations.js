@@ -23,6 +23,8 @@ function generateClutterLocations(start_pos, exit_pos, keys, gem, doors, map_are
   exclusions.push(exit_pos);
 // exclude gem
   exclusions.push(gem.pos);
+// exclude the first key loc, because we add that in manually
+  exclusions.push({x: keys[0].pos.x, y: keys[0].pos.y});
 // exclude doors
   for (let i = 0, ilength = doors.length; i < ilength; i++) {
     exclusions.push(doors[i].pos);
