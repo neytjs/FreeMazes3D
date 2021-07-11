@@ -9,7 +9,9 @@ function wallColors() {
     new Color3(0.49, 0.4, 0.56),
     new Color3(0.76, 0.5, 0.5),
     new Color3(0.98, 0.87, 0.4),
-    new Color3(0.51, 0.67, 0.96)
+    new Color3(0.51, 0.67, 0.96),
+    new Color3(0.4, 0, 0),
+    new Color3(0.59, 0.18, 0.24)
   ];
 
   wall_colors = arrayShuffler(wall_colors);

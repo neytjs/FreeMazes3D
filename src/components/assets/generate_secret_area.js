@@ -11,7 +11,13 @@ import {generateObjects} from "./generate_objects.js";
 import {selectTreasure} from "./select_treasure.js";
 
 function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objects, secret_environments) {
-  let ground_color = secret_environments[0] === "alpine" ? new Color3(0.49, 0.92, 0) : new Color3(0.91, 0.97, 0.98);
+  let ground_colors = {
+    alpine: new Color3(0.49, 0.92, 0),
+    winter: new Color3(0.91, 0.97, 0.98),
+    wasteland: new Color3(0.8, 0.45, 0.06)
+  };
+  let ground_color = ground_colors[secret_environments[0]];
+
   function generateTreeBarriers(piece, floor_x, floor_y, plus_x, plus_z) {
     var TreesData = [
       {

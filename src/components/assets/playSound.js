@@ -21,12 +21,18 @@ function playSound(sound_file, time, scene, callback) {
         autoplay: true
       });
     break;
+    case "aargh2":
+      sound_object = new Sound("Sound", "./sound/aargh2.ogg", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
     case "bubble_01":
       sound_object = new Sound("Sound", "./sound/bubble_01.ogg", scene, null, {
         loop: false,
         autoplay: true
       });
-    break;      
+    break;
     case "cloth_inventory":
       sound_object = new Sound("Sound", "./sound/cloth_inventory.wav", scene, null, {
         loop: false,
@@ -35,6 +41,12 @@ function playSound(sound_file, time, scene, callback) {
     break;
     case "DoorClose04":
       sound_object = new Sound("Sound", "./sound/DoorClose04.ogg", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
+    case "Falling_Rock":
+      sound_object = new Sound("Sound", "./sound/Falling_Rock.wav", scene, null, {
         loop: false,
         autoplay: true
       });
@@ -93,6 +105,13 @@ function playSound(sound_file, time, scene, callback) {
         autoplay: true
       });
     break;
+    case "Rifleprimary2":
+      sound_object = new Sound("Sound", "./sound/Rifleprimary2.ogg", scene, null, {
+        loop: false,
+        autoplay: true,
+        volume: 0.6
+      });
+    break;
     case "ring_inventory":
       sound_object = new Sound("Sound", "./sound/ring_inventory.wav", scene, null, {
         loop: false,
@@ -119,6 +138,12 @@ function playSound(sound_file, time, scene, callback) {
     break;
     case "swish_4":
       sound_object = new Sound("Sound", "./sound/swish_4.wav", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
+    case "tir":
+      sound_object = new Sound("Sound", "./sound/tir.mp3", scene, null, {
         loop: false,
         autoplay: true
       });

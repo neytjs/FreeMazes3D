@@ -8,13 +8,11 @@ import {sphere_colors} from "./sphere_pole_colors.js";
 
 var navigationPlugin = new RecastJSPlugin(Recast);
 
-let agent_object = {};
-
 var x = 0;
 var z = 0;
 
 var navmeshParameters = {
-  cs: 0.2,
+  cs: 0.75,
   ch: 0.2,
   walkableSlopeAngle: 90,
   walkableHeight: 1.0,
@@ -30,11 +28,11 @@ var navmeshParameters = {
 };
 
 function generateNavMesh(scene) {
-  let bigPlatform = scene.getMeshByName("bigPlatform");
-  navigationPlugin.createNavMesh([bigPlatform], navmeshParameters);
+  let bigPlatformMob = scene.getMeshByName("bigPlatformMob");
+  navigationPlugin.createNavMesh([bigPlatformMob], navmeshParameters);
 
-  x = bigPlatform.position.x;
-  z = bigPlatform.position.z;
+  x = bigPlatformMob.position.x;
+  z = bigPlatformMob.position.z;
 }
 
 var crowd = {};
@@ -47,41 +45,23 @@ var agentParams = {
   radius: 1,
   height: 2,
   maxAcceleration: 4.0,
-  maxSpeed: 10.0,
+  maxSpeed: 5.0,
   collisionQueryRange: 0.5,
   pathOptimizationRange: 0.0,
   separationWeight: 1.0
 };
 
 var agentIndex = {};
-let agent_counter = 0;
-let sphere_color_counter = -1;
 
-function generateSphere(scene, just_spliced) {
-  agent_counter = agent_counter + 1;
-  if (agent_counter === 1) {
-    if (just_spliced === false) {
-      let max = sphere_colors.length;
-      sphere_color_counter = (sphere_color_counter + 1) >= max ? 0 : sphere_color_counter + 1;
-    }
-    if (just_spliced === true && sphere_color_counter === sphere_colors.length) {
-      sphere_color_counter = 0;
-    }
-
-    var width = 2;
-    var agentSphere = Mesh.CreateSphere('mob', 5, 2.5, scene);
-    agentSphere.position.y = 2;
-    agentSphere.name = "agentSphere";
-    var matAgent = new StandardMaterial('mat2', scene);
-    matAgent.diffuseColor = sphere_colors[sphere_color_counter].color_code;
-    agentSphere.material = matAgent;
-    var starPos = navigationPlugin.getRandomPointAround(new Vector3(x, 1, z), 0.5);
-    var transform = new TransformNode();
-    agentSphere.parent = transform;
-    agentIndex = crowd.addAgent(starPos, agentParams, transform);
-
-    agent_object.color = sphere_colors[sphere_color_counter].color_name;
-  }
+function generateMob(scene, x, z) {
+  let width = 2;
+  let agentMob = scene.getMeshByName("mobOb12");
+  agentMob.position.y = 2;
+  agentMob.name = "agentMob";
+  let starPos = navigationPlugin.getRandomPointAround(new Vector3(x, 1, z), 0.5);
+  let transform = new TransformNode();
+  agentMob.parent = transform;
+  agentIndex = crowd.addAgent(starPos, agentParams, transform);
 }
 
 function sendAgent(camera) {
@@ -101,11 +81,8 @@ function sendAgent(camera) {
   crowd.agentGoto(agents[0], navigationPlugin.getClosestPoint(new Vector3(aX, 1, aY)));
 }
 
-function crowdCleanUp(sphere) {
-  crowd.removeAgent(sphere);
-  sphere.dispose();
-  agent_counter = 0;
-  agent_object = {};
+function getAgentPosition(scene) {
+  return crowd.getAgentPosition();
 }
 
-export {generateNavMesh, generateSphere, sendAgent, crowdCleanUp, createCrowd, agent_object};
+export {generateNavMesh, generateMob, sendAgent, createCrowd, getAgentPosition};

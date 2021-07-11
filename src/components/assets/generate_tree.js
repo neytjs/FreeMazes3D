@@ -8,8 +8,18 @@ import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 
 function generateTree(x, z, floor_x, floor_z, plus_x, plus_z, scene, secret_environments) {
-  let trunk_color = secret_environments[0] === "alpine" ? new Color3(0.42, 0.25, 0.14) : new Color3(0.45, 0.39, 0.31);
-  let needles_color = secret_environments[0] === "alpine" ? new Color3(0.04, 0.39, 0.05) : new Color3(0.18, 0.49, 0.49);
+  let trunk_colors = {
+    alpine: new Color3(0.42, 0.25, 0.14),
+    winter: new Color3(0.45, 0.39, 0.31),
+    wasteland: new Color3(0.35, 0.3, 0.17)
+  };
+  let needles_colors = {
+    alpine: new Color3(0.04, 0.39, 0.05),
+    winter: new Color3(0.18, 0.49, 0.49),
+    wasteland: new Color3(0.4, 0.48, 0.14)
+  };
+  let trunk_color = trunk_colors[secret_environments[0]];
+  let needles_color = needles_colors[secret_environments[0]];
   let tree_parts = [];
 
   let cylinder = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 1, height: 2, tessellation: 8}, scene);

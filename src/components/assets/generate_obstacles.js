@@ -6,6 +6,10 @@ import {ghostButton} from "./obstacles/ghostButton.js";
 import {carryCrystals} from "./obstacles/carryCrystals.js";
 import {enterHut} from "./obstacles/enterHut.js";
 import {growGarden} from "./obstacles/growGarden.js";
+import {downPipes} from "./obstacles/downPipes.js";
+import {tightRope} from "./obstacles/tightRope.js";
+import {dodgeTurret} from "./obstacles/dodgeTurret.js";
+import {mobShoots} from "./obstacles/mobShoots.js";
 
 function generateObstacles(object_name, x, z, scene, global_objects, item_id, camera) {
   switch (object_name) {
@@ -32,6 +36,18 @@ function generateObstacles(object_name, x, z, scene, global_objects, item_id, ca
     break;
     case "grow_garden":
       growGarden(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "down_pipes":
+      downPipes(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "tight_rope":
+      tightRope(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "dodge_turret":
+      dodgeTurret(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "mob_shoots":
+      mobShoots(x, z, scene, global_objects, item_id, camera);
     break;
   }
 }
