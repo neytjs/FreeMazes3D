@@ -12,11 +12,13 @@ import {Vector3, Matrix} from "@babylonjs/core/Maths/math";
 import {Ray} from "@babylonjs/core/Culling";
 import {UniversalCamera} from "@babylonjs/core/Cameras/universalCamera";
 import {Sound} from "@babylonjs/core/Audio";
+import {KeyboardEventTypes} from "@babylonjs/core/Events";
 import SceneGenerator from "./scenes/scene_generator.js";
 import {keyUp} from "./controls/keyUp.js";
 import {GUI_DisplayHighScores} from "./gui/gui_display_high_scores.js";
 import {GUI_Score} from "./gui/gui_score.js";
-import {exit_pos} from "./generators/maze_generator.js";
+import {runTimer, displayTime} from "./gui/gui_timer.js";
+import {exit_pos, start_pos} from "./generators/maze_generator.js";
 import {collectKey} from "./actions/collectKey.js";
 import {doorMessage} from "./actions/doorMessage.js";
 import {openGate} from "./actions/openGate.js";
@@ -61,11 +63,24 @@ import {fillWateringCanOb8} from "./actions/fillWateringCanOb8.js";
 import {growPlantOb8} from "./actions/growPlantOb8.js";
 import {shrinkPlantOb8} from "./actions/shrinkPlantOb8.js";
 import {pourWaterOb8} from "./actions/pourWaterOb8.js";
+import {removeBallOb9} from "./actions/removeBallOb9.js";
+import {dropBallOb9} from "./actions/dropBallOb9.js";
+import {pickUpBallOb9} from "./actions/pickUpBallOb9.js";
+import {setBallOb9} from "./actions/setBallOb9.js";
+import {fallingBallOb9} from "./actions/fallingBallOb9.js";
+import {climbLadderOb10} from "./actions/climbLadderOb10.js";
+import {acidDeathOb10} from "./actions/acidDeathOb10.js";
+import {pushButtonsOb10} from "./actions/pushButtonsOb10.js";
+import {removeBarrierOb10} from "./actions/removeBarrierOb10.js";
+import {movementTestOb11} from "./actions/movementTestOb11.js";
+import {shellsHitPlayerTestOb11} from "./actions/shellsHitPlayerTestOb11.js";
+import {movementTestOb12} from "./actions/movementTestOb12.js";
+import {laserHitPlayerTestOb12} from "./actions/laserHitPlayerTestOb12.js";
 
-const remote = window.require('electron').remote;
-var app_path = remote.app.getAppPath('');
-var DataStore = window.require('nedb');
-var app_data = new DataStore({ filename: app_path+'/data/app_data.db', autoload: true });
+const {app} = window.require('@electron/remote');
+const DataStore = window.require('nedb');
+const app_filepath = app.getAppPath('');
+const app_data = new DataStore({ filename: app_filepath+'/data/app_data.db', autoload: true });
 const defaultAppData = {
   high_scores: []
 };
@@ -76,7 +91,7 @@ let key_objects = [];
 let portal_objects = [];
 let gem_objects = [];
 let treasure_objects = [];
-let trasure_stats = {
+let treasure_stats = {
   treasure_total: 0,
   treasure_counter: 0
 };
@@ -96,8 +111,17 @@ let score = {
 let map_size = {
   size: ""
 };
+let timer = {
+  counter: 0,
+  time: "",
+  prev_time: "",
+  running: false,
+  menu: false,
+  timeOutFunct: {}
+};
 let menu_gui = {
   counter: 0,
+  toggle: false,
   options: [
     "new_game",
     "controls",
@@ -129,7 +153,7 @@ class Canvas extends Component {
     this.engine = {};
     this.camera = {};
     this.scene = {};
-    this.keyUp = keyUp.bind(this, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this));
+    this.keyUp = keyUp.bind(this, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this), this.reStart.bind(this), timer);
 
     this.state = {
       start: false,
@@ -163,7 +187,7 @@ class Canvas extends Component {
 
   updateEventListener() {
     document.removeEventListener("keyup", this.keyUp, false);
-    this.keyUp = keyUp.bind(this, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this));
+    this.keyUp = keyUp.bind(this, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this), this.reStart.bind(this), timer);
     document.addEventListener("keyup", this.keyUp, false);
   }
 
@@ -175,7 +199,7 @@ class Canvas extends Component {
     portal_objects = [];
     gem_objects = [];
     treasure_objects = [];
-    trasure_stats = {
+    treasure_stats = {
       treasure_total: 0,
       treasure_counter: 0
     };
@@ -188,6 +212,14 @@ class Canvas extends Component {
     secret_data = {
       total: 0,
       counter: 0
+    };
+    timer = {
+      counter: 0,
+      time: "",
+      prev_time: "",
+      running: false,
+      menu: false,
+      timeOutFunct: {}
     };
     GUI_Score(0, score);
     document.getElementById("inventory_item_label").innerHTML = "";
@@ -264,8 +296,10 @@ class Canvas extends Component {
     this.camera.checkCollisions = true;
     this.camera._needMoveForGravity = true;
 
+    let puzzles = [];
+
   // call the SceneGenerator to create the map and generate the maze.
-    SceneGenerator.returnScene(this.scene, this.camera, door_objects, forcefield_objects, key_objects, portal_objects, gem_objects, treasure_objects, trasure_stats, obstacle_objects, secret_walls, secret_data, map_size);
+    SceneGenerator.returnScene(this.scene, this.camera, door_objects, forcefield_objects, key_objects, portal_objects, gem_objects, treasure_objects, treasure_stats, obstacle_objects, secret_walls, secret_data, map_size, puzzles);
     this.updateEventListener();
 
     let buttons = {
@@ -275,13 +309,10 @@ class Canvas extends Component {
     let player = {
       holding: "",
       swing_spear: false,
-      spear_forward: true
-    };
-    let pressedKeys = {
-      87: false,
-      83: false,
-      65: false,
-      68: false
+      spear_forward: true,
+      walking_sound: false,
+      already_walking: false,
+      health: 100
     };
     let solved = {
       solvedP1: 0,
@@ -291,7 +322,11 @@ class Canvas extends Component {
       solvedP5: false,
       solvedP6: false,
       solvedP7: false,
-      solvedP8: false
+      solvedP8: false,
+      solvedP9: false,
+      solvedP10: false,
+      solvedP11: false,
+      solvedP12: false
     };
     let ob1 = {
       warned: false
@@ -358,12 +393,351 @@ class Canvas extends Component {
       water_counter: 0,
       pouring_sound: false
     };
+    let ob9 = {
+      pipe1entrance: false,
+      pipe2entrance: false,
+      pipe3entrance: false,
+      pipe4entrance: false,
+      pipe1exit: false,
+      pipe2exit: false,
+      pipe3exit: false,
+      pipe4exit: false,
+      pipe1rolling: false,
+      pipe2rolling: false,
+      pipe3rolling: false,
+      pipe4rolling: false,
+      hiddenBall1: {},
+      hiddenBall2: {},
+      hiddenBall3: {},
+      hiddenBall4: {},
+      hiddenBall1falling: false,
+      hiddenBall2falling: false,
+      hiddenBall3falling: false,
+      hiddenBall4falling: false,
+      plate1: false,
+      plate2: false,
+      plate3: false,
+      plate4: false,
+      particle1: false,
+      particle2: false,
+      particle3: false,
+      particle4: false,
+      just_accessed: false
+    };
+    let ob10 = {
+      dying: false
+    };
+    let ob11 = {
+      clockwise: false,
+      turret_moving: false,
+      firing: false,
+      rotation: 0,
+      impacted: false,
+      hit: false,
+      powerCrystal1: 100,
+      powerCrystal2: 100,
+      powerCrystal3: 100,
+      powerCrystal4: 100
+    };
+    let ob12 = {
+      clockwise: false,
+      mob_moving: false,
+      firing: false,
+      rotation: 0,
+      impacted: false,
+      hit: false,
+      powerCrystal1: 100,
+      powerCrystal2: 100,
+      powerCrystal3: 100,
+      powerCrystal4: 100
+    };
     let current_secret = {
       secret: {}
     };
     let secret_moving = {
       motion: false
     };
+    let pressedKeys = {
+      w: false,
+      s: false,
+      a: false,
+      d: false
+    };
+
+    function noop() {}
+
+    function coin_match_run_hit(hit) {
+      placeCoinOb1(hit, this.scene, solved, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score);
+    }
+
+    function coin_match_hcc_oo(obstacle_objects, colMesh) {
+      pedestalWarningOb1(obstacle_objects, inventory, ob1, solved, colMesh);
+      removeCoinOb1(obstacle_objects, inventory, inventory_tracker, colMesh, this.scene);
+    }
+
+    function bulb_match_hcc(colMesh) {
+      hintMessageOb2(colMesh, ob2, this.scene);
+    }
+
+    function bulb_match_run_hit(hit) {
+      pushButtonsOb2(hit, solved, buttons, ob2, this.scene);
+    }
+
+    function bulb_match_btn() {
+      changeBulbColorOb2(solved, buttons, ob2, obstacle_objects, forcefield_objects, this.scene, score);
+    }
+
+    function sphere_agents_run_hit(hit) {
+      pushButtonsOb3(hit, solved, buttons, this.scene);
+    }
+
+    function sphere_agents_btn() {
+      agentSummonsOb3(buttons, ob3, this.scene);
+    }
+
+    function sphere_agents_run() {
+      agentCollisionsOb3(solved, ob3, obstacle_objects, forcefield_objects, this.scene, score);
+    }
+
+    function move_bridges_hcc_oo(obstacle_objects, colMesh) {
+      teleportPlayerOb4(obstacle_objects, colMesh, this.camera, this.scene);
+    }
+
+    function move_bridges_btn() {
+      moveGreenOb4(buttons, ob4);
+      moveBlueOb4(buttons, ob4);
+      removeBarrierOb4(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
+    }
+
+    function move_bridges_run() {
+      movingGreenOb4(ob4, this.scene);
+      movingBlueOb4(ob4, this.scene);
+    }
+
+    function move_bridges_run_hit(hit) {
+      pushButtonsOb4(hit, solved, buttons, this.scene);
+    }
+
+    function ghost_button_hcc(colMesh) {
+      warnMessageOb5(colMesh, ob5, this.scene);
+      removeSpearOb5(colMesh, ob5, this.scene, this.camera, player);
+    }
+
+    function ghost_button_run_hit(hit) {
+      pushButtonsOb5(hit, solved, buttons, this.scene);
+    }
+
+    function ghost_button_run() {
+      swingSpearOb5(ob5, this.scene, this.camera, solved, player);
+    }
+
+    function ghost_button_btn() {
+      removeBarrierOb5(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
+    }
+
+    function carry_crystals_run_hit(hit) {
+      placeCrystalOb6(hit.pickedMesh.name, obstacle_objects, forcefield_objects, this.scene, this.camera, solved, ob6, player, score);
+      removeCrystalOb6(hit.pickedMesh.name, obstacle_objects, this.scene, this.camera, solved, ob6, player);
+    }
+
+    function enter_hut_hcc(colMesh) {
+      warnMessageOb7(colMesh, ob7, this.scene);
+      removeSpearOb7(colMesh, ob7, this.scene, this.camera, player);
+    }
+
+    function enter_hut_run() {
+      swingSpearOb7(ob7, this.scene, this.camera, solved, player);
+    }
+
+    function enter_hut_run_hit(hit) {
+      pushButtonsOb7(hit, solved, buttons, this.scene);
+    }
+
+    function enter_hut_btn() {
+      removeBarrierOb7(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
+    }
+
+    function grow_garden_hcc(colMesh) {
+      removeWateringCanOb8(colMesh, this.scene, this.camera, player);
+    }
+
+    function grow_garden_run_hit(hit) {
+      fillWateringCanOb8(this.scene, solved, hit.pickedMesh.name, ob8, player);
+    }
+
+    function grow_garden_run() {
+      growPlantOb8(this.scene, this.camera, ob8, solved, obstacle_objects, forcefield_objects, score, player);
+      shrinkPlantOb8(this.scene, ob8);
+      pourWaterOb8(solved, this.scene, this.camera, ob8);
+    }
+
+    function down_pipes_hcc_oo(obstacle_objects, colMesh) {
+      removeBallOb9(obstacle_objects, inventory, inventory_tracker, colMesh, this.scene);
+    }
+
+    function down_pipes_run_hit(hit) {
+      dropBallOb9(hit.pickedMesh.name, ob9, solved, inventory, inventory_tracker, this.scene);
+      setBallOb9(hit.pickedMesh.name, ob9, solved, inventory, inventory_tracker, this.scene);
+      pickUpBallOb9(hit.pickedMesh.name, ob9, solved, inventory, inventory_tracker, this.scene);
+    }
+
+    function down_pipes_run() {
+      fallingBallOb9(solved, ob9, this.scene, score, obstacle_objects, forcefield_objects);
+    }
+
+    function tight_rope_hcc_oo(obstacle_objects, colMesh) {
+      climbLadderOb10(obstacle_objects, colMesh, this.camera, this.scene);
+      acidDeathOb10(obstacle_objects, colMesh, this.camera, this.scene, ob10, player);
+    }
+
+    function tight_rope_run_hit(hit) {
+      pushButtonsOb10(hit, solved, buttons, this.scene);
+    }
+
+    function tight_rope_btn() {
+      removeBarrierOb10(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
+    }
+
+    function dodge_turret_run() {
+      movementTestOb11(solved, ob11, this.camera, this.scene, score, forcefield_objects, obstacle_objects);
+    }
+
+    function dodge_turret_hcc(colMesh) {
+      shellsHitPlayerTestOb11(ob11, colMesh, this.scene, this.camera, player, start_pos);
+    }
+
+    function mob_shoots_run() {
+      movementTestOb12(solved, ob12, this.camera, this.scene, score, forcefield_objects, obstacle_objects);
+    }
+
+    function mob_shoots_hcc(colMesh) {
+      laserHitPlayerTestOb12(ob12, colMesh, this.scene, this.camera, player, start_pos);
+    }
+
+    let puzzles_data = {
+      coin_match: {
+        hcc: noop,
+        hcc_oo: coin_match_hcc_oo.bind(this),
+        run: noop,
+        run_hit: coin_match_run_hit.bind(this),
+        btn: noop
+      },
+      bulb_match: {
+        hcc: bulb_match_hcc.bind(this),
+        hcc_oo: noop,
+        run: noop,
+        run_hit: bulb_match_run_hit.bind(this),
+        btn: bulb_match_btn.bind(this)
+      },
+      sphere_agents: {
+        hcc: noop,
+        hcc_oo: noop,
+        run: sphere_agents_run.bind(this),
+        run_hit: sphere_agents_run_hit.bind(this),
+        btn: sphere_agents_btn.bind(this)
+      },
+      move_bridges: {
+        hcc: noop,
+        hcc_oo: move_bridges_hcc_oo.bind(this),
+        run: move_bridges_run.bind(this),
+        run_hit: move_bridges_run_hit.bind(this),
+        btn: move_bridges_btn.bind(this)
+      },
+      ghost_button: {
+        hcc: ghost_button_hcc.bind(this),
+        hcc_oo: noop,
+        run: ghost_button_run.bind(this),
+        run_hit: ghost_button_run_hit.bind(this),
+        btn: ghost_button_btn.bind(this)
+      },
+      carry_crystals: {
+        hcc: noop,
+        hcc_oo: noop,
+        run: noop,
+        run_hit: carry_crystals_run_hit.bind(this),
+        btn: noop
+      },
+      enter_hut: {
+        hcc: enter_hut_hcc.bind(this),
+        hcc_oo: noop,
+        run: enter_hut_run.bind(this),
+        run_hit: enter_hut_run_hit.bind(this),
+        btn: enter_hut_btn.bind(this)
+      },
+      grow_garden: {
+        hcc: grow_garden_hcc.bind(this),
+        hcc_oo: noop,
+        run: grow_garden_run.bind(this),
+        run_hit: grow_garden_run_hit.bind(this),
+        btn: noop
+      },
+      down_pipes: {
+        hcc: noop,
+        hcc_oo: down_pipes_hcc_oo.bind(this),
+        run: down_pipes_run.bind(this),
+        run_hit: down_pipes_run_hit.bind(this),
+        btn: noop
+      },
+      tight_rope: {
+        hcc: noop,
+        hcc_oo: tight_rope_hcc_oo.bind(this),
+        run: tight_rope_btn.bind(this),
+        run_hit: tight_rope_run_hit.bind(this),
+        btn: noop
+      },
+      dodge_turret: {
+        hcc: dodge_turret_hcc.bind(this),
+        hcc_oo: noop,
+        run: dodge_turret_run.bind(this),
+        run_hit: noop,
+        btn: noop
+      },
+      mob_shoots: {
+        hcc: mob_shoots_hcc.bind(this),
+        hcc_oo: noop,
+        run: mob_shoots_run.bind(this),
+        run_hit: noop,
+        btn: noop
+      }
+    };
+
+    this.scene.onKeyboardObservable.add((kbInfo) => {
+      switch (kbInfo.type) {
+        case KeyboardEventTypes.KEYDOWN:
+          if (player.health > 0 && menu_gui.toggle === false) {
+            if (kbInfo.event.key === "w" || kbInfo.event.key === "s" || kbInfo.event.key === "a" || kbInfo.event.key === "d") {
+              if (pressedKeys.w === false || pressedKeys.s === false || pressedKeys.a === false || pressedKeys.d === false) {
+                pressedKeys[kbInfo.event.key] = true;
+                if (player.already_walking === false) {
+                  player.already_walking = true;
+                  if (this.camera.speed > 0) {
+                    player.walking_sound = new Sound("Sound", "./sound/sfx_footsteps.wav", this.scene, null, { loop: true, autoplay: true });
+                  }
+                }
+              }
+            }
+          }
+        break;
+        case KeyboardEventTypes.KEYUP:
+          if (kbInfo.event.key === "w" || kbInfo.event.key === "s" || kbInfo.event.key === "a" || kbInfo.event.key === "d") {
+            pressedKeys[kbInfo.event.key] = false;
+            if (pressedKeys.w === false && pressedKeys.s === false && pressedKeys.a === false && pressedKeys.d === false) {
+              if (player.walking_sound) {
+                player.walking_sound.dispose(true, true);
+                player.walking_sound = null;
+                player.already_walking = false;
+              }
+            }
+            if (ob11.turret_moving) {
+              ob11.turret_moving = false;
+            }
+            if (ob12.mob_moving) {
+              ob12.mob_moving = false;
+            }
+          }
+        break;
+      }
+    });
     document.addEventListener("click", () => {
       if (player.holding !== "") {
         player.swing_spear = true;
@@ -402,147 +776,177 @@ class Canvas extends Component {
       // test for gem collisions
         collectGem(gem_objects, inventory, inventory_tracker, colMesh, this.scene);
       // for treasure collisions
-        collectTreasure(treasure_objects, trasure_stats, colMesh, score, this.scene);
-      // for hint collision
-        hintMessageOb2(colMesh, ob2, this.scene);
-      // for ghost barrier collision
-        warnMessageOb5(colMesh, ob5, this.scene);
-      // for removing ghost spear
-        removeSpearOb5(colMesh, ob5, this.scene, this.camera, player);
-      // for hut barrier collision
-        warnMessageOb7(colMesh, ob7, this.scene);
-      // for removing hut spear
-        removeSpearOb7(colMesh, ob7, this.scene, this.camera, player);
-      // for removing the watering can
-        removeWateringCanOb8(colMesh, this.scene, this.camera, player);
+        collectTreasure(treasure_objects, treasure_stats, colMesh, score, this.scene);
+
+        switch (map_size.size) {
+          case "small":
+            puzzles_data[puzzles[0]].hcc(colMesh);
+            puzzles_data[puzzles[1]].hcc(colMesh);
+          break;
+          case "medium":
+            puzzles_data[puzzles[0]].hcc(colMesh);
+            puzzles_data[puzzles[1]].hcc(colMesh);
+            puzzles_data[puzzles[2]].hcc(colMesh);
+          break;
+          case "large":
+            puzzles_data[puzzles[0]].hcc(colMesh);
+            puzzles_data[puzzles[1]].hcc(colMesh);
+            puzzles_data[puzzles[2]].hcc(colMesh);
+            puzzles_data[puzzles[3]].hcc(colMesh);
+          break;
+        }
+
       // for obstacle_objects items
         for (let i = 0, length = obstacle_objects.length; i < length; i++) {
           if (colMesh.uniqueId === obstacle_objects[i].id) {
-          // warn if hits pedestal
-            pedestalWarningOb1(obstacle_objects[i], inventory, ob1, solved, colMesh);
-          // testing for the coin
-            removeCoinOb1(obstacle_objects[i], inventory, inventory_tracker, colMesh, this.scene);
-          // for obstacle 4 teleportation...
-            teleportPlayerOb4(obstacle_objects[i], colMesh, this.camera, this.scene);
+            switch (map_size.size) {
+              case "small":
+                puzzles_data[puzzles[0]].hcc_oo(obstacle_objects[i], colMesh);
+                puzzles_data[puzzles[1]].hcc_oo(obstacle_objects[i], colMesh);
+              break;
+              case "medium":
+                puzzles_data[puzzles[0]].hcc_oo(obstacle_objects[i], colMesh);
+                puzzles_data[puzzles[1]].hcc_oo(obstacle_objects[i], colMesh);
+                puzzles_data[puzzles[2]].hcc_oo(obstacle_objects[i], colMesh);
+              break;
+              case "large":
+                puzzles_data[puzzles[0]].hcc_oo(obstacle_objects[i], colMesh);
+                puzzles_data[puzzles[1]].hcc_oo(obstacle_objects[i], colMesh);
+                puzzles_data[puzzles[2]].hcc_oo(obstacle_objects[i], colMesh);
+                puzzles_data[puzzles[3]].hcc_oo(obstacle_objects[i], colMesh);
+              break;
+            }
           }
         }
       }
     }
     handleCameraCollisions();
 
+    runTimer(timer);
     let divFps = document.getElementById("fps");
+    menu_gui.toggle = false; // make sure this is initially set to false here
 
     this.scene.executeWhenReady(() => {
       this.engine.runRenderLoop(() => {
-        divFps.innerHTML = this.engine.getFps().toFixed() + " fps";
-        this.scene.render();
-      // for secrets
-        moveSecretWall(secret_moving, current_secret, this.scene, secret_data);
-      // for swinging ghost spear
-        swingSpearOb5(ob5, this.scene, this.camera, solved, player);
-      // for swinging hut spear
-        swingSpearOb7(ob7, this.scene, this.camera, solved, player);
-      // for growing plants
-        growPlantOb8(this.scene, this.camera, ob8, solved, obstacle_objects, forcefield_objects, score, player);
-      // for shrinking plants
-        shrinkPlantOb8(this.scene, ob8);
-      // for pouring water
-        pourWaterOb8(solved, this.scene, this.camera, ob8);
+        if (menu_gui.toggle === false) {
+          divFps.innerHTML = this.engine.getFps().toFixed() + " fps";
+          this.scene.render();
+        // display the time
+          displayTime(timer);
+        // for secrets
+          moveSecretWall(secret_moving, current_secret, this.scene, secret_data);
 
-        if (this.pressE === true) {
-          let starting_position = {};
-          let direction = {};
+          switch (map_size.size) {
+            case "small":
+              puzzles_data[puzzles[0]].run();
+              puzzles_data[puzzles[1]].run();
+            break;
+            case "medium":
+              puzzles_data[puzzles[0]].run();
+              puzzles_data[puzzles[1]].run();
+              puzzles_data[puzzles[2]].run();
+            break;
+            case "large":
+              puzzles_data[puzzles[0]].run();
+              puzzles_data[puzzles[1]].run();
+              puzzles_data[puzzles[2]].run();
+              puzzles_data[puzzles[3]].run();
+            break;
+          }
 
-          let invView = new Matrix();
-          this.camera.getViewMatrix().invertToRef(invView);
-          direction = Vector3.TransformNormal(new Vector3(-0.15, 0.1, 1), invView);
-          direction.normalize();
+          if (this.pressE === true) {
+            let starting_position = {};
+            let direction = {};
 
-          let castRay = () => {
-            let origin = this.camera.position;
-            if (Object.keys(starting_position).length === 0) {
-              starting_position = this.camera.position;
-            }
-            let length = 4;
-            let ray = new Ray(origin, direction, length);
+            let invView = new Matrix();
+            this.camera.getViewMatrix().invertToRef(invView);
+            direction = Vector3.TransformNormal(new Vector3(-0.15, 0.1, 1), invView);
+            direction.normalize();
 
-            let hit = this.scene.pickWithRay(ray);
-
-            if (hit) {
-              if (hit.pickedMesh && hit.pickedMesh.name) {
-              // for doors/gates
-                openGate(hit, door_objects, inventory, inventory_tracker, this.scene);
-              // for exit portal
-                powerPortal(hit, portal_objects, inventory, inventory_tracker, exit_pos, this.scene);
-              // exiting the map
-                exitMap(hit, this.resetGlobals.bind(this), this.reStart.bind(this), this.scene);
-              // for discovering secret walls
-                discoverSecret(hit, secret_walls, secret_data, secret_moving, current_secret, score, this.scene);
-              // for obstacle 1
-                placeCoinOb1(hit, this.scene, solved, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score);
-              // for obstacle 2
-                pushButtonsOb2(hit, solved, buttons, ob2, this.scene);
-              // for obstacl 3...
-                pushButtonsOb3(hit, solved, buttons, this.scene);
-              // for obstacle 4
-                pushButtonsOb4(hit, solved, buttons, this.scene);
-              // for obstacle 5
-                pushButtonsOb5(hit, solved, buttons, this.scene);
-              // for obstacle 7
-                pushButtonsOb7(hit, solved, buttons, this.scene);
-              // for placing a crystal in obstacle 6
-                placeCrystalOb6(hit.pickedMesh.name, obstacle_objects, forcefield_objects, this.scene, this.camera, solved, ob6, player, score);
-              // for removing a crystal in obstacle 6
-                removeCrystalOb6(hit.pickedMesh.name, obstacle_objects, this.scene, this.camera, solved, ob6, player);
-              // for filling the watering can in obstacle 8
-                fillWateringCanOb8(this.scene, solved, hit.pickedMesh.name, ob8, player);
+            let castRay = () => {
+              let origin = this.camera.position;
+              if (Object.keys(starting_position).length === 0) {
+                starting_position = this.camera.position;
               }
+              let length = 4;
+              let ray = new Ray(origin, direction, length);
+
+              let hit = this.scene.pickWithRay(ray);
+
+              if (hit) {
+                if (hit.pickedMesh && hit.pickedMesh.name) {
+                // for doors/gates
+                  openGate(hit, door_objects, inventory, inventory_tracker, this.scene);
+                // for exit portal
+                  powerPortal(hit, portal_objects, inventory, inventory_tracker, exit_pos, this.scene);
+                // exiting the map
+                  exitMap(hit, treasure_stats, secret_data, timer, map_size, this.scene, this.camera, menu_gui);
+                // for discovering secret walls
+                  discoverSecret(hit, secret_walls, secret_data, secret_moving, current_secret, score, this.scene);
+
+                  switch (map_size.size) {
+                    case "small":
+                      puzzles_data[puzzles[0]].run_hit(hit);
+                      puzzles_data[puzzles[1]].run_hit(hit);
+                    break;
+                    case "medium":
+                      puzzles_data[puzzles[0]].run_hit(hit);
+                      puzzles_data[puzzles[1]].run_hit(hit);
+                      puzzles_data[puzzles[2]].run_hit(hit);
+                    break;
+                    case "large":
+                      puzzles_data[puzzles[0]].run_hit(hit);
+                      puzzles_data[puzzles[1]].run_hit(hit);
+                      puzzles_data[puzzles[2]].run_hit(hit);
+                      puzzles_data[puzzles[3]].run_hit(hit);
+                    break;
+                  }
+                }
+              }
+              this.pressE = false;
             }
-            this.pressE = false;
+            castRay();
           }
-          castRay();
+
+          if (buttons.pushingButton !== "") {
+            let pushButton = this.scene.getMeshByName(buttons.pushingButton);
+            let down_val = 2.9;
+            let top_val = 3.25;
+          // for obstacle 4's different button heights
+            if (buttons.pushingButton === "pushButton1p4a" || buttons.pushingButton === "pushButton1p4b" || buttons.pushingButton === "pushButton1p4c" || buttons.pushingButton === "pushButton1p10") {
+              down_val = 8.9;
+              top_val = 9.25;
+            }
+            if (pushButton.position.y > down_val && buttons.goingDown === true) {
+              pushButton.position.y -= 0.01;
+            } else if (pushButton.position.y < down_val && buttons.goingDown === true) {
+              switch (map_size.size) {
+                case "small":
+                  puzzles_data[puzzles[0]].btn();
+                  puzzles_data[puzzles[1]].btn();
+                break;
+                case "medium":
+                  puzzles_data[puzzles[0]].btn();
+                  puzzles_data[puzzles[1]].btn();
+                  puzzles_data[puzzles[2]].btn();
+                break;
+                case "large":
+                  puzzles_data[puzzles[0]].btn();
+                  puzzles_data[puzzles[1]].btn();
+                  puzzles_data[puzzles[2]].btn();
+                  puzzles_data[puzzles[3]].btn();
+                break;
+              }
+              buttons.goingDown = false;
+            } else if (pushButton.position.y < top_val && buttons.goingDown === false) {
+              pushButton.position.y += 0.01;
+            } else {
+              buttons.goingDown = true
+              buttons.pushingButton = "";
+              ob2.running = false;
+            }
+          }
         }
-
-      // for obstacle 3
-        agentCollisionsOb3(solved, ob3, obstacle_objects, forcefield_objects, this.scene, score);
-
-        if (buttons.pushingButton !== "") {
-          let pushButton = this.scene.getMeshByName(buttons.pushingButton);
-          let down_val = 2.9;
-          let top_val = 3.25;
-        // for obstacle 4's different button heights
-          if (buttons.pushingButton === "pushButton1p4a" || buttons.pushingButton === "pushButton1p4b" || buttons.pushingButton === "pushButton1p4c") {
-            down_val = 8.9;
-            top_val = 9.25;
-          }
-          if (pushButton.position.y > down_val && buttons.goingDown === true) {
-            pushButton.position.y -= 0.01;
-          } else if (pushButton.position.y < down_val && buttons.goingDown === true) {
-          // for obstacle 2
-            changeBulbColorOb2(solved, buttons, ob2, obstacle_objects, forcefield_objects, this.scene, score);
-          // for obstacle 3
-            agentSummonsOb3(buttons, ob3, this.scene);
-          // for obstacle 4
-            moveGreenOb4(buttons, ob4);
-            moveBlueOb4(buttons, ob4);
-            removeBarrierOb4(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
-          // for obstacle 5
-            removeBarrierOb5(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
-          // for obstacle 7
-            removeBarrierOb7(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
-            buttons.goingDown = false;
-          } else if (pushButton.position.y < top_val && buttons.goingDown === false) {
-            pushButton.position.y += 0.01;
-          } else {
-            buttons.goingDown = true
-            buttons.pushingButton = "";
-            ob2.running = false;
-          }
-        }
-
-      // for obstacle 4 moving bridges
-        movingGreenOb4(ob4, this.scene);
-        movingBlueOb4(ob4, this.scene);
       });
     });
   }
