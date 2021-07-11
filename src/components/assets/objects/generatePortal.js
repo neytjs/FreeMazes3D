@@ -33,37 +33,79 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   top.material.diffuseColor = new Color3(0.31, 0.25, 0.18);
   portal_pieces.push(top);
 
+  let bottom = MeshBuilder.CreateCylinder("cylinder", {diameter: 7, height: 0.5, tessellation: 8}, scene);
+  bottom.position.y = 0.25;
+  bottom.material = new StandardMaterial('texture1', scene);
+  bottom.material.diffuseColor = new Color3(0.41, 0.38, 0.35);
+  portal_pieces.push(bottom);
+
   let column = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8}, scene);
   column.position.y = 3.5;
   column.position.x = 2;
   column.position.z = 2;
   column.material = new StandardMaterial('texture1', scene);
-  column.material.diffuseColor = new Color3(0.31, 0.25, 0.18);
+  column.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
   portal_pieces.push(column);
+
+  let cbarrier = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.3, height: 7, tessellation: 8}, scene);
+  cbarrier.position.y = 3.5;
+  cbarrier.position.x = x + 2;
+  cbarrier.position.z = z + 2;
+  cbarrier.material = new StandardMaterial('texture1', scene);
+  cbarrier.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
+  cbarrier.physicsImpostor = new PhysicsImpostor(cbarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  cbarrier.checkCollisions = true;
 
   let column1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8}, scene);
   column1.position.y = 3.5;
   column1.position.x = -2;
   column1.position.z = -2;
   column1.material = new StandardMaterial('texture1', scene);
-  column1.material.diffuseColor = new Color3(0.31, 0.25, 0.18);
+  column1.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
   portal_pieces.push(column1);
+
+  let c1barrier = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.3, height: 7, tessellation: 8}, scene);
+  c1barrier.position.y = 3.5;
+  c1barrier.position.x = x - 2;
+  c1barrier.position.z = z - 2;
+  c1barrier.material = new StandardMaterial('texture1', scene);
+  c1barrier.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
+  c1barrier.physicsImpostor = new PhysicsImpostor(c1barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  c1barrier.checkCollisions = true;
 
   let column2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8}, scene);
   column2.position.y = 3.5;
   column2.position.x = -2;
   column2.position.z = 2;
   column2.material = new StandardMaterial('texture1', scene);
-  column2.material.diffuseColor = new Color3(0.31, 0.25, 0.18);
+  column2.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
   portal_pieces.push(column2);
+
+  let c2barrier = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.3, height: 7, tessellation: 8}, scene);
+  c2barrier.position.y = 3.5;
+  c2barrier.position.x = x - 2;
+  c2barrier.position.z = z + 2;
+  c2barrier.material = new StandardMaterial('texture1', scene);
+  c2barrier.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
+  c2barrier.physicsImpostor = new PhysicsImpostor(c2barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  c2barrier.checkCollisions = true;
 
   let column3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8}, scene);
   column3.position.y = 3.5;
   column3.position.x = 2;
   column3.position.z = -2;
   column3.material = new StandardMaterial('texture1', scene);
-  column3.material.diffuseColor = new Color3(0.31, 0.25, 0.18);
+  column3.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
   portal_pieces.push(column3);
+
+  let c3barrier = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.3, height: 7, tessellation: 8}, scene);
+  c3barrier.position.y = 3.5;
+  c3barrier.position.x = x + 2;
+  c3barrier.position.z = z - 2;
+  c3barrier.material = new StandardMaterial('texture1', scene);
+  c3barrier.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
+  c3barrier.physicsImpostor = new PhysicsImpostor(c3barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  c3barrier.checkCollisions = true;
 
   let teleporter = {};
   if (exit) {
@@ -79,12 +121,6 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   }
 
   let portal = Mesh.MergeMeshes(portal_pieces, true, true, undefined, false, true);
-  if (exit === true) {
-    portal.physicsImpostor = new PhysicsImpostor(top, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  } else {
-    portal.physicsImpostor = new PhysicsImpostor(top, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  }
-  portal.checkCollisions = true;
   portal.position.y = 0;
   portal.position.x = x;
   portal.position.z = z;
