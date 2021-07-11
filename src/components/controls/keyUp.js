@@ -1,8 +1,9 @@
 import {GUI_Warn} from "../gui/gui_warn.js";
 import {GUI_InventoryCycle} from "../gui/gui_inventory_cycle.js";
+import {stopStartTimer} from "../gui/gui_timer.js";
 import {playSound} from "../assets/playSound.js";
 
-function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClose, scene, resetGlobals) {
+function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClose, scene, resetGlobals, reStart, timer) {
   let key = event.keyCode;
   let menu = document.getElementById("menu");
   let menu_left = parseInt(window.getComputedStyle(menu).left);
@@ -18,6 +19,8 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
   let warn_left = parseInt(window.getComputedStyle(warn).left);
   let fps = document.getElementById("fps");
   let fps_right = parseInt(window.getComputedStyle(fps).right);
+  let results = document.getElementById("results");
+  let results_left = parseInt(window.getComputedStyle(results).left);
 
 // E
   if (key === 69) {
@@ -53,18 +56,30 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
           menu_gui.counter = 0;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+          menu_gui.toggle = false;
         }
         if (difficulty_left === 0) {
           document.getElementById("difficulty").style.left = -10000;
           document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#FF0000";
           menu_gui.difficulty_counter = 0;
           document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#00FF00";
+          menu_gui.toggle = false;
         }
       } else {
         document.getElementById("menu").style.left = 0;
+        menu_gui.toggle = true;
       }
+      stopStartTimer(key, timer);
     }
   }
+  if ((key === 112 || key === 27) && results_left === 0) {
+    resetGlobals();
+    reStart();
+    document.getElementById("results").style.left = -10000;
+    document.getElementById("menu").style.left = 0;
+    menu_gui.toggle = false;
+  }
+
 // arrow up
   if (key === 38) {
     if (warn_left < 0) {
@@ -124,18 +139,21 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
       playSound("misc_menu_3", 2000, scene);
       document.getElementById("key_controls").style.left = -10000;
       document.getElementById("menu").style.left = 0;
+      menu_gui.toggle = true;
     }
   // for retracting the scores
     if (scores_left === 0 && menu_left === -10000) {
       playSound("misc_menu_3", 2000, scene);
       document.getElementById("scores").style.left = -10000;
       document.getElementById("menu").style.left = 0;
+      menu_gui.toggle = true;
     }
   // for retracting the credits
     if (credits_left === 0 && menu_left === -10000) {
       playSound("misc_menu_3", 2000, scene);
       document.getElementById("credits_list").style.left = -10000;
       document.getElementById("menu").style.left = 0;
+      menu_gui.toggle = true;
     }
   // for new game to view difficulty
     if (menu_gui.options[menu_gui.counter] === "new_game") {
@@ -143,6 +161,7 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
         playSound("misc_menu_3", 2000, scene);
         document.getElementById("difficulty").style.left = 0;
         document.getElementById("menu").style.left = -10000;
+        menu_gui.toggle = true;
       }
     }
 
