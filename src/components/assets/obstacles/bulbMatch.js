@@ -74,7 +74,7 @@ function bulbMatch(x, z, scene, global_objects, item_id, camera) {
   buttonBarrier1.material = new StandardMaterial('texture1', scene);
   buttonBarrier1.material.alpha = 0;
   buttonBarrier1.name = "button1";
-  global_objects.push({id: buttonBarrier1.uniqueId, obstacle2_id: item_id, type: "puzzle_piece", name: ""});
+  global_objects.push({id: buttonBarrier1.uniqueId, obstacle2_id: item_id, type: "structure", name: ""});
 
   var buttonHolder2 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
   buttonHolder2.position.y = 1.5;

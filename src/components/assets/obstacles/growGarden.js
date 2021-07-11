@@ -45,7 +45,7 @@ function growGarden(x, z, scene, global_objects, item_id, camera) {
   fence1.position.z = z + 20;
   fence1.material = new StandardMaterial('texture1', scene);
   fence1.material.diffuseColor = new Color3(0.37, 0.25, 0.09);
-  global_objects.push({id: fence1.uniqueId, obstacle8_id: item_id, type: "puzzle_piece", name: ""});
+  global_objects.push({id: fence1.uniqueId, obstacle8_id: item_id, type: "structure", name: ""});
 
   let fence2 = MeshBuilder.CreateBox("box", {width: 10.5, height: 1, depth: 1}, scene);
   fence2.position.y = 0.5;

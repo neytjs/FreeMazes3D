@@ -41,7 +41,7 @@ function ghostButton(x, z, scene, global_objects, item_id, camera) {
   buttonBarrier1.material = new StandardMaterial('texture1', scene);
   buttonBarrier1.material.alpha = 0;
   buttonBarrier1.name = "button1p5a";
-  global_objects.push({id: buttonBarrier1.uniqueId, obstacle5_id: item_id, type: "puzzle_piece", name: ""}); // just for obstacle5_id
+  global_objects.push({id: buttonBarrier1.uniqueId, obstacle5_id: item_id, type: "structure", name: ""}); // just for obstacle5_id
 
   let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
   pushButton1.position.y = 3.25;

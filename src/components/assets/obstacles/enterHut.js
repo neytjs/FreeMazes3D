@@ -49,7 +49,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     pushButton1.material = new StandardMaterial('texture1', scene);
     pushButton1.material.diffuseColor = new Color3(0.64, 0.11, 0.11);
     pushButton1.name = "pushButton1p7a";
-    global_objects.push({id: buttonBarrier1.uniqueId, obstacle7_id: item_id, type: "puzzle_piece", name: ""}); // just for obstacle7_id
+    global_objects.push({id: buttonBarrier1.uniqueId, obstacle7_id: item_id, type: "structure", name: ""}); // just for obstacle7_id
 
 // hut
     let wall1 = MeshBuilder.CreateBox("box", {width: 10, height: 10, depth: 1}, scene);
