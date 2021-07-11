@@ -9,13 +9,13 @@ import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 
 function generatePottedTree(x, z, scene) {
-  let pot = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 2, diameterBottom: 2, height: 1.5, tessellation: 12}, scene);
+  let pot = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 2, diameterBottom: 2, height: 2, tessellation: 12}, scene);
   pot.position.y = 1;
   pot.material = new StandardMaterial('texture1', scene);
   pot.material.diffuseColor = new Color3(0.23, 0.19, 0.05);
 
   var rim = MeshBuilder.CreateTorus("torus", {diameter: 2, thickness: 0.25});
-  rim.position.y = 1.75;
+  rim.position.y = 2;
   rim.material = new StandardMaterial('texture1', scene);
   rim.material.diffuseColor = new Color3(0, 0, 0);
 
