@@ -11,10 +11,19 @@ function createMapAreas(areas) {
       }
     }
   }
-// now get the average section size
-  let average_area_size = Math.floor(total_pieces / areas);
-// also get the "forth", i.e. the MAXIMUM size we want a map area ever to be (i.e. 1/4th of the map's length * width)
-  let forth = Math.round((length * width) / 4);
+// now get the max (unmerged) section size
+  let max_area_size = 0;
+  switch (areas) {
+    case 2:
+      max_area_size = 5;
+    break;
+    case 3:
+      max_area_size = 6;
+    break;
+    case 4:
+      max_area_size = 10;
+    break;
+  }
 // now we use the area_sizes to break up the map into adjacent areas
 // simplest approach, find all pieces with a value of 1
   let total_one_values = [];
@@ -65,14 +74,16 @@ function createMapAreas(areas) {
       moveForwardOnePiece();
     // if value is > than 2, the findMapAreas() finishes running
       if (map[x][y].value > 2) {
-        counter = average_area_size;
+        counter = max_area_size;
       } else { // otherwise, continue running
-        area_pieces.push({x: x, y: y});
-        direction = new_direction;
-        counter = counter + 1;
+          counter = counter + 1;
+        if (counter < max_area_size) {
+          area_pieces.push({x: x, y: y});
+          direction = new_direction;
+        }
       }
 
-      if (counter < average_area_size) {
+      if (counter < max_area_size) {
         findMapAreas();
       } else { // finally, once this function is done calling itself, for each for loop iteration, add the results to map_areas
         map_areas.push({ area_id: i, area_pieces: area_pieces, entrance: { pos: {x: x, y: y}, direction: new_direction } })
@@ -92,9 +103,9 @@ function createMapAreas(areas) {
       if (i !== j && map_areas[i].entrance.pos.x === map_areas[j].entrance.pos.x && map_areas[i].entrance.pos.y === map_areas[j].entrance.pos.y) {
       // if the common entrance piece value is three
         if (map[map_areas[i].entrance.pos.x][map_areas[i].entrance.pos.y].value === 3) {
-        // if either has a pieces length of one... and their combined length is less than forth of the map's length*width
+        // if either has a pieces length of one... and their combined length is not too big
           let combined = map_areas[i].area_pieces.length + map_areas[j].area_pieces.length;
-          if ((map_areas[i].area_pieces.length === 1 || map_areas[j].area_pieces.length === 1) && (combined <= forth)) {        
+          if ((map_areas[i].area_pieces.length === 1 || map_areas[j].area_pieces.length === 1) && (combined <= max_area_size)) {
           // add their pieces together + their entrance piece.
             let new_pieces = map_areas[i].area_pieces.concat(map_areas[j].area_pieces);
             new_pieces.push(map_areas[i].entrance.pos);
