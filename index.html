@@ -103,6 +103,18 @@
       left: 100px;
       font-size: 20;
       border-bottom: black 2px solid;
+    }
+    #timer {
+      position: absolute;
+      line-height: 40px;
+      text-align: center;
+      background-color: #808080;
+      color: #FFFFFF;
+      width: 200px;
+      height: 40px;
+      left: 300px;
+      font-size: 20;
+      border-bottom: black 2px solid;
       border-right: black 2px solid;
       border-bottom-right-radius: 15px;
     }
@@ -122,6 +134,28 @@
       top: 25%;
       font-size: 80;
       text-align: center;
+    }
+    #results {
+      position: absolute;
+      background-color: #808080;
+      color: #FFFFFF;
+      width: 100%;
+      height: 100%;
+      left: -10000px;
+      font-size: 20;
+      z-index: 10;
+    }
+    #results_title {
+      text-align: center;
+    }
+    #results_stats {
+      position: absolute;
+      left: 40%;
+    }
+    #results_end {
+      position: absolute;
+      left: 30%;
+      bottom: 5px;
     }
     #menu {
       position: absolute;
@@ -259,9 +293,25 @@
   </style>
 </head>
 <body>
+  <div id="results">
+    <div id="results_title">
+      <h1>Results</h1>
+    </div>
+    <ul id="results_stats">
+      <li id="difficulty_stats"></li>
+      <li id="time_stats"></li>
+      <li id="treasure_stats"></li>
+      <li id="secret_stats"></li>
+    </ul>
+    <br>
+    <div id="results_end">
+      <div class="back">Press ESC to return to menu.</div>
+    </div>
+  </div>
   <div id="fps">0</div>
   <div id="menu_button">Menu (F1)</div>
   <div id="score">Score: 0</div>
+  <div id="timer">Time: </div>
   <div id="inventory">
     <div>Inventory:</div>
     <div id="inventory_img"></div>
@@ -278,7 +328,7 @@
     <div id="high_scores">High Scores</div>
     <div id="credits">Credits</div>
     <div id="exit_game">Exit Game</div>
-    <div class="version">Version 0.2</div>
+    <div class="version">Version 0.3</div>
   </div>
   <div id="difficulty">
     <div class="game_title"><b><i>FreeMazes3D</i></b></div>
@@ -286,7 +336,7 @@
     <div id="medium">Medium</div>
     <div id="hard">Hard</div>
     <div id="back">BACK</div>
-    <div class="version">Version 0.2</div>
+    <div class="version">Version 0.3</div>
   </div>
   <div id="warn">
     <div id="warn_message"></div>
@@ -355,14 +405,14 @@
       </tr>
     </table>
     <div class="back">BACK</div>
-    <div class="version">Version 0.2</div>
+    <div class="version">Version 0.3</div>
   </div>
   <div id="scores">
     <div class="game_title"><b><i>FreeMazes3D</i></b></div>
     <h3>High Scores:</h3>
     <table id="scores_list" align="center"></table>
     <div class="back">BACK</div>
-    <div class="version">Version 0.2</div>
+    <div class="version">Version 0.3</div>
   </div>
   <div id="credits_list">
     <div class="game_title"><b><i>FreeMazes3D</i></b></div>
@@ -382,12 +432,17 @@
       <i>Mouse Click</i> – LFA<br>
       <i>Realization, Sci-Fi Drone Loop</i> – Jason Dagenet<br>
       <i>Ghost</i> – Ogrebane<br>
+      <i>Aargh!</i> – congusbongus<br>
       <i>Bomb Explosion 8bit</i> – Luke.RUSTLTD<br>
       <i>40 CC0 water / splash / slime SFX</i> – rubberduck<br>
       <i>4 Atmospheric Ghostly Loops</i> – Independent.nu<br>
+      <i>Grass Foot Step Sounds, Lava Loop</i> – Blender Foundation<br>
+      <i>Falling Rock</i> – spookymodem<br>
+      <i>Laser Rifle</i> – Skorpio<br>
+      <i>Laser Fire</i> – farfadet46<br>
     </div>
     <div class="back">BACK</div>
-    <div class="version">Version 0.2</div>
+    <div class="version">Version 0.3</div>
   </div>
   <div id="output"></div>
   <script src="./dist/bundle.js"></script>

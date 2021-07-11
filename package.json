@@ -1,7 +1,7 @@
 {
-  "name": "mazes",
+  "name": "FreeMazes3D",
   "version": "1.0.0",
-  "description": "3d maze generator built with BabylonJS, React, and Electron.",
+  "description": "A maze generator with retro-themed, labyrinth-style adventure and puzzle solving.",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -30,7 +30,8 @@
     "@babylonjs/materials": "^4.2.0",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.2.0",
-    "electron": "^11.4.2",
+    "electron": "^13.1.1",
+    "@electron/remote": "^1.1.0",
     "style-loader": "^0.19.1",
     "url-loader": "^2.1.0",
     "webpack": "^4.44.2",
