@@ -1,5 +1,6 @@
 const { app, Menu, MenuItem, ipcMain, BrowserWindow, dialog } = require('electron');
 const fs = require('fs');
+require('@electron/remote/main').initialize();
 
 app.on('ready', () => {
 	mainWindow = new BrowserWindow({
@@ -9,7 +10,8 @@ app.on('ready', () => {
 		fullscreen: true,
 		webPreferences: {
 			nodeIntegration: true,
-			enableRemoteModule: true,
+			contextIsolation: false,
+			enableRemoteModule: true
 		},
 		icon: require('path').join(__dirname, '')
 	});
@@ -20,7 +22,7 @@ app.on('ready', () => {
 		pathname: require('path').join(__dirname, 'index.html')
 	});
 
-	mainWindow.setTitle("3d test with Electron, React, and Babylon.js");
+	mainWindow.setTitle("FreeMazes3D");
 	mainWindow.loadURL(url);
 	mainWindow.maximize();
 //	mainWindow.webContents.openDevTools();
