@@ -15,7 +15,7 @@ import {generateObjects} from "../assets/generate_objects.js";
 import {generateObstacles} from "../assets/generate_obstacles.js";
 import {map, length, width, total_areas, createEmptyMap, createMap, createMapAreas,
   setStartPosition, setExitPosition, generateKeys, generateGem, generateTreasure,
-  generateSecrets, declareObstacles, declareDoors, storeExitPos, setMapSize,
+  generateSecrets, declareObstacles, declareDoors, storeExitPos, storeStartPos, setMapSize,
   generateClutterLocations} from "../generators/maze_generator.js";
 import {wallColors} from "../assets/wall_colors.js";
 import {floorColors} from "../assets/floor_colors.js";
@@ -26,10 +26,9 @@ import {selectPuzzle} from "../assets/select_puzzle.js";
 import {generateClutter} from "../assets/generateClutter.js";
 import {selectClutter} from "../assets/selectClutter.js";
 import {selectEnvironment} from "../assets/selectEnvironment.js";
-const remote = window.require('electron').remote;
 
 class SceneGenerator {
-  static returnScene(scene, camera, door_objects, forcefield_objects, key_objects, portal_objects, gem_objects, treasure_objects, trasure_stats, obstacle_objects, secret_walls, secret_data, map_size) {
+  static returnScene(scene, camera, door_objects, forcefield_objects, key_objects, portal_objects, gem_objects, treasure_objects, treasure_stats, obstacle_objects, secret_walls, secret_data, map_size, puzzles) {
     var light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
 
     light.intensity = 1;
@@ -94,7 +93,7 @@ class SceneGenerator {
             doors = declareDoors(map_areas, obstacles, keys, exit_pos, total_areas);
           // generate treasure
             treasure = generateTreasure(start_pos, exit_pos, keys, gem, doors, updated_map);
-            trasure_stats.treasure_total = treasure.length;
+            treasure_stats.treasure_total = treasure.length;
           // finally generate clutter
             clutter = generateClutterLocations(start_pos, exit_pos, keys, gem, doors, map_areas);
           }
@@ -150,7 +149,6 @@ class SceneGenerator {
     let hard_puzzles = selectPuzzle("hard");
     let clutter_types = selectClutter();
     let secret_environments = selectEnvironment();
-
     for (let i = 0, length = terrain_pieces.length; i < length; i++) {
       for (let j = 0, jlength = terrain_pieces[i].length; j < jlength; j++) {
         let floor_tile = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
@@ -294,15 +292,19 @@ class SceneGenerator {
             for (let n = 0, nlength = obstacles.length; n < nlength; n++) {
               if (obstacles[n].pos.x === i && obstacles[n].pos.y === j && obstacles[n].obstacle_id === 1) {
                 generateObstacles(easy_puzzles[0], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera);
+                puzzles.push(easy_puzzles[0]);
               }
               if (obstacles[n].pos.x === i && obstacles[n].pos.y === j && obstacles[n].obstacle_id === 2) {
                 generateObstacles(hard_puzzles[0], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera);
+                puzzles.push(hard_puzzles[0]);
               }
               if (obstacles[n].pos.x === i && obstacles[n].pos.y === j && obstacles[n].obstacle_id === 3) {
                 generateObstacles(hard_puzzles[1], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera);
+                puzzles.push(hard_puzzles[1]);
               }
               if (obstacles[n].pos.x === i && obstacles[n].pos.y === j && obstacles[n].obstacle_id === 4) {
                 generateObstacles(easy_puzzles[1], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera);
+                puzzles.push(easy_puzzles[1]);
               }
             }
           // check for gem
@@ -315,6 +317,7 @@ class SceneGenerator {
             // also reset the camera position there
               camera.position.x = (j * 70) + 30;
               camera.position.z = ((i * 70) - ((i * 70) * 2)) - 30;
+              storeStartPos({x: ((j * 70) + 30), y: (((i * 70) - ((i * 70) * 2)) - 30)});
             }
           // check for exit
             if (exit_pos.x === i && exit_pos.y === j) {
