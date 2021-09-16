@@ -26,6 +26,7 @@ app.on('ready', () => {
 	mainWindow.loadURL(url);
 	mainWindow.maximize();
 //	mainWindow.webContents.openDevTools();
+    require("@electron/remote/main").enable(mainWindow.webContents);
 });
 
 let darwin = process.platform === 'darwin';
