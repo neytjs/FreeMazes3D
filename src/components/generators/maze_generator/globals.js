@@ -20,6 +20,10 @@ function storeStartPos(new_start_pos) {
 }
 
 function setMapSize(size) {
+  if (map.length > 0) {
+    map = null;
+    map = [];
+  }
   switch (size) {
     case "small":
     length = 4;
