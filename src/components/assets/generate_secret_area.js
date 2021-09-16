@@ -17,9 +17,11 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
     wasteland: new Color3(0.8, 0.45, 0.06)
   };
   let ground_color = ground_colors[secret_environments[0]];
+  let tree = generateTree(secret_environments, scene);
+  tree.isVisible = false;
 
   function generateTreeBarriers(piece, floor_x, floor_y, plus_x, plus_z) {
-    var TreesData = [
+    let TreesData = [
       {
         piece: "horizontal_up",
         data: [
@@ -75,7 +77,19 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
           for (let k = 0, klength = 7; k < klength; k++) {
             if (TreesData[i].data[j][k] !== "_") {
               if (TreesData[i].data[j][k] === "X") {
-                generateTree(k, j, floor_y, floor_x, plus_x, plus_z, scene, secret_environments);
+                let newTreeInstance = tree.createInstance("i" + (i + j + k));
+                newTreeInstance.position.x = ((k * 10) + (floor_x * 70) + plus_z);
+                newTreeInstance.position.z = (((j * 10) - (((j * 10) * 2) + (floor_y * 70))) + plus_x);
+
+                let treesBarrier = MeshBuilder.CreateBox("wall", {width: 10, height: 10, depth: 10}, scene);
+                treesBarrier.position.y = 5;
+                treesBarrier.position.x = ((k * 10) + (floor_x * 70) + plus_z);
+                treesBarrier.position.z = (((j * 10) - (((j * 10) * 2) + (floor_y * 70))) + plus_x);
+                treesBarrier.material = new StandardMaterial('texture1', scene);
+                treesBarrier.material.diffuseColor = new Color3(0, 1, 0);
+                treesBarrier.material.alpha = 0;
+                treesBarrier.physicsImpostor = new PhysicsImpostor(treesBarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+                treesBarrier.checkCollisions = true;
               }
             }
           }
@@ -84,7 +98,7 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
     }
   }
   if (secret_data.type === "horizontal_up") {
-    var secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    let secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
     secret_ground.position.x = (floor_x * 70) + 30;
     secret_ground.position.z = ((floor_y * 70) + 40);
     secret_ground.position.y = -0.5;
@@ -96,7 +110,7 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
     generateObjects(selectTreasure(), (floor_x * 70) + 30, ((floor_y * 70) + 40), scene, treasure_objects);
   }
   if (secret_data.type === "horizontal_down") {
-    var secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    let secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
     secret_ground.position.x = (floor_x * 70) + 30;
     secret_ground.position.z = -((floor_y * 70) + 100);
     secret_ground.position.y = -0.5;
@@ -108,7 +122,7 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
     generateObjects(selectTreasure(), (floor_x * 70) + 30, -((floor_y * 70) + 100), scene, treasure_objects);
   }
   if (secret_data.type === "vertical_left") {
-    var secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    let secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
     secret_ground.position.x = (floor_x * 70) - 40;
     secret_ground.position.z = -((floor_y * 70) + 30);
     secret_ground.position.y = -0.5;
@@ -120,7 +134,7 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
     generateObjects(selectTreasure(), (floor_x * 70) - 40, -((floor_y * 70) + 30), scene, treasure_objects);
   }
   if (secret_data.type === "vertical_right") {
-    var secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    let secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
     secret_ground.position.x = (floor_x * 70) + 100;
     secret_ground.position.z = -((floor_y * 70) + 30);
     secret_ground.position.y = -0.5;

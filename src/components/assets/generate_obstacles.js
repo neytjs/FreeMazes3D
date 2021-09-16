@@ -10,6 +10,10 @@ import {downPipes} from "./obstacles/downPipes.js";
 import {tightRope} from "./obstacles/tightRope.js";
 import {dodgeTurret} from "./obstacles/dodgeTurret.js";
 import {mobShoots} from "./obstacles/mobShoots.js";
+import {powderPyramid} from "./obstacles/powderPyramid.js";
+import {hauntedCrypt} from "./obstacles/hauntedCrypt.js";
+import {bullsEye} from "./obstacles/bullsEye.js";
+import {timedButtons} from "./obstacles/timedButtons.js";
 
 function generateObstacles(object_name, x, z, scene, global_objects, item_id, camera) {
   switch (object_name) {
@@ -48,6 +52,18 @@ function generateObstacles(object_name, x, z, scene, global_objects, item_id, ca
     break;
     case "mob_shoots":
       mobShoots(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "powder_pyramid":
+      powderPyramid(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "haunted_crypt":
+      hauntedCrypt(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "bulls_eye":
+      bullsEye(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "timed_buttons":
+      timedButtons(x, z, scene, global_objects, item_id, camera);
     break;
   }
 }

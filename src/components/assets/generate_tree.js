@@ -7,7 +7,7 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 
-function generateTree(x, z, floor_x, floor_z, plus_x, plus_z, scene, secret_environments) {
+function generateTree(secret_environments, scene, x, z, floor_x, floor_z, plus_x, plus_z) {
   let trunk_colors = {
     alpine: new Color3(0.42, 0.25, 0.14),
     winter: new Color3(0.45, 0.39, 0.31),
@@ -102,18 +102,9 @@ function generateTree(x, z, floor_x, floor_z, plus_x, plus_z, scene, secret_envi
   cone5.material.diffuseColor = needles_color;
   tree_parts.push(cone5);
 
-  var treesBarrier = MeshBuilder.CreateBox("wall", {width: 10, height: 10, depth: 10}, scene);
-  treesBarrier.position.y = 5;
-  treesBarrier.material = new StandardMaterial('texture1', scene);
-  treesBarrier.material.diffuseColor = new Color3(0, 1, 0);
-  treesBarrier.material.alpha = 0;
-  tree_parts.push(treesBarrier);
-
   let fullTrees = Mesh.MergeMeshes(tree_parts, true, true, undefined, false, true);
-  fullTrees.position.x = ((x * 10) + (floor_z * 70) + plus_z);
-  fullTrees.position.z = (((z * 10) - (((z * 10) * 2) + (floor_x * 70))) + plus_x);
-  fullTrees.physicsImpostor = new PhysicsImpostor(treesBarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  fullTrees.checkCollisions = true;
+  
+  return fullTrees;
 }
 
 export {generateTree};

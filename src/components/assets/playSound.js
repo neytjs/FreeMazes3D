@@ -63,6 +63,12 @@ function playSound(sound_file, time, scene, callback) {
         autoplay: true
       });
     break;
+    case "magnet_action":
+      sound_object = new Sound("Sound", "./sound/magnet_action.wav", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
     case "misc_menu_3":
       sound_object = new Sound("Sound", "./sound/misc_menu_3.wav", scene, null, {
         loop: false,
@@ -142,8 +148,20 @@ function playSound(sound_file, time, scene, callback) {
         autoplay: true
       });
     break;
+    case "tick":
+      sound_object = new Sound("Sound", "./sound/tick.wav", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
     case "tir":
       sound_object = new Sound("Sound", "./sound/tir.mp3", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
+    case "tock":
+      sound_object = new Sound("Sound", "./sound/tock.wav", scene, null, {
         loop: false,
         autoplay: true
       });
