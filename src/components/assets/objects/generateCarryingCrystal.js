@@ -8,7 +8,7 @@ import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 
-function generateCarryingCrystal(scene, camera, color) {
+function generateCarryingCrystal(scene, camera) {
   let carryingCrystalShard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
   carryingCrystalShard1.position.y = 8;
 
@@ -17,12 +17,10 @@ function generateCarryingCrystal(scene, camera, color) {
 
   let carryingCrystal = Mesh.MergeMeshes([carryingCrystalShard1, carryingCrystalShard2], true, true, undefined, false, true);
   carryingCrystal.material = new StandardMaterial('texture1', scene);
-  carryingCrystal.material.diffuseColor = color;
-  carryingCrystal.renderingGroupId = 1;
+  carryingCrystal.material.alpha = 0;
+  carryingCrystal.position.y = -1000;
   carryingCrystal.name = "carryingCrystal";
   carryingCrystal.rotation.x = Math.PI / 3;
-  carryingCrystal.parent = camera;
-  carryingCrystal.position = new Vector3(-2, -4, 0);
 }
 
 export {generateCarryingCrystal};

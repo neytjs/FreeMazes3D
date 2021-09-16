@@ -42,11 +42,9 @@ function generateSpear(status, spear_type, scene, x, z, camera) {
 
   if (status === "holding") {
     let spear = Mesh.MergeMeshes([shaft, blade1, blade2], true, true, undefined, false, true);
-    spear.renderingGroupId = 1;
+    spear.position.y = -1000;
     spear.name = spear_name;
     spear.rotation.x = Math.PI / 3;
-    spear.parent = camera;
-    spear.position = new Vector3(0, -6, 8);
   }
   if (status === "item") {
     let spearBarrier = MeshBuilder.CreateCylinder("spearBarrier", {diameter: 2.5, height: 10, tessellation: 8}, scene);
@@ -58,7 +56,7 @@ function generateSpear(status, spear_type, scene, x, z, camera) {
     spear.position.z = z + 20;
     spear.physicsImpostor = new PhysicsImpostor(spearBarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     spear.checkCollisions = true;
-    spear.name = spear_name;
+    spear.name = spear_name + "item";
   // make it rotate
     let axis = new Vector3(0, 6, 0);
     let angle = 0.05;

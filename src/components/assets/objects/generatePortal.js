@@ -113,7 +113,7 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
     teleporter.position.y = 3.25;
     teleporter.position.x = x;
     teleporter.position.z = z;
-    var teleporterMat = new StandardMaterial('texture1', scene);
+    let teleporterMat = new StandardMaterial('texture1', scene);
     teleporterMat.alpha = 0;
     teleporter.material = teleporterMat;
     teleporter.physicsImpostor = new PhysicsImpostor(teleporter, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
@@ -131,8 +131,10 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   }
 
   if (exit === true && powered === true) {
-    teleporter.name = "teleporter_powered_barrier";
+    teleporter.name = "teleporter_powered_barrier";    
     portal.name = "teleporter_powered";
+    portal.position.y = -1000;
+    teleporter.position.y = -1000;
     var particleSystem = new ParticleSystem("particles", 3000, scene);
 
     particleSystem.particleTexture = new Texture("./imgs/circle.png", scene);
@@ -144,11 +146,12 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
     pyramid2.position.y = 3;
 
     let gem = Mesh.MergeMeshes([pyramid, pyramid2], true, true, undefined, false, true);
-    gem.position.y = 0;
+    gem.position.y = -1000;
     gem.position.x = x;
     gem.position.z = z;
     gem.material = new StandardMaterial('texture1', scene);
     gem.material.diffuseColor = new Color3(0.98, 0.18, 0.81);
+    gem.name = "exitGem";
 
     let axis = new Vector3(0, 6, 0);
     let angle = 0.05;
@@ -157,9 +160,10 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
     });
 
     let sphere = Mesh.CreateSphere("sphere", 8, 0.01, scene);
-    sphere.position.y = 3.5;
+    sphere.position.y = -1000;
     sphere.position.x = x;
     sphere.position.z = z;
+    sphere.name = "exitSphere";
 
     particleSystem.emitter = sphere;
 

@@ -26,10 +26,8 @@ function generateWateringCan(status, scene, x, z, camera) {
   if (status === "holding") {
     let can = Mesh.MergeMeshes([pipe, nozzle], true, true, undefined, false, true);
     can.name = "wateringCan";
-    can.renderingGroupId = 1;
+    can.position.y = -1000;
     can.rotation.x = 0.25;
-    can.parent = camera;
-    can.position = new Vector3(0, -2.1, 0);
   }
   if (status === "pouring") {
     let water = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8}, scene);
@@ -41,11 +39,9 @@ function generateWateringCan(status, scene, x, z, camera) {
     water.material.alpha = 0.5;
 
     let can = Mesh.MergeMeshes([pipe, nozzle, water], true, true, undefined, false, true);
-    can.name = "wateringCan";
-    can.renderingGroupId = 1;
+    can.name = "wateringCanpouring";
+    can.position.y = -1000;
     can.rotation.x = 0.5;
-    can.parent = camera;
-    can.position = new Vector3(0, -2.1, 0);
   }
   if (status === "item") {
     let tank = MeshBuilder.CreateCylinder("cylinder", {diameter: 1.5, height: 1.5, tessellation: 8}, scene);
@@ -81,7 +77,7 @@ function generateWateringCan(status, scene, x, z, camera) {
     can.position.z = z;
     can.physicsImpostor = new PhysicsImpostor(barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
     can.checkCollisions = true;
-    can.name = "wateringCan";
+    can.name = "wateringCanitem";
 // make it rotate
     let axis = new Vector3(0, 6, 0);
     let angle = 0.05;
