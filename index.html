@@ -2,301 +2,14 @@
 <head>
   <title>FreeMazes3D</title>
   <meta charset="UTF-8">
-  <style>
-    html, body {
-      padding: 0;
-      margin: 0;
-      overflow: hidden;
-      cursor: none;
-    }
-    canvas {
-      outline: none;
-      width: 100%;
-      height: 100%;
-    }
-    #fps {
-      position: absolute;
-      background-color: black;
-      border: 2px solid white;
-      text-align: center;
-      font-size: 16px;
-      color: white;
-      top: 15px;
-      right: -10000;
-      width: 60px;
-      height: 20px;
-    }
-    #warning {
-      position: absolute;
-      line-height: 200px;
-      text-align: center;
-      bottom: 0;
-      background-color: #808080;
-      color: #FFFFFF;
-      width: 1200px;
-      height: 200px;
-      left: -10000;
-      font-size: 50;
-      border-bottom: black 2px solid;
-      border-top: black 2px solid;
-      border-right: black 2px solid;
-      border-bottom-right-radius: 15px;
-      border-top-right-radius: 15px;
-    }
-    #warn {
-      position: absolute;
-      top: 50%;
-      background-color: #663300;
-      padding: 15px;
-      color: #FFFFFF;
-      width: 600px;
-      height: 200px;
-      left: -10000;
-      font-size: 24;
-      border: black 2px solid;
-      border-radius: 15px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    }
-    #inventory {
-      position: absolute;
-      line-height: 40px;
-      text-align: center;
-      background-color: #808080;
-      color: #FFFFFF;
-      width: 200px;
-      height: 200px;
-      left: 0px;
-      bottom: 0px;
-      font-size: 20;
-      border-top: black 2px solid;
-      border-right: black 2px solid;
-      border-top-right-radius: 15px;
-    }
-    .version {
-      position: absolute;
-      color: #FFFFFF;
-      left: 5px;
-      bottom: 5px;
-      font-size: 12;
-    }
-    #menu_button {
-      position: absolute;
-      line-height: 40px;
-      text-align: center;
-      background-color: #FF0000;
-      color: #FFFFFF;
-      width: 100px;
-      height: 40px;
-      left: 0px;
-      font-size: 20;
-      border-bottom: black 2px solid;
-      border-right: black 2px solid;
-    }
-    #score {
-      position: absolute;
-      line-height: 40px;
-      text-align: center;
-      background-color: #808080;
-      color: #FFFFFF;
-      width: 200px;
-      height: 40px;
-      left: 100px;
-      font-size: 20;
-      border-bottom: black 2px solid;
-    }
-    #timer {
-      position: absolute;
-      line-height: 40px;
-      text-align: center;
-      background-color: #808080;
-      color: #FFFFFF;
-      width: 200px;
-      height: 40px;
-      left: 300px;
-      font-size: 20;
-      border-bottom: black 2px solid;
-      border-right: black 2px solid;
-      border-bottom-right-radius: 15px;
-    }
-    #loading {
-      position: absolute;
-      background-color: #000000;
-      color: #FFFFFF;
-      width: 100%;
-      height: 100%;
-      left: 0px;
-      font-size: 30;
-    }
-    #loading_text {
-      position: absolute;
-      width: 100%;
-      height: 20%;
-      top: 25%;
-      font-size: 80;
-      text-align: center;
-    }
-    #results {
-      position: absolute;
-      background-color: #808080;
-      color: #FFFFFF;
-      width: 100%;
-      height: 100%;
-      left: -10000px;
-      font-size: 20;
-      z-index: 10;
-    }
-    #results_title {
-      text-align: center;
-    }
-    #results_stats {
-      position: absolute;
-      left: 40%;
-    }
-    #results_end {
-      position: absolute;
-      left: 30%;
-      bottom: 5px;
-    }
-    #menu {
-      position: absolute;
-      text-align: center;
-      background-color: #808080;
-      color: #FFFFFF;
-      width: 100%;
-      height: 100%;
-      left: -10000px;
-      font-size: 20;
-    }
-    #difficulty {
-      position: absolute;
-      text-align: center;
-      background-color: #808080;
-      color: #FFFFFF;
-      width: 100%;
-      height: 100%;
-      left: -10000px;
-      font-size: 20;
-    }
-    #key_controls {
-      position: absolute;
-      text-align: center;
-      background-color: #808080;
-      color: #FFFFFF;
-      width: 100%;
-      height: 100%;
-      left: -10000px;
-      font-size: 20;
-    }
-    #scores {
-      position: absolute;
-      text-align: center;
-      background-color: #808080;
-      color: #FFFFFF;
-      width: 100%;
-      height: 100%;
-      left: -10000px;
-      font-size: 20;
-    }
-    #credits_list {
-      position: absolute;
-      text-align: center;
-      background-color: #808080;
-      color: #FFFFFF;
-      width: 100%;
-      height: 100%;
-      left: -10000px;
-      font-size: 20;
-    }
-    #the_list {
-      position: relative;
-      text-align: left;
-      left: 35%;
-    }
-    .game_title {
-      color: #0000FF;
-      font-size: 80;
-    }
-    #new_game {
-      color: #00FF00;
-      font-size: 50;
-    }
-    #controls {
-      color: #FF0000;
-      font-size: 50;
-    }
-    #high_scores {
-      color: #FF0000;
-      font-size: 50;
-    }
-    #credits {
-      color: #FF0000;
-      font-size: 50;
-    }
-    #exit_game {
-      color: #FF0000;
-      font-size: 50;
-    }
-    #easy {
-      color: #00FF00;
-      font-size: 50;
-    }
-    #medium {
-      color: #FF0000;
-      font-size: 50;
-    }
-    #hard {
-      color: #FF0000;
-      font-size: 50;
-    }
-    #back {
-      color: #FF0000;
-      font-size: 50;
-    }
-    #okay {
-      border-radius: 5px;
-      font-size: 24px;
-      background-color: #FF0000;
-      color: #000000;
-      border: 1px solid #000000;
-    	margin: 10px 10px;
-      padding: 15px;
-      line-height: 1.45;
-      width: auto;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    }
-    #cancel {
-      border-radius: 5px;
-      font-size: 24px;
-      background-color: #00FF00;
-      color: #000000;
-      border: 1px solid #000000;
-    	margin: 10px 10px;
-      padding: 15px;
-      line-height: 1.45;
-      width: auto;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    }
-    .back {
-      color: #00FF00;
-      font-size: 50;
-    }
-    table {
-      border-collapse: collapse;
-      width: 60%;
-      color: #FFFFFF;
-    }
-    td, th {
-      padding: 3px;
-      padding: 3px 7px 2px 7px;
-      border: 3px solid #FFFFFF;
-    }
-  </style>
+  <link rel="stylesheet" href="./theme.css"></link>
 </head>
 <body>
   <div id="results">
     <div id="results_title">
-      <h1>Results</h1>
+      <h1><b><i>Results</i></b></h1>
     </div>
+    <div id="results_body"></div>
     <ul id="results_stats">
       <li id="difficulty_stats"></li>
       <li id="time_stats"></li>
@@ -307,7 +20,9 @@
     <div id="results_end">
       <div class="back">Press ESC to return to menu.</div>
     </div>
+    <div class="version">Version 0.4</div>
   </div>
+  <div id="achiev1"></div>
   <div id="fps">0</div>
   <div id="menu_button">Menu (F1)</div>
   <div id="score">Score: 0</div>
@@ -321,22 +36,43 @@
   <div id="loading">
     <div id="loading_text"><h3>Loading...</h3></div>
   </div>
+  <div id="reviving">
+    <div id="reviving_text"><h3>Reviving...</h3></div>
+  </div>
   <div id="menu">
-    <div class="game_title"><b><i>FreeMazes3D</i></b></div>
-    <div id="new_game">New Game</div>
-    <div id="controls">Controls</div>
-    <div id="high_scores">High Scores</div>
-    <div id="credits">Credits</div>
-    <div id="exit_game">Exit Game</div>
-    <div class="version">Version 0.3</div>
+    <center><center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center></center>
+    <br>
+    <table class="menu_list" align="center">
+      <tr>
+        <td align="left">
+          <div id="new_game">New Game</div>
+          <div id="controls">Controls</div>
+          <div id="high_scores">High Scores</div>
+          <div id="achievements">Achievements</div>
+          <div id="credits">Credits</div>
+          <div id="exit_game">Exit Game</div>
+        </td>
+      </tr>
+    </table>
+    <div class="version">Version 0.4</div>
   </div>
   <div id="difficulty">
-    <div class="game_title"><b><i>FreeMazes3D</i></b></div>
-    <div id="easy">Easy</div>
-    <div id="medium">Medium</div>
-    <div id="hard">Hard</div>
-    <div id="back">BACK</div>
-    <div class="version">Version 0.3</div>
+    <center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center>
+    <br>
+    <table class="menu_list" align="center">
+      <tr>
+        <td align="left">
+          <div id="easy">Easy</div>
+          <div id="medium">Medium</div>
+          <div id="hard">Hard</div>
+          <div id="easy_tl">Easy (Time Limit)</div>
+          <div id="medium_tl">Medium (Time Limit)</div>
+          <div id="hard_tl">Hard (Time Limit)</div>
+          <div id="back">BACK</div>
+        </td>
+      </tr>
+    </table>
+    <div class="version">Version 0.4</div>
   </div>
   <div id="warn">
     <div id="warn_message"></div>
@@ -344,9 +80,13 @@
     <span id="okay">Okay</span> <span id="cancel">Cancel</span>
   </div>
   <div id="key_controls">
-    <div class="game_title"><b><i>FreeMazes3D</i></b></div>
+    <center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center>
     <h3>Key Controls:</h3>
     <table align="center">
+      <tr>
+        <th>Key</th>
+        <th>Action</th>
+      </tr>
       <tr>
         <td>
           W/A/S/D
@@ -405,44 +145,66 @@
       </tr>
     </table>
     <div class="back">BACK</div>
-    <div class="version">Version 0.3</div>
+    <div class="version">Version 0.4</div>
   </div>
   <div id="scores">
-    <div class="game_title"><b><i>FreeMazes3D</i></b></div>
+    <center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center>
     <h3>High Scores:</h3>
-    <table id="scores_list" align="center"></table>
+    <table id="scores_list" class="menu_list" align="center"></table>
     <div class="back">BACK</div>
-    <div class="version">Version 0.3</div>
+    <div class="version">Version 0.4</div>
+  </div>
+  <div id="achieves">
+    <center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center>
+    <h3>Achievements:</h3>
+    <table id="achieves_list" align="center"></table>
+    <div class="back">BACK</div>
+    <div class="version">Version 0.4</div>
   </div>
   <div id="credits_list">
-    <div class="game_title"><b><i>FreeMazes3D</i></b></div>
+    <center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center>
     <h3>Credits:</h3>
-    <div id="the_list">
-      <b>Game development:</b><br>
-      All scripting, 3d modeling, testing and game design – neytjs<br>
-      <br>
-      <b>3d engine:</b><br>
-      BabylonJS – the BabylonJS team (thanks guys!)<br>
-      <br>
-      <b>Sound effects (from opengameart.org):</b><br>
-      <i>GUI Sound Effects</i> – Lokif<br>
-      <i>Battle Sound Effects</i>, <i>Inventory Sound Effects</i> – artisticdude<br>
-      <i>Atmospheric Interaction Sound Pack</i> – legoluft<br>
-      <i>Door Open, Door Close Set</i> – qubodup<br>
-      <i>Mouse Click</i> – LFA<br>
-      <i>Realization, Sci-Fi Drone Loop</i> – Jason Dagenet<br>
-      <i>Ghost</i> – Ogrebane<br>
-      <i>Aargh!</i> – congusbongus<br>
-      <i>Bomb Explosion 8bit</i> – Luke.RUSTLTD<br>
-      <i>40 CC0 water / splash / slime SFX</i> – rubberduck<br>
-      <i>4 Atmospheric Ghostly Loops</i> – Independent.nu<br>
-      <i>Grass Foot Step Sounds, Lava Loop</i> – Blender Foundation<br>
-      <i>Falling Rock</i> – spookymodem<br>
-      <i>Laser Rifle</i> – Skorpio<br>
-      <i>Laser Fire</i> – farfadet46<br>
-    </div>
+    <table class="menu_list" align="center">
+      <tr>
+        <td align="left">
+          <b><u>Game Development</u>:</b><br>
+          All scripting, 3D modeling, testing and game design – neytjs<br>
+          <br>
+          <b><u>3D Engine</u>:</b><br>
+          BabylonJS – the BabylonJS team (thanks guys!)<br>
+          <br>
+          <b><u>Music (from opengameart.org)</u>:</b><br>
+          <i>Night City Lights, Great Pyramids, Life in Forest</i> – Alexandr Zhelanov<br>
+          <i>My Friends (SCC Version), It's Love, Good Bye</i> – Snabisch<br>
+          <i>Caketown</i> – Matthew Pablo<br>
+          <i>Virus Hunter Toon Level Music</i> – TyberiusGames<br>
+          <i>Sonar Tuning Electro Track</i> – SouljahdeShiva<br>
+          <i>Distorted Memory</i> – soled<br>
+          <i>Falling Organ</i> – vandalorum<br>
+          <i>Roy Batty's Boombox</i> – joeBaxterWebb<br>
+          <br>
+          <b><u>Sound Effects (from opengameart.org)</u>:</b><br>
+          <i>GUI Sound Effects</i> – Lokif<br>
+          <i>Battle Sound Effects</i>, <i>Inventory Sound Effects</i> – artisticdude<br>
+          <i>Atmospheric Interaction Sound Pack</i> – legoluft<br>
+          <i>Door Open, Door Close Set</i> – qubodup<br>
+          <i>Mouse Click</i> – LFA<br>
+          <i>Realization, Sci-Fi Drone Loop</i> – Jason Dagenet<br>
+          <i>Ghost</i> – Ogrebane<br>
+          <i>Aargh!</i> – congusbongus<br>
+          <i>Bomb Explosion 8bit</i> – Luke.RUSTLTD<br>
+          <i>40 CC0 water / splash / slime SFX</i> – rubberduck<br>
+          <i>4 Atmospheric Ghostly Loops</i> – Independent.nu<br>
+          <i>Grass Foot Step Sounds, Lava Loop</i> – Blender Foundation<br>
+          <i>Falling Rock</i> – spookymodem<br>
+          <i>Laser Rifle</i> – Skorpio<br>
+          <i>Laser Fire</i> – farfadet46<br>
+          <i>Slow Clock Ticking</i> – Nicole Marie T<br>
+        </td>
+      </tr>
+    </table>
     <div class="back">BACK</div>
-    <div class="version">Version 0.3</div>
+    <div class="version">Version 0.4</div>
   </div>
   <div id="output"></div>
   <script src="./dist/bundle.js"></script>
