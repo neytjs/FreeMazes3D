@@ -6,8 +6,7 @@ function growPlantOb8(scene, camera, ob8, solved, obstacle_objects, forcefield_o
   if (ob8.growing) {
   // first test to make sure if it is shrinking and if so stop it
     if (ob8.shrinking) {
-      ob8.shrinking = false;
-      ob8.shrinking_name = "";
+      ob8["shrinking_" + ob8.growing_name] = false;
     }
     let selected = scene.getMeshByName(ob8.growing_name);
     let distance = camera.position.subtract(selected.position).length();
@@ -44,6 +43,10 @@ function growPlantOb8(scene, camera, ob8, solved, obstacle_objects, forcefield_o
                 ob8.pouring_sound = null;
                 let wateringCan = scene.getMeshByName("wateringCan");
                 wateringCan.dispose();
+                let wateringCanItem = scene.getMeshByName("wateringCanitem");
+                wateringCanItem.dispose();
+                let wateringCanPouring = scene.getMeshByName("wateringCanpouring");
+                wateringCanPouring.dispose();
                 player.holding = "";
                 setTimeout(() => {
                   playSound("save", 5000, scene);

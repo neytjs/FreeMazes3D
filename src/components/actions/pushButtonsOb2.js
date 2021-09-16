@@ -4,8 +4,8 @@ import {playSound} from "../assets/playSound.js";
 function pushButtonsOb2(hit, solved, buttons, ob2, scene) {
   if (hit.pickedMesh.name === "button1" || hit.pickedMesh.name === "button2" || hit.pickedMesh.name === "button3" || hit.pickedMesh.name === "button4") {
     if (solved.solvedP2 === false) {
-      if (ob2.running === false) {
-        ob2.running = true;
+      if (buttons.running === false) {
+        buttons.running = true;
         switch (hit.pickedMesh.name) {
           case "button1":
             ob2.b1counter = ob2.b1counter < bulb_colors.length - 1 ? ob2.b1counter + 1 : 0;

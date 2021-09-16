@@ -21,7 +21,6 @@ function removeGhostOb5(hit_name, ob5, scene, player) {
         ghostBarrier.dispose();
         spear.dispose();
         player.holding = "";
-        ob5.holding = false;
       }
     }
   }

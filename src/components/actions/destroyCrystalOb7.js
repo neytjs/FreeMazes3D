@@ -9,6 +9,7 @@ function destroyCrystalOb7(hit, solved, ob7, scene, player) {
       if (crystal) {
         crystal.dispose();
         playSound("8bit_bomb_explosion", 1100, scene);
+        ob7.warned = true;
         setTimeout(() => {
           removeBeamOb7(hit.pickedMesh.name, ob7, scene, player);
         }, 1000);

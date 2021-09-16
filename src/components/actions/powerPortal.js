@@ -1,4 +1,3 @@
-import {generateObjects} from "../assets/generate_objects.js";
 import {GUI_InventoryDisplay} from "../gui/gui_inventory_display.js";
 import {GUI_InventoryDec} from "../gui/gui_inventory_dec.js";
 import {GUI_Warning} from "../gui/gui_warning.js";
@@ -23,7 +22,14 @@ function powerPortal(hit, portal_objects, inventory, inventory_tracker, exit_pos
         GUI_InventoryDec(inventory, inventory_tracker);
         GUI_InventoryDisplay(inventory, inventory_tracker);
         hit.pickedMesh.dispose();
-        generateObjects("exit_powered", (exit_pos.y * 70) + 30, ((exit_pos.x * 70) - ((exit_pos.x * 70) * 2)) - 30, scene, portal_objects);
+        let exit_powered = scene.getMeshByName("teleporter_powered");
+        exit_powered.position.y = 0;
+        let teleporter = scene.getMeshByName("teleporter_powered_barrier");
+        teleporter.position.y = 3.25;
+        let exitGem = scene.getMeshByName("exitGem");
+        exitGem.position.y = 0;
+        let exitSphere = scene.getMeshByName("exitSphere");
+        exitSphere.position.y = 3.5;
         GUI_Warning("You have powered the exit portal! Press again to exit.", 2000);
       } else {
         GUI_Warning("You must select the portal gem.", 1200);

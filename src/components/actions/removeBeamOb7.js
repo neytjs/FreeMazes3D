@@ -16,7 +16,6 @@ function removeBeamOb7(hit_name, ob7, scene, player) {
       hutBarrier.dispose();
       spear.dispose();
       player.holding = "";
-      ob7.holding = false;
     }
   }
 }

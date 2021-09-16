@@ -12,8 +12,10 @@ function placeCrystalOb6(hit_name, obstacle_objects, forcefield_objects, scene, 
           if (obstacle_objects[i].name === "pedestalcrystal") {
             let carryingCrystal = scene.getMeshByName("carryingCrystal");
             if (carryingCrystal) {
-            // had to hide this here, instead of disposing, as there was some odd conflict
               carryingCrystal.material.alpha = 0;
+              carryingCrystal.renderingGroupId = 0;
+              carryingCrystal.parent = null;
+              carryingCrystal.position.y = -1000;
             }
             ob6.just_accessed = true;
             camera.speed = 0.7;

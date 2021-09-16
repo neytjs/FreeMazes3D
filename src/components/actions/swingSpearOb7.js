@@ -4,7 +4,7 @@ import {playSound} from "../assets/playSound.js";
 import {destroyCrystalOb7} from "./destroyCrystalOb7.js";
 
 function swingSpearOb7(ob7, scene, camera, solved, player) {
-  if (player.swing_spear === true && ob7.holding === true) {
+  if (player.swing_spear === true && player.holding === "hutSpear") {
     let spear = scene.getMeshByName("hutSpear");
     let start_pos = spear.position.z;
     if (ob7.swing_sound_counter === 0) {
