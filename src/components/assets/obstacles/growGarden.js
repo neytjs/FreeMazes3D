@@ -26,7 +26,7 @@ function growGarden(x, z, scene, global_objects, item_id, camera) {
 
   let cactusColors = [
     new Color3(0.41, 0.62, 0.35),
-    new Color3(0.54, 0.77, 0.47)
+    new Color3(0.57, 0.71, 0.38)
   ];
   cactusColors = arrayShuffler(cactusColors);
 
@@ -38,6 +38,9 @@ function growGarden(x, z, scene, global_objects, item_id, camera) {
   flowerColors = arrayShuffler(flowerColors);
 
   generateWateringCan("item", scene, x, (z + 10), camera);
+  generateWateringCan("holding", scene, x, (z + 10), camera);
+  generateWateringCan("pouring", scene, x, (z + 10), camera);
+  global_objects.push({id: "", type: "holdable", name: "wateringCan", puzzle_pos: {x: x, z: (z + 10), y: 4}});
 
   let fence1 = MeshBuilder.CreateBox("box", {width: 1, height: 1, depth: 10}, scene);
   fence1.position.y = 0.5;
@@ -387,12 +390,12 @@ function growGarden(x, z, scene, global_objects, item_id, camera) {
   let stones = MeshBuilder.CreateCylinder("cylinder", {diameter: 5, height: 2.5, tessellation: 12}, scene);
   stones.position.y = 1.25;
   stones.material = new StandardMaterial('texture1', scene);
-  stones.material.diffuseColor = new Color3(0.35, 0.35, 0.35);
+  stones.material.diffuseColor = new Color3(0.55, 0.55, 0.55);
 
   let rim = MeshBuilder.CreateTorus("torus", {diameter: 5, thickness: 0.6}, scene);
   rim.position.y = 2.7;
   rim.material = new StandardMaterial('texture1', scene);
-  rim.material.diffuseColor = new Color3(0.35, 0.35, 0.35);
+  rim.material.diffuseColor = new Color3(0.49, 0.48, 0.48);
 
   let hole = MeshBuilder.CreateCylinder("cylinder", {diameter: 5, height: 0.01, tessellation: 20}, scene);
   hole.position.y = 2.7;

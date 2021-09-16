@@ -14,6 +14,8 @@ import {arrayShuffler} from "../../utilities/shuffler.js";
 function ghostButton(x, z, scene, global_objects, item_id, camera) {
 // generate the spear
   generateSpear("item", "ghost", scene, x, z);
+  generateSpear("holding", "ghost", scene, x, z);
+  global_objects.push({id: "", type: "holdable", name: "ghostSpear", puzzle_pos: {x: x, z: z, y: 4}});
 // declare and shuffle the colors
   let ghost_colors = [
     new Color3(0, 0, 1),

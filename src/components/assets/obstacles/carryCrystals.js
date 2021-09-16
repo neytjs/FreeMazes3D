@@ -11,6 +11,7 @@ import cloneDeep from 'lodash.clonedeep';
 import {generateSpear} from "../objects/generateSpear.js";
 import {distinguishTwoArrays} from "../../utilities/distinguishTwoArrays.js";
 import {degrees} from "../../utilities/math.js";
+import {generateCarryingCrystal} from "../objects/generateCarryingCrystal.js";
 
 function carryCrystals(x, z, scene, global_objects, item_id, camera) {
   let global_pedestalcrystal_data = {};
@@ -23,6 +24,8 @@ function carryCrystals(x, z, scene, global_objects, item_id, camera) {
     {color_name: "blue", color_code: new Color3(0.11, 0.47, 0.95)},
     {color_name: "purple", color_code: new Color3(0.25, 0.05, 0.41)}
   ];
+
+  generateCarryingCrystal(scene, camera);
 
   let two_arrays = distinguishTwoArrays(colors_base, "color_name");
   let pedestal_colors = two_arrays.first_clone_and_shuffle;

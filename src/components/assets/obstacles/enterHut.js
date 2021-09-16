@@ -14,6 +14,8 @@ import {arrayShuffler} from "../../utilities/shuffler.js";
 function enterHut(x, z, scene, global_objects, item_id, camera) {
 // generate the spear
   generateSpear("item", "hut", scene, x, z);
+  generateSpear("holding", "hut", scene, x, z);
+  global_objects.push({id: "", type: "holdable", name: "hutSpear", puzzle_pos: {x: x, z: z, y: 4}});
   // declare and shuffle the colors
     let power_colors = [
       new Color3(0.23, 0.83, 0.25),
