@@ -1,9 +1,11 @@
 import {GUI_Warn} from "../gui/gui_warn.js";
 import {GUI_InventoryCycle} from "../gui/gui_inventory_cycle.js";
+import {GUI_Score} from "../gui/gui_score.js";
 import {stopStartTimer} from "../gui/gui_timer.js";
+import {stopStartMusic} from "../gui/gui_music.js";
 import {playSound} from "../assets/playSound.js";
 
-function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClose, scene, resetGlobals, reStart, timer) {
+function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClose, scene, resetGlobals, reStart, timer, score, maze, sound_track) {
   let key = event.keyCode;
   let menu = document.getElementById("menu");
   let menu_left = parseInt(window.getComputedStyle(menu).left);
@@ -13,6 +15,8 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
   let key_controls_left = parseInt(window.getComputedStyle(key_controls).left);
   let scores = document.getElementById("scores");
   let scores_left = parseInt(window.getComputedStyle(scores).left);
+  let achievements = document.getElementById("achieves");
+  let achievements_left = parseInt(window.getComputedStyle(achievements).left);
   let credits = document.getElementById("credits_list");
   let credits_left = parseInt(window.getComputedStyle(credits).left);
   let warn = document.getElementById("warn");
@@ -48,9 +52,9 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
     }
   }
 // F1 / ESC
-  if ((key === 112 || key === 27) && warn_left < 0) {
+  if (maze.loaded && ((key === 112 || key === 27) && warn_left < 0)) {
     if (this.state.start) {
-      if (menu_left === 0 || difficulty_left === 0) {
+      if (menu_left === 0 || difficulty_left === 0 || key_controls_left === 0 || scores_left === 0 || achievements_left === 0 || credits_left === 0) {
         if (menu_left === 0) {
           document.getElementById("menu").style.left = -10000;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
@@ -65,11 +69,40 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
           document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#00FF00";
           menu_gui.toggle = false;
         }
+        if (key_controls_left === 0) {
+          document.getElementById("key_controls").style.left = -10000;
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+          menu_gui.counter = 0;
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+          menu_gui.toggle = false;
+        }
+        if (scores_left === 0) {
+          document.getElementById("scores").style.left = -10000;
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+          menu_gui.counter = 0;
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+          menu_gui.toggle = false;
+        }
+        if (achievements_left === 0) {
+          document.getElementById("achieves").style.left = -10000;
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+          menu_gui.counter = 0;
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+          menu_gui.toggle = false;
+        }
+        if (credits_left === 0) {
+          document.getElementById("credits_list").style.left = -10000;
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+          menu_gui.counter = 0;
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+          menu_gui.toggle = false;
+        }
       } else {
         document.getElementById("menu").style.left = 0;
         menu_gui.toggle = true;
       }
-      stopStartTimer(key, timer);
+      stopStartTimer(key, timer, map_size);
+      stopStartMusic(key, sound_track);
     }
   }
   if ((key === 112 || key === 27) && results_left === 0) {
@@ -148,6 +181,13 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
       document.getElementById("menu").style.left = 0;
       menu_gui.toggle = true;
     }
+  // for retracting the achievements
+    if (achievements_left === 0 && menu_left === -10000) {
+      playSound("misc_menu_3", 2000, scene);
+      document.getElementById("achieves").style.left = -10000;
+      document.getElementById("menu").style.left = 0;
+      menu_gui.toggle = true;
+    }
   // for retracting the credits
     if (credits_left === 0 && menu_left === -10000) {
       playSound("misc_menu_3", 2000, scene);
@@ -171,12 +211,27 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
         switch (difficulty_setting) {
           case "easy":
             map_size.size = "small";
+            map_size.type = "no";
           break;
           case "medium":
             map_size.size = "medium";
+            map_size.type = "no";
           break;
           case "hard":
             map_size.size = "large";
+            map_size.type = "no";
+          break;
+          case "easy_tl":
+            map_size.size = "small";
+            map_size.type = "tl";
+          break;
+          case "medium_tl":
+            map_size.size = "medium";
+            map_size.type = "tl";
+          break;
+          case "hard_tl":
+            map_size.size = "large";
+            map_size.type = "tl";
           break;
         }
         document.getElementById("difficulty").style.left = -10000;
@@ -184,7 +239,6 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
         setTimeout(()=> {
           this.setState({ start: true }, ()=> {
             this.launchGame();
-            document.getElementById("loading").style.left = -10000;
           });
         }, 300);
       }
@@ -193,7 +247,7 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
         startNewGame();
       } else {
         if (menu_gui.press_counter === 0) {
-          GUI_Warn("Warning, starting a new game will result in losing all progress in current map.");
+          GUI_Warn("Warning, starting a new game will result in losing all progress in the current maze and will reset your score to zero.");
         }
         menu_gui.press_counter = menu_gui.press_counter + 1;
       // if they click okay...
@@ -207,6 +261,8 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
           document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#FF0000";
           document.getElementById("easy").style.color = "#00FF00";
           menu_gui.difficulty_counter = 0;
+          score.total = 0;
+          GUI_Score(0, score);
           this.resetGlobals();
           startNewGame();
         }
@@ -239,6 +295,21 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
       if (menu_gui.difficulty_options[menu_gui.difficulty_counter] === "hard") {
         handleGameStart(menu_gui.difficulty_options[menu_gui.difficulty_counter]);
       }
+
+    // for selecting easy (time limit) difficulty setting
+      if (menu_gui.difficulty_options[menu_gui.difficulty_counter] === "easy_tl") {
+        handleGameStart(menu_gui.difficulty_options[menu_gui.difficulty_counter]);
+      }
+
+    // for selecting medium (time limit) difficulty setting
+      if (menu_gui.difficulty_options[menu_gui.difficulty_counter] === "medium_tl") {
+        handleGameStart(menu_gui.difficulty_options[menu_gui.difficulty_counter]);
+      }
+
+    // for selecting hard (time limit) difficulty setting
+      if (menu_gui.difficulty_options[menu_gui.difficulty_counter] === "hard_tl") {
+        handleGameStart(menu_gui.difficulty_options[menu_gui.difficulty_counter]);
+      }
       if (this.state.start === false || menu_gui.difficulty_options[menu_gui.difficulty_counter] === "back") {
         document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#FF0000";
         document.getElementById("easy").style.color = "#00FF00";
@@ -260,6 +331,13 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
         document.getElementById("menu").style.left = -10000;
       }
     }
+  // for viewing achievements
+    if (menu_gui.options[menu_gui.counter] === "achievements") {
+      if (menu_left === 0 && achievements_left === -10000) {
+        document.getElementById("achieves").style.left = 0;
+        document.getElementById("menu").style.left = -10000;
+      }
+    }
   // for viewing credits
     if (menu_gui.options[menu_gui.counter] === "credits") {
       if (menu_left === 0 && credits_left === -10000) {
@@ -272,11 +350,12 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
       if (menu_left === 0) {
         if (this.state.start) {
           if (menu_gui.press_counter === 0) {
-            GUI_Warn("Warning, exiting will result in losing all progress in current map.");
+            GUI_Warn("Warning, exiting will result in losing all progress in the current maze and will reset your score to zero.");
           }
           menu_gui.press_counter = menu_gui.press_counter + 1;
         // if they click okay...
           if (menu_gui.press_counter === 2 && menu_gui.warn_options[menu_gui.warn_counter] === "okay") {
+            score.total = 0;
             saveScoreAndClose();
           }
         // if they click cancel...
