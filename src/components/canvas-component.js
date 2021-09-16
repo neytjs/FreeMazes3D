@@ -13,12 +13,16 @@ import {Ray} from "@babylonjs/core/Culling";
 import {UniversalCamera} from "@babylonjs/core/Cameras/universalCamera";
 import {Sound} from "@babylonjs/core/Audio";
 import {KeyboardEventTypes} from "@babylonjs/core/Events";
-import SceneGenerator from "./scenes/scene_generator.js";
+import {sceneGenerator} from "./scenes/scene_generator.js";
 import {keyUp} from "./controls/keyUp.js";
 import {GUI_DisplayHighScores} from "./gui/gui_display_high_scores.js";
+import {GUI_DisplayAchievements} from "./gui/gui_display_achievements.js";
 import {GUI_Score} from "./gui/gui_score.js";
-import {runTimer, displayTime} from "./gui/gui_timer.js";
+import {setMenuBackgroundColors} from "./gui/gui_background.js";
+import {setTimer, runTimer, displayTime} from "./gui/gui_timer.js";
 import {exit_pos, start_pos} from "./generators/maze_generator.js";
+import {defaultAppData} from "./assets/defaultAppData.js";
+import {playMusic, playMenuMusic} from "./assets/playMusic.js";
 import {collectKey} from "./actions/collectKey.js";
 import {doorMessage} from "./actions/doorMessage.js";
 import {openGate} from "./actions/openGate.js";
@@ -30,6 +34,11 @@ import {powerPortal} from "./actions/powerPortal.js";
 import {exitMap} from "./actions/exitMap.js";
 import {discoverSecret} from "./actions/discoverSecret.js";
 import {moveSecretWall} from "./actions/moveSecretWall.js";
+import {playerHoldingDistanceTest} from "./actions/playerHoldingDistanceTest.js";
+import {playerHoldingGhostSpearDistanceCheck} from "./actions/playerHoldingGhostSpearDistanceCheck.js";
+import {playerHoldingHutSpearDistanceCheck} from "./actions/playerHoldingHutSpearDistanceCheck.js";
+import {playerHoldingWateringCanDistanceCheck} from "./actions/playerHoldingWateringCanDistanceCheck.js";
+import {playerHoldingBlasterDistanceCheck} from "./actions/playerHoldingBlasterDistanceCheck.js";
 import {placeCoinOb1} from "./actions/placeCoinOb1.js";
 import {removeCoinOb1} from "./actions/removeCoinOb1.js";
 import {pedestalWarningOb1} from "./actions/pedestalWarningOb1.js";
@@ -76,14 +85,27 @@ import {movementTestOb11} from "./actions/movementTestOb11.js";
 import {shellsHitPlayerTestOb11} from "./actions/shellsHitPlayerTestOb11.js";
 import {movementTestOb12} from "./actions/movementTestOb12.js";
 import {laserHitPlayerTestOb12} from "./actions/laserHitPlayerTestOb12.js";
+import {enterExitPyramidOb13} from "./actions/enterExitPyramidOb13.js";
+import {pushButtonsOb13} from "./actions/pushButtonsOb13.js";
+import {handleButtonPressOb13} from "./actions/handleButtonPressOb13.js";
+import {removePowderOb13} from "./actions/removePowderOb13.js";
+import {placePowderOb13} from "./actions/placePowderOb13.js";
+import {enterExitCryptOb14} from "./actions/enterExitCryptOb14.js";
+import {removeWaterOb14} from "./actions/removeWaterOb14.js";
+import {warnMessageOb14} from "./actions/warnMessageOb14.js";
+import {pourWaterOb14} from "./actions/pourWaterOb14.js";
+import {warnMessageOb15} from "./actions/warnMessageOb15.js";
+import {removeBlasterOb15} from "./actions/removeBlasterOb15.js";
+import {climbStepOb15} from "./actions/climbStepOb15.js";
+import {shootBlasterOb15} from "./actions/shootBlasterOb15.js";
+import {removeBarrierOb15} from "./actions/removeBarrierOb15.js";
+import {pushButtonsOb16} from "./actions/pushButtonsOb16.js";
+import {handleButtonPressOb16} from "./actions/handleButtonPressOb16.js";
 
 const {app} = window.require('@electron/remote');
 const DataStore = window.require('nedb');
 const app_filepath = app.getAppPath('');
 const app_data = new DataStore({ filename: app_filepath+'/data/app_data.db', autoload: true });
-const defaultAppData = {
-  high_scores: []
-};
 
 let door_objects = [];
 let forcefield_objects = [];
@@ -109,16 +131,30 @@ let score = {
   total: 0
 };
 let map_size = {
-  size: ""
+  size: "",
+  type: "no"
 };
 let timer = {
   counter: 0,
+  max_time: 0,
   time: "",
   prev_time: "",
   running: false,
   menu: false,
-  timeOutFunct: {}
+  timeOutFunct: {},
+  setTimer: false,
+  timesup_warned: false
 };
+let sound_track = {
+  song: {},
+  menu_song: {},
+  menu: false
+};
+let maze = {
+  loaded: false
+};
+
+let achievements = [];
 let menu_gui = {
   counter: 0,
   toggle: false,
@@ -126,6 +162,7 @@ let menu_gui = {
     "new_game",
     "controls",
     "high_scores",
+    "achievements",
     "credits",
     "exit_game"
   ],
@@ -134,6 +171,9 @@ let menu_gui = {
     "easy",
     "medium",
     "hard",
+    "easy_tl",
+    "medium_tl",
+    "hard_tl",
     "back"
   ],
   warn_counter: 0,
@@ -153,7 +193,7 @@ class Canvas extends Component {
     this.engine = {};
     this.camera = {};
     this.scene = {};
-    this.keyUp = keyUp.bind(this, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this), this.reStart.bind(this), timer);
+    this.keyUp = keyUp.bind(this, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this), this.reStart.bind(this), timer, score, maze, sound_track);
 
     this.state = {
       start: false,
@@ -164,10 +204,12 @@ class Canvas extends Component {
   async componentDidMount() {
     let ret_app_data = await this.getAppData();
     this.setState({ high_scores: ret_app_data.high_scores }, () => {
+      achievements = ret_app_data.achievements;
       document.addEventListener("keyup", this.keyUp, false);
       this.launchMock();
       document.getElementById("menu").style.left = 0;
       GUI_DisplayHighScores(this.state.high_scores);
+      GUI_DisplayAchievements(achievements);
     });
   }
 
@@ -187,7 +229,7 @@ class Canvas extends Component {
 
   updateEventListener() {
     document.removeEventListener("keyup", this.keyUp, false);
-    this.keyUp = keyUp.bind(this, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this), this.reStart.bind(this), timer);
+    this.keyUp = keyUp.bind(this, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this), this.reStart.bind(this), timer, score, maze, sound_track);
     document.addEventListener("keyup", this.keyUp, false);
   }
 
@@ -215,11 +257,22 @@ class Canvas extends Component {
     };
     timer = {
       counter: 0,
+      max_time: 0,
       time: "",
       prev_time: "",
       running: false,
       menu: false,
-      timeOutFunct: {}
+      timeOutFunct: {},
+      setTimer: false,
+      timesup_warned: false
+    };
+    sound_track = {
+      song: {},
+      menu_song: {},
+      menu: false
+    };
+    maze = {
+      loaded: false
     };
     GUI_Score(0, score);
     document.getElementById("inventory_item_label").innerHTML = "";
@@ -228,6 +281,7 @@ class Canvas extends Component {
 
   reStart() {
     this.setState({ start: false }, () => {
+      setMenuBackgroundColors("rgba(128, 128, 128, 1)");
       this.launchMock();
       this.updateEventListener();
     });
@@ -254,6 +308,7 @@ class Canvas extends Component {
     this.scene = new Scene(this.engine);
     this.camera = new UniversalCamera("UniversalCamera", new Vector3(0, 0, -10), this.scene);
 
+    playMenuMusic(this.scene, sound_track, true)
     this.updateEventListener();
 
     this.scene.executeWhenReady(() => {
@@ -296,18 +351,21 @@ class Canvas extends Component {
     this.camera.checkCollisions = true;
     this.camera._needMoveForGravity = true;
 
+    setTimer(timer, map_size);
     let puzzles = [];
 
-  // call the SceneGenerator to create the map and generate the maze.
-    SceneGenerator.returnScene(this.scene, this.camera, door_objects, forcefield_objects, key_objects, portal_objects, gem_objects, treasure_objects, treasure_stats, obstacle_objects, secret_walls, secret_data, map_size, puzzles);
+  // call the sceneGenerator to create the map and generate the maze.
+    sceneGenerator(this.scene, this.camera, door_objects, forcefield_objects, key_objects, portal_objects, gem_objects, treasure_objects, treasure_stats, obstacle_objects, secret_walls, secret_data, map_size, puzzles);
     this.updateEventListener();
 
     let buttons = {
       pushingButton: "",
-      goingDown: true
+      goingDown: true,
+      running: false
     };
     let player = {
       holding: "",
+      puzzle_pos: {},
       swing_spear: false,
       spear_forward: true,
       walking_sound: false,
@@ -326,7 +384,11 @@ class Canvas extends Component {
       solvedP9: false,
       solvedP10: false,
       solvedP11: false,
-      solvedP12: false
+      solvedP12: false,
+      solvedP13: false,
+      solvedP14: false,
+      solvedP15: false,
+      solvedP16: false
     };
     let ob1 = {
       warned: false
@@ -337,7 +399,6 @@ class Canvas extends Component {
       b3counter: 0,
       b4counter: 0,
       hinted: false,
-      running: false,
       bulb: "",
       bulb_color: {}
     };
@@ -356,7 +417,6 @@ class Canvas extends Component {
       ghost_counter: 0,
       swing_sound_counter: 0,
       hit_sound_counter: 0,
-      holding: false,
       starting_position: {},
       starting_distance: [],
       ghost1_crystal_hp: 100,
@@ -372,7 +432,6 @@ class Canvas extends Component {
       power_counter: 0,
       swing_sound_counter: 0,
       hit_sound_counter: 0,
-      holding: false,
       starting_position: {},
       starting_distance: [],
       power1_crystal_hp: 100,
@@ -388,6 +447,10 @@ class Canvas extends Component {
       growing_name: "",
       shrinking: false,
       shrinking_name: "",
+      shrinking_fruitTree: false,
+      shrinking_pineTree: false,
+      shrinking_cactus: false,
+      shrinking_flower: false,
       pouring: false,
       water: 0,
       water_counter: 0,
@@ -451,6 +514,51 @@ class Canvas extends Component {
       powerCrystal3: 100,
       powerCrystal4: 100
     };
+    let ob13 = {
+      buttons_remaining: 3,
+      pushButton1p13: false,
+      pushButton2p13: false,
+      pushButton3p13: false,
+      green_plate: false,
+      red_plate: false,
+      blue_plate: false
+    };
+    let ob14 = {
+      ghost_part_counter: 0,
+      pouring: true,
+      ghost1Barrier: false,
+      ghost2Barrier: false,
+      ghost3Barrier: false,
+      ghost1Barrier_warned: false,
+      ghost2Barrier_warned: false,
+      ghost3Barrier_warned: false
+    };
+    let ob15 = {
+      warned: false,
+      shooting: false,
+      bullseye1: false,
+      bullseye2: false,
+      bullseye3: false,
+      bullseye4: false,
+      remove: false,
+      currently_firing: false
+    };
+    let ob16 = {
+      pushButton1p16: false,
+      pushButton2p16: true,
+      pushButton3p16: true,
+      pushButton4p16: true,
+      pushButton5p16: true,
+      bulb_counter: 0,
+      hint_bulb1: "",
+      hint_bulb2: "",
+      hint_bulb3: "",
+      hint_bulb4: "",
+      puzz_bulb1: "",
+      puzz_bulb2: "",
+      puzz_bulb3: "",
+      puzz_bulb4: ""
+    };
     let current_secret = {
       secret: {}
     };
@@ -476,7 +584,7 @@ class Canvas extends Component {
     }
 
     function bulb_match_hcc(colMesh) {
-      hintMessageOb2(colMesh, ob2, this.scene);
+      hintMessageOb2(colMesh, ob2, this.scene, solved);
     }
 
     function bulb_match_run_hit(hit) {
@@ -529,6 +637,7 @@ class Canvas extends Component {
 
     function ghost_button_run() {
       swingSpearOb5(ob5, this.scene, this.camera, solved, player);
+      playerHoldingGhostSpearDistanceCheck(obstacle_objects, player, this.camera, this.scene, solved);
     }
 
     function ghost_button_btn() {
@@ -547,6 +656,7 @@ class Canvas extends Component {
 
     function enter_hut_run() {
       swingSpearOb7(ob7, this.scene, this.camera, solved, player);
+      playerHoldingHutSpearDistanceCheck(obstacle_objects, player, this.camera, this.scene, solved);
     }
 
     function enter_hut_run_hit(hit) {
@@ -568,7 +678,8 @@ class Canvas extends Component {
     function grow_garden_run() {
       growPlantOb8(this.scene, this.camera, ob8, solved, obstacle_objects, forcefield_objects, score, player);
       shrinkPlantOb8(this.scene, ob8);
-      pourWaterOb8(solved, this.scene, this.camera, ob8);
+      pourWaterOb8(solved, this.scene, this.camera, ob8, player);
+      playerHoldingWateringCanDistanceCheck(obstacle_objects, player, this.camera, this.scene, solved, ob8);
     }
 
     function down_pipes_hcc_oo(obstacle_objects, colMesh) {
@@ -612,6 +723,56 @@ class Canvas extends Component {
 
     function mob_shoots_hcc(colMesh) {
       laserHitPlayerTestOb12(ob12, colMesh, this.scene, this.camera, player, start_pos);
+    }
+
+    function powder_pyramid_hcc_oo(obstacle_objects, colMesh) {
+      enterExitPyramidOb13(obstacle_objects, colMesh, this.scene, this.camera);
+      removePowderOb13(obstacle_objects, inventory, inventory_tracker, colMesh, this.scene);
+    }
+
+    function powder_pyramid_run_hit(hit) {
+      pushButtonsOb13(hit, solved, buttons, this.scene, ob13);
+      placePowderOb13(hit, this.scene, solved, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score, ob13);
+    }
+
+    function powder_pyramid_btn() {
+      handleButtonPressOb13(buttons, ob13, obstacle_objects, this.scene);
+    }
+
+    function haunted_crypt_hcc(colMesh) {
+      warnMessageOb14(colMesh, ob14, this.scene);
+    }
+
+    function haunted_crypt_hcc_oo(obstacle_objects, colMesh) {
+      enterExitCryptOb14(obstacle_objects, colMesh, this.scene, this.camera);
+      removeWaterOb14(obstacle_objects, inventory, inventory_tracker, colMesh, this.scene);
+    }
+
+    function haunted_crypt_run_hit(hit) {
+      pourWaterOb14(hit, this.scene, solved, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score, ob14);
+    }
+
+    function bulls_eye_hcc(colMesh) {
+      warnMessageOb15(colMesh, ob15, this.scene, solved);
+      removeBlasterOb15(colMesh, ob15, this.scene, this.camera, player);
+    }
+
+    function bulls_eye_hcc_oo(obstacle_objects, colMesh) {
+      climbStepOb15(obstacle_objects, colMesh, this.camera, this.scene);
+    }
+
+    function bulls_eye_run() {
+      shootBlasterOb15(this.scene, this.camera, player, ob15);
+      removeBarrierOb15(ob15, solved, obstacle_objects, forcefield_objects, this.scene, score, player);
+      playerHoldingBlasterDistanceCheck(obstacle_objects, player, this.camera, this.scene, solved);
+    }
+
+    function timed_buttons_run_hit(hit) {
+      pushButtonsOb16(hit, solved, buttons, this.scene, ob16);
+    }
+
+    function timed_buttons_btn() {
+      handleButtonPressOb16(buttons, ob16, this.scene, obstacle_objects, forcefield_objects, score);
     }
 
     let puzzles_data = {
@@ -698,6 +859,34 @@ class Canvas extends Component {
         run: mob_shoots_run.bind(this),
         run_hit: noop,
         btn: noop
+      },
+      powder_pyramid: {
+        hcc: noop,
+        hcc_oo: powder_pyramid_hcc_oo.bind(this),
+        run: noop,
+        run_hit: powder_pyramid_run_hit.bind(this),
+        btn: powder_pyramid_btn.bind(this)
+      },
+      haunted_crypt: {
+        hcc: haunted_crypt_hcc.bind(this),
+        hcc_oo: haunted_crypt_hcc_oo.bind(this),
+        run: noop,
+        run_hit: haunted_crypt_run_hit.bind(this),
+        btn: noop
+      },
+      bulls_eye: {
+        hcc: bulls_eye_hcc.bind(this),
+        hcc_oo: bulls_eye_hcc_oo.bind(this),
+        run: bulls_eye_run.bind(this),
+        run_hit: noop,
+        btn: noop
+      },
+      timed_buttons: {
+        hcc: noop,
+        hcc_oo: noop,
+        run: noop,
+        run_hit: timed_buttons_run_hit.bind(this),
+        btn: timed_buttons_btn.bind(this)
       }
     };
 
@@ -739,13 +928,20 @@ class Canvas extends Component {
       }
     });
     document.addEventListener("click", () => {
-      if (player.holding !== "") {
+      if (player.holding === "ghostSpear" || player.holding === "hutSpear") {
         player.swing_spear = true;
+      }
+      if (player.holding === "blasterOb15" && ob15.currently_firing === false) {
+        ob15.shooting = true;
+        ob15.currently_firing = true;
+        setTimeout(() => {
+          ob15.currently_firing = false;
+        }, 750);
       }
     }, false);
     document.addEventListener("keydown", () => {
     // for pouring water in obstacle 8
-      if (event.keyCode === 69 && ob8.pouring === false && solved.solvedP8 === false) {
+      if (event.keyCode === 69 && ob8.pouring === false && solved.solvedP8 === false && player.holding === "wateringCan") {
         ob8.pouring = true;
         if (ob8.water > 0) {
           ob8.pouring_sound = new Sound("Sound", "./sound/loop_rain.ogg", this.scene, null, { loop: true, autoplay: true });
@@ -822,11 +1018,17 @@ class Canvas extends Component {
     }
     handleCameraCollisions();
 
-    runTimer(timer);
     let divFps = document.getElementById("fps");
     menu_gui.toggle = false; // make sure this is initially set to false here
 
     this.scene.executeWhenReady(() => {
+      maze.loaded = true;
+      runTimer(timer, map_size);
+      playMusic(this.scene, sound_track);
+      playMenuMusic(this.scene, sound_track, false);
+      setMenuBackgroundColors("rgba(128, 0, 0, 0.75)");
+      playerHoldingDistanceTest(obstacle_objects, player);
+      document.getElementById("loading").style.left = -10000;
       this.engine.runRenderLoop(() => {
         if (menu_gui.toggle === false) {
           divFps.innerHTML = this.engine.getFps().toFixed() + " fps";
@@ -835,6 +1037,8 @@ class Canvas extends Component {
           displayTime(timer);
         // for secrets
           moveSecretWall(secret_moving, current_secret, this.scene, secret_data);
+        // if they run out of time on a time limit map
+          exitMap(null, treasure_stats, secret_data, timer, map_size, this.scene, this.camera, menu_gui, score, sound_track);
 
           switch (map_size.size) {
             case "small":
@@ -880,7 +1084,7 @@ class Canvas extends Component {
                 // for exit portal
                   powerPortal(hit, portal_objects, inventory, inventory_tracker, exit_pos, this.scene);
                 // exiting the map
-                  exitMap(hit, treasure_stats, secret_data, timer, map_size, this.scene, this.camera, menu_gui);
+                  exitMap(hit, treasure_stats, secret_data, timer, map_size, this.scene, this.camera, menu_gui, score, sound_track, achievements, puzzles, app_data);
                 // for discovering secret walls
                   discoverSecret(hit, secret_walls, secret_data, secret_moving, current_secret, score, this.scene);
 
@@ -912,10 +1116,14 @@ class Canvas extends Component {
             let pushButton = this.scene.getMeshByName(buttons.pushingButton);
             let down_val = 2.9;
             let top_val = 3.25;
-          // for obstacle 4's different button heights
+          // for different button heights
             if (buttons.pushingButton === "pushButton1p4a" || buttons.pushingButton === "pushButton1p4b" || buttons.pushingButton === "pushButton1p4c" || buttons.pushingButton === "pushButton1p10") {
               down_val = 8.9;
               top_val = 9.25;
+            }
+            if (buttons.pushingButton === "pushButton1p13" || buttons.pushingButton === "pushButton2p13" || buttons.pushingButton === "pushButton3p13") {
+              down_val = -97.1;
+              top_val = -96.75;
             }
             if (pushButton.position.y > down_val && buttons.goingDown === true) {
               pushButton.position.y -= 0.01;
@@ -943,7 +1151,7 @@ class Canvas extends Component {
             } else {
               buttons.goingDown = true
               buttons.pushingButton = "";
-              ob2.running = false;
+              buttons.running = false;
             }
           }
         }
