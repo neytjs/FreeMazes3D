@@ -7,77 +7,77 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
+import {returnMetalTexture} from "../textures.js";
 
 function generateKey(key_type, x, z, scene, global_objects, item_id, special) {
   let inventory = "";
   let img = "";
-  let color = [];
+  let texture = {};
   switch (key_type) {
     case "copper":
       inventory = "Copper Key";
       img = "copper_key";
-      color = new Color3(0.71, 0.4, 0.15);
+      texture = "copper";
     break;
     case "silver":
       inventory = "Silver Key";
       img = "silver_key";
-      color = new Color3(0.73, 0.73, 0.72);
+      texture = "silver";
     break;
     case "gold":
       inventory = "Gold Key";
       img = "gold_key";
-      color = new Color3(0.87, 0.83, 0.21);
+      texture = "gold";
     break;
   }
 
-  var torus = MeshBuilder.CreateTorus("torus", {});
+  let torus = MeshBuilder.CreateTorus("torus", {});
   torus.position.y = 3.5;
   torus.rotation.x = Math.PI / 2;
   torus.material = new StandardMaterial('texture1', scene);
-  torus.material.diffuseColor = color;
+  torus.material.diffuseTexture = returnMetalTexture(texture, scene);
 
-  var cylinder = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8}, scene);
+  let cylinder = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8}, scene);
   cylinder.position.y = 3.5;
   cylinder.position.x = 1.5;
   cylinder.rotation.z = Math.PI / 2;
   cylinder.material = new StandardMaterial('texture1', scene);
-  cylinder.material.diffuseColor = color;
+  cylinder.material.diffuseTexture = returnMetalTexture(texture, scene);
 
-  var cylinder1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 1, tessellation: 8}, scene);
+  let cylinder1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 1, tessellation: 8}, scene);
   cylinder1.position.y = 3;
   cylinder1.position.x = 2.25;
   cylinder1.material = new StandardMaterial('texture1', scene);
-  cylinder1.material.diffuseColor = color;
+  cylinder1.material.diffuseTexture = returnMetalTexture(texture, scene);
 
-  var cylinder2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 0.75, tessellation: 8}, scene);
+  let cylinder2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 0.75, tessellation: 8}, scene);
   cylinder2.position.y = 3.1;
   cylinder2.position.x = 1.5;
   cylinder2.material = new StandardMaterial('texture1', scene);
-  cylinder2.material.diffuseColor = color;
+  cylinder2.material.diffuseTexture = returnMetalTexture(texture, scene);
 
-  var sphere = MeshBuilder.CreateSphere("sphere", {diameter: 0.5, segments: 8}, scene);
+  let sphere = MeshBuilder.CreateSphere("sphere", {diameter: 0.5, segments: 8}, scene);
   sphere.position.y = 3.5;
   sphere.position.x = 2.45;
   sphere.material = new StandardMaterial('texture1', scene);
-  sphere.material.diffuseColor = color;
+  sphere.material.diffuseTexture = returnMetalTexture(texture, scene);
 
-  var sphere1 = MeshBuilder.CreateSphere("sphere", {diameter: 0.49, segments: 8}, scene);
+  let sphere1 = MeshBuilder.CreateSphere("sphere", {diameter: 0.49, segments: 8}, scene);
   sphere1.position.y = 2.75;
   sphere1.position.x = 1.5;
   sphere1.material = new StandardMaterial('texture1', scene);
-  sphere1.material.diffuseColor = color;
+  sphere1.material.diffuseTexture = returnMetalTexture(texture, scene);
 
-  var sphere2 = MeshBuilder.CreateSphere("sphere", {diameter: 0.49, segments: 8}, scene);
+  let sphere2 = MeshBuilder.CreateSphere("sphere", {diameter: 0.49, segments: 8}, scene);
   sphere2.position.y = 2.5;
   sphere2.position.x = 2.25;
   sphere2.material = new StandardMaterial('texture1', scene);
-  sphere2.material.diffuseColor = color;
+  sphere2.material.diffuseTexture = returnMetalTexture(texture, scene);
 
   let key_barrier = MeshBuilder.CreateBox("barrier", {width: 5, height: 10, depth: 3}, scene);
   key_barrier.position.y = 5;
   key_barrier.position.x = 1;
   key_barrier.material = new StandardMaterial('texture1', scene);
-  key_barrier.material.diffuseColor = new Color3(0.7, 0.1, 0.6);
   key_barrier.material.alpha = 0;
 
   let key = Mesh.MergeMeshes([torus, cylinder, cylinder1, cylinder2, sphere, sphere1, sphere2, key_barrier], true, true, undefined, false, true);

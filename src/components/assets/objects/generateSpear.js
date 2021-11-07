@@ -6,39 +6,39 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {Texture} from "@babylonjs/core/Materials/Textures";
+import {returnMetalTexture, returnWoodTexture} from "../textures.js";
 
 function generateSpear(status, spear_type, scene, x, z, camera) {
   let spear_name = "";
-  let shaft_color = {};
-  let blade_color = {};
+  let shaft_texture = "";
+  let blade_texture = "";
   switch (spear_type) {
     case "hut":
       spear_name = "hutSpear";
-      shaft_color = new Color3(0.45, 0.29, 0.14);
-      blade_color = new Color3(0.65, 0.65, 0.65);
+      shaft_texture = "wood_brown";
+      blade_texture = "iron";
     break;
     case "ghost":
       spear_name = "ghostSpear";
-      shaft_color = new Color3(0.58, 0.53, 0.42);
-      blade_color = new Color3(0.59, 0.71, 0.73);
+      shaft_texture = "wood_lightbrown";
+      blade_texture = "silver";
     break;
   }
 
   let shaft = MeshBuilder.CreateCylinder("shaft", {diameterTop: 0.3, diameterBottom: 0.4, height: 8, tessellation: 12}, scene);
   shaft.position.y = 4;
   shaft.material = new StandardMaterial('texture1', scene);
-  shaft.material.diffuseColor = shaft_color;
+  shaft.material.diffuseTexture = returnWoodTexture(shaft_texture, scene);
 
   let blade1 = MeshBuilder.CreateCylinder("blade", {diameterTop: 0, diameter: 1.5, height: 2.5, tessellation: 4}, scene);
   blade1.position.y = 9;
   blade1.material = new StandardMaterial('texture1', scene);
-  blade1.material.diffuseColor = blade_color;
+  blade1.material.diffuseTexture = returnMetalTexture(blade_texture, scene);
 
   let blade2 = MeshBuilder.CreateCylinder("blade", {diameterBottom: 0, diameter: 1.5, height: 0.5, tessellation: 4}, scene);
   blade2.position.y = 7.5;
   blade2.material = new StandardMaterial('texture1', scene);
-  blade2.material.diffuseColor = blade_color;
+  blade2.material.diffuseTexture = returnMetalTexture(blade_texture, scene);
 
   if (status === "holding") {
     let spear = Mesh.MergeMeshes([shaft, blade1, blade2], true, true, undefined, false, true);

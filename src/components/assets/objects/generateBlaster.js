@@ -6,7 +6,7 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {Texture} from "@babylonjs/core/Materials/Textures";
+import {returnMetalTexture, returnCrystalTexture} from "../textures.js";
 
 function generateBlaster(status, scene, x, z, camera) {
   if (status === "holding") {
@@ -15,19 +15,19 @@ function generateBlaster(status, scene, x, z, camera) {
     gunBarrel.position.z = 3;
     gunBarrel.rotation.x = 1.57;
     gunBarrel.material = new StandardMaterial('texture1', scene);
-    gunBarrel.material.diffuseColor = new Color3(0.18, 0.17, 0.16);
+    gunBarrel.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let gunBarrel2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 0.6, tessellation: 20}, scene);
     gunBarrel2.position.y = 3;
     gunBarrel2.position.z = 6;
     gunBarrel2.rotation.x = 1.57;
     gunBarrel2.material = new StandardMaterial('texture1', scene);
-    gunBarrel2.material.diffuseColor = new Color3(0.18, 0.17, 0.16);
+    gunBarrel2.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let gunCentral = MeshBuilder.CreateBox("box", {width: 0.9, height: 1.2, depth: 3}, scene);
     gunCentral.position.y = 3;
     gunCentral.material = new StandardMaterial('texture1', scene);
-    gunCentral.material.diffuseColor = new Color3(0.35, 0.3, 0.24);
+    gunCentral.material.diffuseTexture = returnMetalTexture("iron_tan", scene);
 
     let blaster = Mesh.MergeMeshes([gunBarrel, gunBarrel2, gunCentral], true, true, undefined, false, true);
     blaster.position.y = -1000;
@@ -46,7 +46,7 @@ function generateBlaster(status, scene, x, z, camera) {
     blast.renderingGroupId = 1;
     blast.parent = camera;
     blast.material = new StandardMaterial('texture1', scene);
-    blast.material.diffuseColor = new Color3(0.99, 0.4, 0);
+    blast.material.diffuseTexture = returnCrystalTexture("gem_orange", scene);
     blast.material.alpha = 0;
     blast.name = "blastOb15";
   }
@@ -56,21 +56,21 @@ function generateBlaster(status, scene, x, z, camera) {
     gunBarrel.position.z = 1;
     gunBarrel.rotation.x = 1.57;
     gunBarrel.material = new StandardMaterial('texture1', scene);
-    gunBarrel.material.diffuseColor = new Color3(0.18, 0.17, 0.16);
+    gunBarrel.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let gunBarrel2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.25, height: 0.2, tessellation: 20}, scene);
     gunBarrel2.position.y = 3;
     gunBarrel2.position.z = 2;
     gunBarrel2.rotation.x = 1.57;
     gunBarrel2.material = new StandardMaterial('texture1', scene);
-    gunBarrel2.material.diffuseColor = new Color3(0.18, 0.17, 0.16);
+    gunBarrel2.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let gunBarrel3 = MeshBuilder.CreateTorus("torus", {diameter: 0.2, thickness: 0.05});
     gunBarrel3.position.y = 3;
     gunBarrel3.position.z = 2.1;
     gunBarrel3.rotation.x = 1.57;
     gunBarrel3.material = new StandardMaterial('texture1', scene);
-    gunBarrel3.material.diffuseColor = new Color3(0.16, 0.16, 0.16);
+    gunBarrel3.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let gunBarrel4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.2, height: 0.025, tessellation: 20}, scene);
     gunBarrel4.position.y = 3;
@@ -82,25 +82,25 @@ function generateBlaster(status, scene, x, z, camera) {
     let gunCentral = MeshBuilder.CreateBox("box", {width: 0.3, height: 0.4, depth: 1}, scene);
     gunCentral.position.y = 3;
     gunCentral.material = new StandardMaterial('texture1', scene);
-    gunCentral.material.diffuseColor = new Color3(0.35, 0.3, 0.24);
+    gunCentral.material.diffuseTexture = returnMetalTexture("iron_tan", scene);
 
     let clip = MeshBuilder.CreateBox("box", {width: 0.2, height: 1, depth: 0.5}, scene);
     clip.position.y = 2.5;
     clip.material = new StandardMaterial('texture1', scene);
-    clip.material.diffuseColor = new Color3(0.33, 0.33, 0.33);
+    clip.material.diffuseTexture = returnMetalTexture("iron_medium", scene);
 
     let gunPart1 = MeshBuilder.CreateBox("box", {width: 0.3, height: 0.3, depth: 1}, scene);
     gunPart1.position.y = 3;
     gunPart1.position.z = -1;
     gunPart1.material = new StandardMaterial('texture1', scene);
-    gunPart1.material.diffuseColor = new Color3(0.41, 0.41, 0.41);
+    gunPart1.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-    let gunPart2 = MeshBuilder.CreateBox("box", {width: 0.3, height: 0.85, depth: 0.3}, scene);
+    let gunPart2 = MeshBuilder.CreateBox("box", {width: 0.2, height: 0.85, depth: 0.3}, scene);
     gunPart2.position.y = 2.65;
     gunPart2.position.z = -1.5;
     gunPart2.rotation.x = 0.758;
     gunPart2.material = new StandardMaterial('texture1', scene);
-    gunPart2.material.diffuseColor = new Color3(0.41, 0.41, 0.41);
+    gunPart2.material.diffuseTexture = returnMetalTexture("iron", scene);
 
     var gunPart3 = MeshBuilder.CreateTorus("torus", {diameter: 0.4, thickness: 0.1});
     gunPart3.position.y = 2.8;
@@ -108,13 +108,13 @@ function generateBlaster(status, scene, x, z, camera) {
     gunPart3.rotation.x = 1.57;
     gunPart3.rotation.y = 1.57;
     gunPart3.material = new StandardMaterial('texture1', scene);
-    gunPart3.material.diffuseColor = new Color3(0.16, 0.16, 0.16);
+    gunPart3.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let trigger = MeshBuilder.CreateBox("box", {width: 0.05, height: 0.2, depth: 0.05}, scene);
     trigger.position.y = 2.8;
     trigger.position.z = -0.9;
     trigger.material = new StandardMaterial('texture1', scene);
-    trigger.material.diffuseColor = new Color3(0.15, 0.15, 0.15);
+    trigger.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let gunBarrier = MeshBuilder.CreateBox("box", {width: 1, height: 6, depth: 3.5}, scene);
     gunBarrier.position.y = 3;

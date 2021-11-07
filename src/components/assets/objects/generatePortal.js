@@ -8,6 +8,7 @@ import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 import {ParticleSystem} from "@babylonjs/core/Particles";
+import {returnStoneTexture, returnCrystalTexture, returnWoodTexture} from "../textures.js";
 
 function generatePortal(portal_type, x, z, scene, global_objects, item_id, special) {
   let exit, powered;
@@ -30,13 +31,13 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   let top = MeshBuilder.CreateCylinder("cylinder", {diameter: 7, height: 0.75, tessellation: 8}, scene);
   top.position.y = 7;
   top.material = new StandardMaterial('texture1', scene);
-  top.material.diffuseColor = new Color3(0.31, 0.25, 0.18);
+  top.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
   portal_pieces.push(top);
 
   let bottom = MeshBuilder.CreateCylinder("cylinder", {diameter: 7, height: 0.5, tessellation: 8}, scene);
   bottom.position.y = 0.25;
   bottom.material = new StandardMaterial('texture1', scene);
-  bottom.material.diffuseColor = new Color3(0.41, 0.38, 0.35);
+  bottom.material.diffuseTexture = returnStoneTexture("stone_dark", scene);
   portal_pieces.push(bottom);
 
   let column = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8}, scene);
@@ -44,7 +45,9 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   column.position.x = 2;
   column.position.z = 2;
   column.material = new StandardMaterial('texture1', scene);
-  column.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
+  column.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
+  column.material.diffuseTexture.uScale = 2;
+  column.material.diffuseTexture.vScale = 2;
   portal_pieces.push(column);
 
   let cbarrier = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.3, height: 7, tessellation: 8}, scene);
@@ -52,7 +55,6 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   cbarrier.position.x = x + 2;
   cbarrier.position.z = z + 2;
   cbarrier.material = new StandardMaterial('texture1', scene);
-  cbarrier.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
   cbarrier.physicsImpostor = new PhysicsImpostor(cbarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   cbarrier.checkCollisions = true;
 
@@ -61,7 +63,9 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   column1.position.x = -2;
   column1.position.z = -2;
   column1.material = new StandardMaterial('texture1', scene);
-  column1.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
+  column1.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
+  column1.material.diffuseTexture.uScale = 2;
+  column1.material.diffuseTexture.vScale = 2;
   portal_pieces.push(column1);
 
   let c1barrier = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.3, height: 7, tessellation: 8}, scene);
@@ -69,7 +73,6 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   c1barrier.position.x = x - 2;
   c1barrier.position.z = z - 2;
   c1barrier.material = new StandardMaterial('texture1', scene);
-  c1barrier.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
   c1barrier.physicsImpostor = new PhysicsImpostor(c1barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   c1barrier.checkCollisions = true;
 
@@ -78,7 +81,9 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   column2.position.x = -2;
   column2.position.z = 2;
   column2.material = new StandardMaterial('texture1', scene);
-  column2.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
+  column2.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
+  column2.material.diffuseTexture.uScale = 2;
+  column2.material.diffuseTexture.vScale = 2;
   portal_pieces.push(column2);
 
   let c2barrier = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.3, height: 7, tessellation: 8}, scene);
@@ -86,7 +91,6 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   c2barrier.position.x = x - 2;
   c2barrier.position.z = z + 2;
   c2barrier.material = new StandardMaterial('texture1', scene);
-  c2barrier.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
   c2barrier.physicsImpostor = new PhysicsImpostor(c2barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   c2barrier.checkCollisions = true;
 
@@ -95,7 +99,9 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   column3.position.x = 2;
   column3.position.z = -2;
   column3.material = new StandardMaterial('texture1', scene);
-  column3.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
+  column3.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
+  column3.material.diffuseTexture.uScale = 2;
+  column3.material.diffuseTexture.vScale = 2;
   portal_pieces.push(column3);
 
   let c3barrier = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.3, height: 7, tessellation: 8}, scene);
@@ -103,7 +109,6 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   c3barrier.position.x = x + 2;
   c3barrier.position.z = z - 2;
   c3barrier.material = new StandardMaterial('texture1', scene);
-  c3barrier.material.diffuseColor = new Color3(0.43, 0.3, 0.13);
   c3barrier.physicsImpostor = new PhysicsImpostor(c3barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   c3barrier.checkCollisions = true;
 
@@ -131,7 +136,7 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   }
 
   if (exit === true && powered === true) {
-    teleporter.name = "teleporter_powered_barrier";    
+    teleporter.name = "teleporter_powered_barrier";
     portal.name = "teleporter_powered";
     portal.position.y = -1000;
     teleporter.position.y = -1000;
@@ -150,7 +155,7 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
     gem.position.x = x;
     gem.position.z = z;
     gem.material = new StandardMaterial('texture1', scene);
-    gem.material.diffuseColor = new Color3(0.98, 0.18, 0.81);
+    gem.material.diffuseTexture = returnCrystalTexture("gem_pink", scene);
     gem.name = "exitGem";
 
     let axis = new Vector3(0, 6, 0);

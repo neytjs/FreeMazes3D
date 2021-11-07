@@ -7,33 +7,33 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
+import {returnCrystalTexture} from '../textures.js';
 
 function generateGem(gem_type, x, z, scene, global_objects, item_id, special) {
   let inventory = "";
   let img = "";
-  let color = {};
+  let texture = "";
   switch (gem_type) {
     case "portal_gem":
       inventory = "Portal Gem";
       img = "portal_gem";
-      color = new Color3(0.98, 0.18, 0.81);
+      texture = "gem_pink";
     break;
   }
 
   let pyramid = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 1, height: 1, tessellation: 4}, scene);
   pyramid.position.y = 4;
   pyramid.material = new StandardMaterial('texture1', scene);
-  pyramid.material.diffuseColor = color;
+  pyramid.material.diffuseTexture = returnCrystalTexture(texture, scene);
 
   let pyramid2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 1, height: 1, tessellation: 4}, scene);
   pyramid2.position.y = 3;
   pyramid2.material = new StandardMaterial('texture1', scene);
-  pyramid2.material.diffuseColor = color;
+  pyramid2.material.diffuseTexture = returnCrystalTexture(texture, scene);
 
   let gem_barrier = MeshBuilder.CreateBox("barrier", {width: 2.5, height: 10, depth: 2.5}, scene);
   gem_barrier.position.y = 5;
   gem_barrier.material = new StandardMaterial('texture1', scene);
-  gem_barrier.material.diffuseColor = color;
   gem_barrier.material.alpha = 0;
 
   let gem = Mesh.MergeMeshes([pyramid, pyramid2, gem_barrier], true, true, undefined, false, true);

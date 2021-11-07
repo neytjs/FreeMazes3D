@@ -8,12 +8,13 @@ import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 import {plateColors} from "../pyramid_data.js";
+import {returnCrystalTexture, returnWoodTexture} from "../textures.js";
 
 function generateMagicPowder(num, obstacle_objects, scene) {
   let magicPowder = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 0.6, tessellation: 20}, scene);
   magicPowder.position.y = 2.9;
   magicPowder.material = new StandardMaterial('texture1', scene);
-  magicPowder.material.diffuseColor = plateColors[num].color_code;
+  magicPowder.material.diffuseTexture = returnCrystalTexture(plateColors[num].color_texture, scene);
 
   let glassContainer = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.9, height: 0.9, tessellation: 20}, scene);
   glassContainer.position.y = 3;
@@ -24,7 +25,7 @@ function generateMagicPowder(num, obstacle_objects, scene) {
   let glassContainerCork = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 0.25, tessellation: 20}, scene);
   glassContainerCork.position.y = 3.45;
   glassContainerCork.material = new StandardMaterial('texture1', scene);
-  glassContainerCork.material.diffuseColor = new Color3(0.45, 0.36, 0.25);
+  glassContainerCork.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
 
   let glassContainerBarrier = MeshBuilder.CreateBox("box", {width: 2, height: 10, depth: 2}, scene);
   glassContainerBarrier.position.y = 5;
