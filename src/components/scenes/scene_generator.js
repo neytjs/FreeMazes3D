@@ -17,8 +17,9 @@ import {map, length, width, total_areas, createEmptyMap, createMap, createMapAre
   setStartPosition, setExitPosition, generateKeys, generateGem, generateTreasure,
   generateSecrets, declareObstacles, declareDoors, storeExitPos, storeStartPos, setMapSize,
   generateClutterLocations} from "../generators/maze_generator.js";
-import {wallColors} from "../assets/wall_colors.js";
-import {floorColors} from "../assets/floor_colors.js";
+import {returnWallTexture, returnFloorTexture} from "../assets/textures.js";
+import {wallTextures} from "../assets/wall_textures.js";
+import {floorTextures} from "../assets/floor_textures.js";
 import {skyColors} from "../assets/sky_colors.js";
 import {generateSecretArea} from "../assets/generate_secret_area.js";
 import {selectTreasure} from "../assets/select_treasure.js";
@@ -133,8 +134,8 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
 
   let draw_pieces = PiecesData;
   let units = 10;
-  let wall_colors = wallColors();
-  let floor_colors = floorColors();
+  let wall_textures = wallTextures();
+  let floor_textures = floorTextures();
   let sky_colors = skyColors();
 // set sky color
   scene.clearColor = sky_colors[0];
@@ -158,21 +159,23 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
       floor_tile.checkCollisions = true;
       switch (terrain_pieces[i][j].area_id) {
         case 0:
-          floor_tile.material.diffuseColor = floor_colors[0];
+          floor_tile.material.diffuseTexture = returnFloorTexture(floor_textures[0], scene);
         break;
         case 1:
-          floor_tile.material.diffuseColor = floor_colors[1];
+          floor_tile.material.diffuseTexture = returnFloorTexture(floor_textures[1], scene);
         break;
         case 2:
-          floor_tile.material.diffuseColor = floor_colors[2];
+          floor_tile.material.diffuseTexture = returnFloorTexture(floor_textures[2], scene);
         break;
         case 3:
-          floor_tile.material.diffuseColor = floor_colors[3];
+          floor_tile.material.diffuseTexture = returnFloorTexture(floor_textures[3], scene);
         break;
         case 4:
-          floor_tile.material.diffuseColor = floor_colors[4];
+          floor_tile.material.diffuseTexture = returnFloorTexture(floor_textures[4], scene);
         break;
       }
+      floor_tile.material.diffuseTexture.uScale = 7;
+	    floor_tile.material.diffuseTexture.vScale = 7;
       floor.push(floor_tile);
     }
   }
@@ -191,34 +194,34 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
           for (let z = 0, zlength = 7; z < zlength; z++) {
             for (let x = 0, xlength = 7; x < xlength; x++) {
               if (draw_pieces[k].data[z][x] === "X") {
-                function selectWallColor(wall_piece) {
+                function selectWallTexture(wall_piece) {
                   switch (terrain_pieces[i][j].area_id) {
                     case 0:
-                      wall_piece.material.diffuseColor = wall_colors[0];
+                      wall_piece.material.diffuseTexture = returnWallTexture(wall_textures[0], scene);
                     break;
                     case 1:
-                      wall_piece.material.diffuseColor = wall_colors[1];
+                      wall_piece.material.diffuseTexture = returnWallTexture(wall_textures[1], scene);
                     break;
                     case 2:
-                      wall_piece.material.diffuseColor = wall_colors[2];
+                      wall_piece.material.diffuseTexture = returnWallTexture(wall_textures[2], scene);
                     break;
                     case 3:
-                      wall_piece.material.diffuseColor = wall_colors[3];
+                      wall_piece.material.diffuseTexture = returnWallTexture(wall_textures[3], scene);
                     break;
                     case 4:
-                      wall_piece.material.diffuseColor = wall_colors[4];
+                      wall_piece.material.diffuseTexture = returnWallTexture(wall_textures[4], scene);
                     break;
                   }
                 }
 
                 if ((terrain_pieces[i][j].secret && (terrain_pieces[i][j].secret.tile_pos.x === i && terrain_pieces[i][j].secret.tile_pos.z === j) && (terrain_pieces[i][j].secret.entry_pos.x === x && terrain_pieces[i][j].secret.entry_pos.z === z))) {
                   secret_counter = secret_counter + 1;
-                  let secretWall = MeshBuilder.CreateBox("wall", {width: units, height: units, depth: units}, scene);
+                  let secretWall = MeshBuilder.CreateBox("wall", {width: units, height: units, depth: units, wrap: true}, scene);
                   secretWall.position.y = 5;
                   secretWall.position.x = (x * units) + (j * 70);
                   secretWall.position.z = ((z * units) - (((z * units) * 2) + (i * 70)));
                   secretWall.material = new StandardMaterial('texture1', scene);
-                  selectWallColor(secretWall);
+                  selectWallTexture(secretWall);
                   secretWall.physicsImpostor = new PhysicsImpostor(secretWall, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
                   secretWall.checkCollisions = true;
                   secretWall.name = "secret" + "_" + terrain_pieces[i][j].secret.direction + secret_counter;
@@ -231,12 +234,12 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
                   secret_walls.push(secret_wall_data);
                   generateSecretArea(j, i, secret_wall_data, scene, treasure_objects, secret_environments);
                 } else {
-                  let wall = MeshBuilder.CreateBox("wall", {width: units, height: units, depth: units}, scene);
+                  let wall = MeshBuilder.CreateBox("wall", {width: units, height: units, depth: units, wrap: true}, scene);
                   wall.position.y = 5;
                   wall.position.x = (x * units) + (j * 70);
                   wall.position.z = ((z * units) - (((z * units) * 2) + (i * 70)));
                   wall.material = new StandardMaterial('texture1', scene);
-                  selectWallColor(wall);
+                  selectWallTexture(wall);
                   wall.physicsImpostor = new PhysicsImpostor(wall, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
                   wall.checkCollisions = true;
                   walls.push(wall);
