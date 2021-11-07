@@ -6,7 +6,7 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {Texture} from "@babylonjs/core/Materials/Textures";
+import {returnMetalTexture} from "../../textures.js";
 
 function generateLadder(x, z, scene) {
   let rail1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 9, tessellation: 12}, scene);
@@ -47,7 +47,7 @@ function generateLadder(x, z, scene) {
   ladder.position.x = x;
   ladder.position.z = z;
   ladder.material = new StandardMaterial('texture1', scene);
-  ladder.material.diffuseColor = new Color3(0.23, 0.19, 0.05);
+  ladder.material.diffuseTexture = returnMetalTexture("iron_rusty", scene);
 }
 
 export {generateLadder};

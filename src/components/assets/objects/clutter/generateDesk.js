@@ -6,7 +6,7 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {Texture} from "@babylonjs/core/Materials/Textures";
+import {returnWoodTexture} from "../../textures.js";
 
 function generateDesk(x, z, scene) {
   let leg1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.25, diameterBottom: 0.25, height: 2, tessellation: 12}, scene);
@@ -38,7 +38,7 @@ function generateDesk(x, z, scene) {
   desk.position.x = x;
   desk.position.z = z;
   desk.material = new StandardMaterial('texture1', scene);
-  desk.material.diffuseColor = new Color3(0.23, 0.19, 0.05);
+  desk.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
 }
 
 export {generateDesk};

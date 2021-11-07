@@ -6,7 +6,7 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {Texture} from "@babylonjs/core/Materials/Textures";
+import {returnWoodTexture} from "../../textures.js";
 
 function generateBoxes(x, z, scene) {
   let box1 = MeshBuilder.CreateBox("box", {width: 3, height: 2, depth: 2}, scene);
@@ -28,7 +28,7 @@ function generateBoxes(x, z, scene) {
   boxes.position.x = x;
   boxes.position.z = z;
   boxes.material = new StandardMaterial('texture1', scene);
-  boxes.material.diffuseColor = new Color3(0.23, 0.19, 0.05);
+  boxes.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
 }
 
 export {generateBoxes};
