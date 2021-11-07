@@ -8,6 +8,8 @@ import 'babylonjs-loaders';
 import "@babylonjs/core/Physics/physicsEngineComponent";
 import {DefaultCollisionCoordinator} from "@babylonjs/core/Collisions";
 import {CannonJSPlugin} from "@babylonjs/core/Physics/Plugins";
+import "@babylonjs/core/Rendering/boundingBoxRenderer";
+import {GlowLayer} from "@babylonjs/core/Layers";
 import {Vector3, Matrix} from "@babylonjs/core/Maths/math";
 import {Ray} from "@babylonjs/core/Culling";
 import {UniversalCamera} from "@babylonjs/core/Cameras/universalCamera";
@@ -15,6 +17,8 @@ import {Sound} from "@babylonjs/core/Audio";
 import {KeyboardEventTypes} from "@babylonjs/core/Events";
 import {sceneGenerator} from "./scenes/scene_generator.js";
 import {keyUp} from "./controls/keyUp.js";
+import {readConfig, handleKeyData} from "./controls/keyConfig.js";
+import {showKeyControls} from "./gui/gui_key_controls.js";
 import {GUI_DisplayHighScores} from "./gui/gui_display_high_scores.js";
 import {GUI_DisplayAchievements} from "./gui/gui_display_achievements.js";
 import {GUI_Score} from "./gui/gui_score.js";
@@ -102,11 +106,21 @@ import {removeBarrierOb15} from "./actions/removeBarrierOb15.js";
 import {pushButtonsOb16} from "./actions/pushButtonsOb16.js";
 import {handleButtonPressOb16} from "./actions/handleButtonPressOb16.js";
 
-const {app} = window.require('@electron/remote');
+const {app, BrowserWindow} = window.require('@electron/remote');
 const DataStore = window.require('nedb');
 const app_filepath = app.getAppPath('');
 const app_data = new DataStore({ filename: app_filepath+'/data/app_data.db', autoload: true });
 
+let global_keys = {
+  move_up: {default_letter: "w", code: 87, new_key: "w"},
+  move_left: {default_letter: "a", code: 65, new_key: "a"},
+  move_down: {default_letter: "s", code: 83, new_key: "s"},
+  move_right: {default_letter: "d", code: 68, new_key: "d"},
+  action_key: {default_letter: "e", code: 69, new_key: "e"},
+  show_fps: {default_letter: "f", code: 70, new_key: "f"},
+  toggle_left: {default_letter: "[", code: 219, new_key: "["},
+  toggle_right: {default_letter: "]", code: 221, new_key: "]"}
+};
 let door_objects = [];
 let forcefield_objects = [];
 let key_objects = [];
@@ -193,7 +207,7 @@ class Canvas extends Component {
     this.engine = {};
     this.camera = {};
     this.scene = {};
-    this.keyUp = keyUp.bind(this, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this), this.reStart.bind(this), timer, score, maze, sound_track);
+    this.keyUp = keyUp.bind(this, global_keys, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this), this.reStart.bind(this), timer, score, maze, sound_track);
 
     this.state = {
       start: false,
@@ -203,6 +217,9 @@ class Canvas extends Component {
 
   async componentDidMount() {
     let ret_app_data = await this.getAppData();
+    let key_data = await readConfig(app_filepath);
+    handleKeyData(key_data, global_keys);
+    showKeyControls(global_keys);
     this.setState({ high_scores: ret_app_data.high_scores }, () => {
       achievements = ret_app_data.achievements;
       document.addEventListener("keyup", this.keyUp, false);
@@ -229,7 +246,7 @@ class Canvas extends Component {
 
   updateEventListener() {
     document.removeEventListener("keyup", this.keyUp, false);
-    this.keyUp = keyUp.bind(this, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this), this.reStart.bind(this), timer, score, maze, sound_track);
+    this.keyUp = keyUp.bind(this, global_keys, menu_gui, map_size, inventory, inventory_tracker, this.saveScoreAndClose.bind(this), this.scene, this.resetGlobals.bind(this), this.reStart.bind(this), timer, score, maze, sound_track);
     document.addEventListener("keyup", this.keyUp, false);
   }
 
@@ -333,10 +350,10 @@ class Canvas extends Component {
 
     this.camera.position.y = 4;
     this.camera.speed = 0.7;
-    this.camera.keysUp = [87]; // w
-    this.camera.keysDown = [83]; // s
-    this.camera.keysLeft = [65]; // a
-    this.camera.keysRight = [68]; // d
+    this.camera.keysUp = [global_keys.move_up.code];
+    this.camera.keysDown = [global_keys.move_down.code];
+    this.camera.keysLeft = [global_keys.move_left.code];
+    this.camera.keysRight = [global_keys.move_right.code];
 
     this.camera.setTarget(Vector3.Zero());
 
@@ -350,6 +367,8 @@ class Canvas extends Component {
     this.scene.collisionsEnabled = true;
     this.camera.checkCollisions = true;
     this.camera._needMoveForGravity = true;
+    let glow = new GlowLayer("glow", this.scene);
+    glow.intensity = 2;
 
     setTimer(timer, map_size);
     let puzzles = [];
@@ -424,7 +443,7 @@ class Canvas extends Component {
       ghost3_crystal_hp: 100
     };
     let ob6 = {
-      holding: {},
+      holding: "",
       just_accessed: false
     };
     let ob7 = {
@@ -842,9 +861,9 @@ class Canvas extends Component {
       tight_rope: {
         hcc: noop,
         hcc_oo: tight_rope_hcc_oo.bind(this),
-        run: tight_rope_btn.bind(this),
+        run: noop,
         run_hit: tight_rope_run_hit.bind(this),
-        btn: noop
+        btn: tight_rope_btn.bind(this)
       },
       dodge_turret: {
         hcc: dodge_turret_hcc.bind(this),
@@ -889,14 +908,28 @@ class Canvas extends Component {
         btn: timed_buttons_btn.bind(this)
       }
     };
+    function selectLeter(kbInfo, global_keys) {
+      if (kbInfo.event.which === global_keys.move_up.code) {
+        return global_keys.move_up.default_letter;
+      }
+      if (kbInfo.event.which === global_keys.move_down.code) {
+        return global_keys.move_down.default_letter;
+      }
+      if (kbInfo.event.which === global_keys.move_left.code) {
+        return global_keys.move_left.default_letter;
+      }
+      if (kbInfo.event.which === global_keys.move_right.code) {
+        return global_keys.move_right.default_letter;
+      }
+    }
 
     this.scene.onKeyboardObservable.add((kbInfo) => {
       switch (kbInfo.type) {
         case KeyboardEventTypes.KEYDOWN:
           if (player.health > 0 && menu_gui.toggle === false) {
-            if (kbInfo.event.key === "w" || kbInfo.event.key === "s" || kbInfo.event.key === "a" || kbInfo.event.key === "d") {
+            if (kbInfo.event.which === global_keys.move_up.code || kbInfo.event.which === global_keys.move_down.code || kbInfo.event.which === global_keys.move_left.code || kbInfo.event.which === global_keys.move_right.code) {
               if (pressedKeys.w === false || pressedKeys.s === false || pressedKeys.a === false || pressedKeys.d === false) {
-                pressedKeys[kbInfo.event.key] = true;
+                pressedKeys[selectLeter(kbInfo, global_keys)] = true;
                 if (player.already_walking === false) {
                   player.already_walking = true;
                   if (this.camera.speed > 0) {
@@ -908,8 +941,8 @@ class Canvas extends Component {
           }
         break;
         case KeyboardEventTypes.KEYUP:
-          if (kbInfo.event.key === "w" || kbInfo.event.key === "s" || kbInfo.event.key === "a" || kbInfo.event.key === "d") {
-            pressedKeys[kbInfo.event.key] = false;
+          if (kbInfo.event.which === global_keys.move_up.code || kbInfo.event.which === global_keys.move_down.code || kbInfo.event.which === global_keys.move_left.code || kbInfo.event.which === global_keys.move_right.code) {
+            pressedKeys[selectLeter(kbInfo, global_keys)] = false;
             if (pressedKeys.w === false && pressedKeys.s === false && pressedKeys.a === false && pressedKeys.d === false) {
               if (player.walking_sound) {
                 player.walking_sound.dispose(true, true);
@@ -927,6 +960,14 @@ class Canvas extends Component {
         break;
       }
     });
+
+    document.addEventListener("mousemove", () => {
+    // makes alt-tabbing work as intended
+      if (!this.engine.isPointerLock && BrowserWindow.getFocusedWindow()) {
+        this.engine.enterPointerlock();
+        canvas.focus();
+      }
+    }, false);
     document.addEventListener("click", () => {
       if (player.holding === "ghostSpear" || player.holding === "hutSpear") {
         player.swing_spear = true;
@@ -941,7 +982,7 @@ class Canvas extends Component {
     }, false);
     document.addEventListener("keydown", () => {
     // for pouring water in obstacle 8
-      if (event.keyCode === 69 && ob8.pouring === false && solved.solvedP8 === false && player.holding === "wateringCan") {
+      if (event.keyCode === global_keys.action_key.code && ob8.pouring === false && solved.solvedP8 === false && player.holding === "wateringCan") {
         ob8.pouring = true;
         if (ob8.water > 0) {
           ob8.pouring_sound = new Sound("Sound", "./sound/loop_rain.ogg", this.scene, null, { loop: true, autoplay: true });
@@ -950,7 +991,7 @@ class Canvas extends Component {
     }, false);
     document.addEventListener("keyup", () => {
     // for pouring water in obstacle 8
-      if (event.keyCode === 69 && ob8.pouring === true) {
+      if (event.keyCode === global_keys.action_key.code && ob8.pouring === true) {
         ob8.pouring = false;
         if (ob8.pouring_sound) {
           ob8.pouring_sound.dispose(true, true);
