@@ -11,6 +11,7 @@ import {Ray} from "@babylonjs/core/Culling";
 import {ParticleSystem} from "@babylonjs/core/Particles";
 import {Sound} from "@babylonjs/core/Audio";
 import {playSound} from "../assets/playSound.js";
+import {returnCrystalTexture} from "../assets/textures.js";
 
 function shootBlasterOb15(scene, camera, player, ob15) {
   if (ob15.shooting) {
@@ -73,7 +74,7 @@ function shootBlasterOb15(scene, camera, player, ob15) {
           if (camera.position.y >= 6) {
             if (hit.pickedMesh.name === "bullseye1" && ob15.bullseye1 === false) {
               let bullseye = scene.getMeshByName("bullseye1");
-              bullseye.material.diffuseColor = new Color3(1, 0, 0);
+              bullseye.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
               ob15.bullseye1 = true;
               setTimeout(() => {
                 playSound("positive", 2000, scene);
@@ -81,7 +82,7 @@ function shootBlasterOb15(scene, camera, player, ob15) {
             }
             if (hit.pickedMesh.name === "bullseye2" && ob15.bullseye2 === false) {
               let bullseye = scene.getMeshByName("bullseye2");
-              bullseye.material.diffuseColor = new Color3(1, 0, 0);
+              bullseye.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
               ob15.bullseye2 = true;
               setTimeout(() => {
                 playSound("positive", 2000, scene);
@@ -89,7 +90,7 @@ function shootBlasterOb15(scene, camera, player, ob15) {
             }
             if (hit.pickedMesh.name === "bullseye3" && ob15.bullseye3 === false) {
               let bullseye = scene.getMeshByName("bullseye3");
-              bullseye.material.diffuseColor = new Color3(1, 0, 0);
+              bullseye.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
               ob15.bullseye3 = true;
               setTimeout(() => {
                 playSound("positive", 2000, scene);
@@ -97,7 +98,7 @@ function shootBlasterOb15(scene, camera, player, ob15) {
             }
             if (hit.pickedMesh.name === "bullseye4" && ob15.bullseye4 === false) {
               let bullseye = scene.getMeshByName("bullseye4");
-              bullseye.material.diffuseColor = new Color3(1, 0, 0);
+              bullseye.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
               ob15.bullseye4 = true;
               setTimeout(() => {
                 playSound("positive", 2000, scene);

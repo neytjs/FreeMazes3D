@@ -2,6 +2,7 @@ import {Color3} from "@babylonjs/core/Maths/math";
 import {GUI_InventoryDisplay} from "../gui/gui_inventory_display.js";
 import {GUI_InventoryDec} from "../gui/gui_inventory_dec.js";
 import {playSound} from "../assets/playSound.js";
+import {returnCrystalTexture} from "../assets/textures.js";
 
 function setBallOb9(hit_name, ob9, solved, inventory, inventory_tracker, scene) {
   if (solved.solvedP9 === false && inventory[inventory_tracker.current_item].hasOwnProperty("type") && ob9.just_accessed === false) {
@@ -13,7 +14,7 @@ function setBallOb9(hit_name, ob9, solved, inventory, inventory_tracker, scene) 
       let hidden = "hiddenBall" + hit_name[4];
       ob9[hidden] = inventory[inventory_tracker.current_item];
       let hiddenBall = scene.getMeshByName(hidden);
-      hiddenBall.material.diffuseColor = new Color3(ob9[hidden].color_code.r, ob9[hidden].color_code.g, ob9[hidden].color_code.b);
+      hiddenBall.material.diffuseTexture = returnCrystalTexture(ob9[hidden].texture, scene);
       hiddenBall.position.y = 2.5;
       inventory.splice(inventory_tracker.current_item, 1);
       GUI_InventoryDec(inventory, inventory_tracker);

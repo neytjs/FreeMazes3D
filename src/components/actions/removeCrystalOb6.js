@@ -1,5 +1,6 @@
 import {Vector3} from "@babylonjs/core/Maths/math";
 import {playSound} from "../assets/playSound.js";
+import {returnCrystalTexture} from "../assets/textures.js";
 
 function removeCrystalOb6(hit_name, obstacle_objects, scene, camera, solved, ob6, player) {
   if (player.holding === "" && solved.solvedP6 === false && ob6.just_accessed === false) {
@@ -12,12 +13,12 @@ function removeCrystalOb6(hit_name, obstacle_objects, scene, camera, solved, ob6
           camera.speed = 0.25;
           obstacle_objects[i].pedestals[pedestal].color_name = "empty";
           player.holding = pedestal;
-          ob6.holding = obstacle_objects[i].pedestals[pedestal].color_code;
+          ob6.holding = obstacle_objects[i].pedestals[pedestal].texture;
           let crystal = scene.getMeshByName(pedestal+"Crystal");
           crystal.material.alpha = 0;
           let carryingCrystal = scene.getMeshByName("carryingCrystal");
           carryingCrystal.material.alpha = 1;
-          carryingCrystal.material.diffuseColor = ob6.holding;
+          carryingCrystal.material.diffuseTexture = returnCrystalTexture(ob6.holding, scene);
           carryingCrystal.renderingGroupId = 1;
           carryingCrystal.parent = camera;
           carryingCrystal.position = new Vector3(-2, -4, 0);

@@ -49,16 +49,16 @@ function startTimerOb16(ob16, scene, obstacle_objects, forcefield_objects, score
           ob16.puzz_bulb3 = "";
           ob16.puzz_bulb4 = "";
           let bulb1 = scene.getMeshByName("bulb1Ob16");
-          bulb1.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+          bulb1.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
           let bulb2 = scene.getMeshByName("bulb2Ob16");
-          bulb2.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+          bulb2.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
           let bulb3 = scene.getMeshByName("bulb3Ob16");
-          bulb3.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+          bulb3.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
           let bulb4 = scene.getMeshByName("bulb4Ob16");
-          bulb4.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+          bulb4.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
         }
       }
-    }, 1100);
+    }, 1125);
   }
   innerFunction();
 }

@@ -7,7 +7,7 @@ function setBulbColorOb16(button_name, ob16, scene, obstacle_objects) {
       ob16.bulb_counter = ob16.bulb_counter + 1;
       ob16["puzz_bulb" + ob16.bulb_counter] = obstacle_objects[i].color_name;
       let bulb = scene.getMeshByName("bulb" + ob16.bulb_counter + "Ob16");
-      bulb.material.diffuseColor = obstacle_objects[i].color_code;
+      bulb.material.emissiveColor = obstacle_objects[i].color_code;
       break;
     }
   }

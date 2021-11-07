@@ -1,6 +1,7 @@
 import {GUI_Warning} from "../gui/gui_warning.js";
 import {GUI_Score} from "../gui/gui_score.js";
 import {playSound} from "../assets/playSound.js";
+import {returnCrystalTexture} from "../assets/textures.js";
 
 function placeCrystalOb6(hit_name, obstacle_objects, forcefield_objects, scene, camera, solved, ob6, player, score) {
   if (player.holding !== "" && solved.solvedP6 === false && ob6.just_accessed === false) {
@@ -20,10 +21,10 @@ function placeCrystalOb6(hit_name, obstacle_objects, forcefield_objects, scene, 
             ob6.just_accessed = true;
             camera.speed = 0.7;
             obstacle_objects[i].pedestals[pedestal].color_name = pedestal;
-            obstacle_objects[i].pedestals[pedestal].color_code = ob6.holding;
-            crystal_mesh.material.diffuseColor = ob6.holding;
+            obstacle_objects[i].pedestals[pedestal].texture = ob6.holding;
+            crystal_mesh.material.diffuseTexture = returnCrystalTexture(ob6.holding, scene);
             crystal_mesh.material.alpha = 1;
-            ob6.holding = {};
+            ob6.holding = "";
             player.holding = "";
             playSound("load", 2000, scene);
           // finally, perform test to see if they finished the puzzle

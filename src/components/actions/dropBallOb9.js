@@ -3,6 +3,7 @@ import {GUI_Warning} from "../gui/gui_warning.js";
 import {GUI_InventoryDisplay} from "../gui/gui_inventory_display.js";
 import {GUI_InventoryDec} from "../gui/gui_inventory_dec.js";
 import {playSound} from "../assets/playSound.js";
+import {returnCrystalTexture} from "../assets/textures.js";
 
 function dropBallOb9(hit_name, ob9, solved, inventory, inventory_tracker, scene) {
   if (solved.solvedP9 === false && inventory[inventory_tracker.current_item].hasOwnProperty("type")) {
@@ -18,7 +19,7 @@ function dropBallOb9(hit_name, ob9, solved, inventory, inventory_tracker, scene)
         GUI_InventoryDec(inventory, inventory_tracker);
         GUI_InventoryDisplay(inventory, inventory_tracker);
         let hiddenBall = scene.getMeshByName(hidden);
-        hiddenBall.material.diffuseColor = new Color3(ob9[hidden].color_code.r, ob9[hidden].color_code.g, ob9[hidden].color_code.b);
+        hiddenBall.material.diffuseTexture = returnCrystalTexture(ob9[hidden].texture, scene);
         setTimeout(() => {
           ob9[hidden+"falling"] = true;
         }, 3200);
