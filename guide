@@ -1,0 +1,34 @@
+**************************************************************************************************
+************************************* FreeMazes3D FAQ/GUIDE! *************************************
+**************************************************************************************************
+
+Q: What is the difference between the three difficulty settings (Easy, Medium, Hard)?
+A: Easy mazes only have two puzzles rooms and one key to find. Medium mazes have three puzzles
+and two keys. Hard mazes have four puzzles and three keys. Easy mazes are also the smallest in
+size, while hard are the largest and medium are in between.
+
+Q: What is the difference between a regular maze and a (Time Limit) maze?
+A: In the regular mazes, you can take as long as you want to solve them. The time limited mazes
+require you to finish before the timer runs out. If you complete a time limited maze within the
+time limit you will receive a nice score bonus as a reward. You may want to consider playing a
+few regular mazes first.
+
+Q: How does the score system work in this game?
+A: Your score is based on your entire play session, from the time you start the game until you
+exit it. Therefore, it is cumulative between mazes. However, if you do not complete a (Time Limit)
+maze in time or if you exit out of any maze without finishing, your score will be reset to zero
+as a consequence.
+
+Q: How do I find secret areas?
+A: Press the activate key while facing towards walls inside the big rooms containing puzzles.
+
+Q: How can I change the key bindings?
+A: Open the config.json file, which is located in FreeMazes3D/resources/app. Simply change the
+letters of the keys as desired. Do not accidentally delete any commas, quotation marks, or curly
+braces. If the game detects invalid JSON, it will give you the default QWERTY key bindings. If
+this happens, you can always delete the config.json file and restart the game, which will create
+a new config.json file for you.
+
+**************************************************************************************************
+**************************************************************************************************
+**************************************************************************************************
