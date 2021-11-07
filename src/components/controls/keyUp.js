@@ -5,7 +5,7 @@ import {stopStartTimer} from "../gui/gui_timer.js";
 import {stopStartMusic} from "../gui/gui_music.js";
 import {playSound} from "../assets/playSound.js";
 
-function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClose, scene, resetGlobals, reStart, timer, score, maze, sound_track) {
+function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClose, scene, resetGlobals, reStart, timer, score, maze, sound_track) {
   let key = event.keyCode;
   let menu = document.getElementById("menu");
   let menu_left = parseInt(window.getComputedStyle(menu).left);
@@ -27,11 +27,11 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
   let results_left = parseInt(window.getComputedStyle(results).left);
 
 // E
-  if (key === 69) {
+  if (key === global_keys.action_key.code) {
     this.pressE = true;
   }
 // F
-  if (key === 70) {
+  if (key === global_keys.show_fps.code) {
     if (menu_left === -10000 && fps_right === 10) {
       document.getElementById("fps").style.right = -10000;
     }
@@ -41,12 +41,12 @@ function keyUp(menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClo
   }
   if (inventory.length > 2) {
   // [
-    if (key === 219) {
+    if (key === global_keys.toggle_left.code) {
       GUI_InventoryCycle(inventory, inventory_tracker, "left");
       playSound("cloth_inventory", 3000, scene);
     }
   // ]
-    if (key === 221) {
+    if (key === global_keys.toggle_right.code) {
       GUI_InventoryCycle(inventory, inventory_tracker, "right");
       playSound("cloth_inventory", 3000, scene);
     }
