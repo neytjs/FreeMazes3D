@@ -5,6 +5,6 @@ Linux users can download the current release, extract the files, and run the exe
 
 Note, Windows/MacOS users will need to clone the project, install the project dependencies, and then build from source.
 
-[fm3d5a](https://user-images.githubusercontent.com/35025868/140636038-1340aa7c-6a78-4e44-837b-7d1e3315d15d.png)
+![fm3d5a](https://user-images.githubusercontent.com/35025868/140636038-1340aa7c-6a78-4e44-837b-7d1e3315d15d.png)
 
 
