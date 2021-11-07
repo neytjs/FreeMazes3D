@@ -9,14 +9,15 @@ import {StandardMaterial} from "@babylonjs/core/Materials";
 import {generateTree} from "./generate_tree.js";
 import {generateObjects} from "./generate_objects.js";
 import {selectTreasure} from "./select_treasure.js";
+import {returnFloorTexture} from "../assets/textures.js";
 
 function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objects, secret_environments) {
-  let ground_colors = {
-    alpine: new Color3(0.49, 0.92, 0),
-    winter: new Color3(0.91, 0.97, 0.98),
-    wasteland: new Color3(0.8, 0.45, 0.06)
+  let ground_textures = {
+    alpine: "grass",
+    winter: "snow",
+    wasteland: "wasteland"
   };
-  let ground_color = ground_colors[secret_environments[0]];
+  let ground_texture = ground_textures[secret_environments[0]];
   let tree = generateTree(secret_environments, scene);
   tree.isVisible = false;
 
@@ -97,54 +98,57 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
       }
     }
   }
+  let secret_ground = {};
   if (secret_data.type === "horizontal_up") {
-    let secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
     secret_ground.position.x = (floor_x * 70) + 30;
     secret_ground.position.z = ((floor_y * 70) + 40);
     secret_ground.position.y = -0.5;
     secret_ground.material = new StandardMaterial('texture1', scene);
-    secret_ground.material.diffuseColor = ground_color;
+    secret_ground.material.diffuseTexture = returnFloorTexture(ground_texture, scene);
     secret_ground.physicsImpostor = new PhysicsImpostor(secret_ground, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     secret_ground.checkCollisions = true;
     generateTreeBarriers("horizontal_up", floor_x, floor_y, 70, 0);
     generateObjects(selectTreasure(), (floor_x * 70) + 30, ((floor_y * 70) + 40), scene, treasure_objects);
   }
   if (secret_data.type === "horizontal_down") {
-    let secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
     secret_ground.position.x = (floor_x * 70) + 30;
     secret_ground.position.z = -((floor_y * 70) + 100);
     secret_ground.position.y = -0.5;
     secret_ground.material = new StandardMaterial('texture1', scene);
-    secret_ground.material.diffuseColor = ground_color;
+    secret_ground.material.diffuseTexture = returnFloorTexture(ground_texture, scene);
     secret_ground.physicsImpostor = new PhysicsImpostor(secret_ground, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     secret_ground.checkCollisions = true;
     generateTreeBarriers("horizontal_down", floor_x, floor_y, -70, 0);
     generateObjects(selectTreasure(), (floor_x * 70) + 30, -((floor_y * 70) + 100), scene, treasure_objects);
   }
   if (secret_data.type === "vertical_left") {
-    let secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
     secret_ground.position.x = (floor_x * 70) - 40;
     secret_ground.position.z = -((floor_y * 70) + 30);
     secret_ground.position.y = -0.5;
     secret_ground.material = new StandardMaterial('texture1', scene);
-    secret_ground.material.diffuseColor = ground_color;
+    secret_ground.material.diffuseTexture = returnFloorTexture(ground_texture, scene);
     secret_ground.physicsImpostor = new PhysicsImpostor(secret_ground, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     secret_ground.checkCollisions = true;
     generateTreeBarriers("vertical_left", floor_x, floor_y, 0, -70);
     generateObjects(selectTreasure(), (floor_x * 70) - 40, -((floor_y * 70) + 30), scene, treasure_objects);
   }
   if (secret_data.type === "vertical_right") {
-    let secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
     secret_ground.position.x = (floor_x * 70) + 100;
     secret_ground.position.z = -((floor_y * 70) + 30);
     secret_ground.position.y = -0.5;
     secret_ground.material = new StandardMaterial('texture1', scene);
-    secret_ground.material.diffuseColor = ground_color;
+    secret_ground.material.diffuseTexture = returnFloorTexture(ground_texture, scene);
     secret_ground.physicsImpostor = new PhysicsImpostor(secret_ground, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     secret_ground.checkCollisions = true;
     generateTreeBarriers("vertical_right", floor_x, floor_y, 0, 70);
     generateObjects(selectTreasure(), (floor_x * 70) + 100, -((floor_y * 70) + 30), scene, treasure_objects);
   }
+  secret_ground.material.diffuseTexture.uScale = 7;
+  secret_ground.material.diffuseTexture.vScale = 7;
 }
 
 export {generateSecretArea};

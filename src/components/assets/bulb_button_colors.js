@@ -10,10 +10,10 @@ let puzzle_colors_base = [
 ];
 
 let button_colors_base = [
-  {color_name: "blue", button_code: new Color3(0, 0, 1), holder_code: new Color3(0.02, 0.02, 0.33)},
-  {color_name: "red", button_code: new Color3(1, 0, 0), holder_code: new Color3(0.31, 0.02, 0.02)},
-  {color_name: "green", button_code: new Color3(0.06, 0.64, 0.06), holder_code: new Color3(0.02, 0.24, 0.02)},
-  {color_name: "yellow", button_code: new Color3(1, 1, 0), holder_code: new Color3(0.41, 0.41, 0)}
+  {color_name: "blue", button_code: new Color3(0, 0, 1), button_texture: "gem_blue", holder_code: "metal_blue"},
+  {color_name: "red", button_code: new Color3(1, 0, 0), button_texture: "gem_red", holder_code: "metal_red"},
+  {color_name: "green", button_code: new Color3(0.06, 0.64, 0.06), button_texture: "gem_green", holder_code: "metal_green"},
+  {color_name: "yellow", button_code: new Color3(1, 1, 0), button_texture: "gem_yellow", holder_code: "metal_yellow"}
 ];
 
 let puzzleColors = [];

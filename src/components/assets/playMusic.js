@@ -8,11 +8,14 @@ function playMusic(scene, sound_track) {
     "3_life_in_forest",
     "Caketown_1",
     "enchantmentinstumental_sonartuning",
+    "Estrella_de_Mar",
     "Its_Love",
+    "Little_Party",
     "My_Friends_SCC",
     "night_city_lights_free_to_use",
     "Roy_Battys_Boombox",
     "soled_distorted_memory",
+    "The_Golden_Mansion",
     "VirusHunterToonStationLevelMusic"
   ];
   tracks = arrayShuffler(tracks);
@@ -36,8 +39,14 @@ function playMusic(scene, sound_track) {
       case "enchantmentinstumental_sonartuning":
         sound_track.song = new Sound("Music", "./music/enchantmentinstumental_sonartuning.mp3", scene, null, settings);
       break;
+      case "Estrella_de_Mar":
+        sound_track.song = new Sound("Music", "./music/Estrella_de_Mar.mp3", scene, null, settings);
+      break;
       case "Its_Love":
         sound_track.song = new Sound("Music", "./music/Its_Love.mp3", scene, null, settings);
+      break;
+      case "Little_Party":
+        sound_track.song = new Sound("Music", "./music/Little_Party.mp3", scene, null, settings);
       break;
       case "My_Friends_SCC":
         sound_track.song = new Sound("Music", "./music/My_Friends_SCC.mp3", scene, null, settings);
@@ -50,6 +59,9 @@ function playMusic(scene, sound_track) {
       break;
       case "soled_distorted_memory":
         sound_track.song = new Sound("Music", "./music/soled_distorted_memory.mp3", scene, null, settings);
+      break;
+      case "The_Golden_Mansion":
+        sound_track.song = new Sound("Music", "./music/The_Golden_Mansion.mp3", scene, null, settings);
       break;
       case "VirusHunterToonStationLevelMusic":
         sound_track.song = new Sound("Music", "./music/VirusHunterToonStationLevelMusic.mp3", scene, null, settings);

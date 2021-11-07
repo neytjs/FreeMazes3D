@@ -73,7 +73,7 @@ function generateSphere(scene, just_spliced) {
     agentSphere.position.y = 2;
     agentSphere.name = "agentSphere";
     var matAgent = new StandardMaterial('mat2', scene);
-    matAgent.diffuseColor = sphere_colors[sphere_color_counter].color_code;
+    matAgent.emissiveColor = sphere_colors[sphere_color_counter].color_code;
     agentSphere.material = matAgent;
     var starPos = navigationPlugin.getRandomPointAround(new Vector3(x, 1, z), 0.5);
     var transform = new TransformNode();
