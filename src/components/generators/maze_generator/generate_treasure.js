@@ -42,16 +42,10 @@ function generateTreasure(start_pos, exit_pos, keys, gem, doors, updated_map) {
 
 // get a set of random tile pos
   let set = new Set();
+  let size = Math.floor((length * width) / 5);
   function fillSet() {
-    let size = Math.floor((length * width) / 5);
-    for (let i = 0; i < size; i++) {
-      if (set.size < size) {
-        let rand = Math.floor(Math.random() * available.length);
-        set.add(available[rand]);
-      } else {
-        break;
-      }
-    }
+    let rand = Math.floor(Math.random() * available.length);
+    set.add(available[rand]);
 
     if (set.size < size) {
       fillSet();
