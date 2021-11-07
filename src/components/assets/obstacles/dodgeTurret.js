@@ -6,28 +6,20 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {Texture} from "@babylonjs/core/Materials/Textures";
 import {arrayShuffler} from "../../utilities/shuffler.js";
+import {returnMetalTexture, returnCrystalTexture} from "../textures.js";
 
 function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
-  let crystalColors = [
-    new Color3(1, 0, 0),
-    new Color3(1, 0.2, 0),
-    new Color3(0.98, 0.16, 0.3),
-    new Color3(0.68, 0, 0)
-  ];
-  crystalColors = arrayShuffler(crystalColors);
-
   let turretBase = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 8}, scene);
   turretBase.position.y = 1.5;
   turretBase.material = new StandardMaterial('texture1', scene);
-  turretBase.material.diffuseColor = new Color3(0.32, 0.32, 0.32);
+  turretBase.material.diffuseTexture = returnMetalTexture("iron_blue", scene);
   global_objects.push({id: turretBase.uniqueId, obstacle11_id: item_id, type: "structure", name: ""});
 
   let turretTower = MeshBuilder.CreateBox("box", {width: 4, height: 2.5, depth: 5}, scene);
   turretTower.position.y = 4;
   turretTower.material = new StandardMaterial('texture1', scene);
-  turretTower.material.diffuseColor = new Color3(0.47, 0.45, 0.45);
+  turretTower.material.diffuseTexture = returnMetalTexture("iron", scene);
 
   let turretBarrel1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.75, diameterBottom: 1, height: 4, tessellation: 8}, scene);
   turretBarrel1.position.y = 4;
@@ -35,7 +27,7 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   turretBarrel1.position.x = -1;
   turretBarrel1.rotation.x = Math.PI / 2;
   turretBarrel1.material = new StandardMaterial('texture1', scene);
-  turretBarrel1.material.diffuseColor = new Color3(0.29, 0.26, 0.26);
+  turretBarrel1.material.diffuseTexture = returnMetalTexture("iron_medium", scene);
 
   let turretBarrel2 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.75, diameterBottom: 1, height: 4, tessellation: 8}, scene);
   turretBarrel2.position.y = 4;
@@ -43,7 +35,7 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   turretBarrel2.position.x = 1;
   turretBarrel2.rotation.x = Math.PI / 2;
   turretBarrel2.material = new StandardMaterial('texture1', scene);
-  turretBarrel2.material.diffuseColor = new Color3(0.29, 0.26, 0.26);
+  turretBarrel2.material.diffuseTexture = returnMetalTexture("iron_medium", scene);
 
   let turretBarrelRim1 = MeshBuilder.CreateTorus("torus", {diameter: 0.75, thickness: 0.2}, scene);
   turretBarrelRim1.position.y = 4;
@@ -51,7 +43,7 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   turretBarrelRim1.position.x = 1;
   turretBarrelRim1.rotation.x = 1.57;
   turretBarrelRim1.material = new StandardMaterial('texture1', scene);
-  turretBarrelRim1.material.diffuseColor = new Color3(0.29, 0.26, 0.26);
+  turretBarrelRim1.material.diffuseTexture = returnMetalTexture("iron_medium", scene);
 
   let turretBarrelRim2 = MeshBuilder.CreateTorus("torus", {diameter: 0.75, thickness: 0.2}, scene);
   turretBarrelRim2.position.y = 4;
@@ -59,7 +51,7 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   turretBarrelRim2.position.x = -1;
   turretBarrelRim2.rotation.x = 1.57;
   turretBarrelRim2.material = new StandardMaterial('texture1', scene);
-  turretBarrelRim2.material.diffuseColor = new Color3(0.29, 0.26, 0.26);
+  turretBarrelRim2.material.diffuseTexture = returnMetalTexture("iron_medium", scene);
 
   let turretBarrelBackRim1 = MeshBuilder.CreateTorus("torus", {diameter: 1, thickness: 0.6}, scene);
   turretBarrelBackRim1.position.y = 4;
@@ -67,7 +59,7 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   turretBarrelBackRim1.position.x = 1;
   turretBarrelBackRim1.rotation.x = 1.57;
   turretBarrelBackRim1.material = new StandardMaterial('texture1', scene);
-  turretBarrelBackRim1.material.diffuseColor = new Color3(0.45, 0.43, 0.36);
+  turretBarrelBackRim1.material.diffuseTexture = returnMetalTexture("iron_tan", scene);
 
   let turretBarrelBackRim2 = MeshBuilder.CreateTorus("torus", {diameter: 1, thickness: 0.6}, scene);
   turretBarrelBackRim2.position.y = 4;
@@ -75,7 +67,7 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   turretBarrelBackRim2.position.x = -1;
   turretBarrelBackRim2.rotation.x = 1.57;
   turretBarrelBackRim2.material = new StandardMaterial('texture1', scene);
-  turretBarrelBackRim2.material.diffuseColor = new Color3(0.45, 0.43, 0.36);
+  turretBarrelBackRim2.material.diffuseTexture = returnMetalTexture("iron_tan", scene);
 
   let turretBarrelHole1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.7, height: 0.1, tessellation: 8}, scene);
   turretBarrelHole1.position.y = 4;
@@ -97,7 +89,6 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   turretBarrier.position.y = 3;
   turretBarrier.position.z = 1.75;
   turretBarrier.material = new StandardMaterial('texture1', scene);
-  turretBarrier.material.diffuseColor = new Color3(0.47, 0.45, 0.45);
   turretBarrier.material.alpha = 0;
 
   let turret = Mesh.MergeMeshes([turretBase, turretTower, turretBarrel1, turretBarrel2, turretBarrelRim1, turretBarrelRim2, turretBarrelBackRim1, turretBarrelBackRim2, turretBarrelHole1, turretBarrelHole2, turretBarrier], true, true, undefined, false, true);
@@ -106,17 +97,18 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   turret.physicsImpostor = new PhysicsImpostor(turretBarrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   turret.checkCollisions = true;
   turret.name = "turretOb11";
-  //turret.billboardMode = Mesh.BILLBOARDMODE_Y;
 
   let power1Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
   power1Shard1.position.y = 6;
   power1Shard1.material = new StandardMaterial('texture1', scene);
-  power1Shard1.material.diffuseColor = crystalColors[0];
+  power1Shard1.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
+  power1Shard1.material.diffuseTexture.uScale = 3;
+  power1Shard1.material.diffuseTexture.vScale = 3;
 
   let power1Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
   power1Shard2.position.y = 2;
   power1Shard2.material = new StandardMaterial('texture1', scene);
-  power1Shard2.material.diffuseColor = crystalColors[0];
+  power1Shard2.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
 
   let powerCrystal1Barrier = MeshBuilder.CreateBox("barrier", {width: 3.5, height: 10, depth: 3.5}, scene);
   powerCrystal1Barrier.position.y = 5;
@@ -133,12 +125,14 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   let power2Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
   power2Shard1.position.y = 6;
   power2Shard1.material = new StandardMaterial('texture1', scene);
-  power2Shard1.material.diffuseColor = crystalColors[1];
+  power2Shard1.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
+  power2Shard1.material.diffuseTexture.uScale = 3;
+  power2Shard1.material.diffuseTexture.vScale = 3;
 
   let power2Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
   power2Shard2.position.y = 2;
   power2Shard2.material = new StandardMaterial('texture1', scene);
-  power2Shard2.material.diffuseColor = crystalColors[1];
+  power2Shard2.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
 
   let powerCrystal2Barrier = MeshBuilder.CreateBox("barrier", {width: 3.5, height: 10, depth: 3.5}, scene);
   powerCrystal2Barrier.position.y = 5;
@@ -155,12 +149,14 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   let power3Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
   power3Shard1.position.y = 6;
   power3Shard1.material = new StandardMaterial('texture1', scene);
-  power3Shard1.material.diffuseColor = crystalColors[2];
+  power3Shard1.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
+  power3Shard1.material.diffuseTexture.uScale = 3;
+  power3Shard1.material.diffuseTexture.vScale = 3;
 
   let power3Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
   power3Shard2.position.y = 2;
   power3Shard2.material = new StandardMaterial('texture1', scene);
-  power3Shard2.material.diffuseColor = crystalColors[2];
+  power3Shard2.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
 
   let powerCrystal3Barrier = MeshBuilder.CreateBox("barrier", {width: 3.5, height: 10, depth: 3.5}, scene);
   powerCrystal3Barrier.position.y = 5;
@@ -177,12 +173,14 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   let power4Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
   power4Shard1.position.y = 6;
   power4Shard1.material = new StandardMaterial('texture1', scene);
-  power4Shard1.material.diffuseColor = crystalColors[3];
+  power4Shard1.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
+  power4Shard1.material.diffuseTexture.uScale = 3;
+  power4Shard1.material.diffuseTexture.vScale = 3;
 
   let power4Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
   power4Shard2.position.y = 2;
   power4Shard2.material = new StandardMaterial('texture1', scene);
-  power4Shard2.material.diffuseColor = crystalColors[3];
+  power4Shard2.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
 
   let powerCrystal4Barrier = MeshBuilder.CreateBox("barrier", {width: 3.5, height: 10, depth: 3.5}, scene);
   powerCrystal4Barrier.position.y = 5;
@@ -210,28 +208,28 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   machine1.position.x = x - 20;
   machine1.position.z = z + 20;
   machine1.material = new StandardMaterial('texture1', scene);
-  machine1.material.diffuseColor = new Color3(0.19, 0.19, 0.19);
+  machine1.material.diffuseTexture = returnMetalTexture("iron", scene);
 
   let machine2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8}, scene);
   machine2.position.y = 0.25;
   machine2.position.x = x - 20;
   machine2.position.z = z - 20;
   machine2.material = new StandardMaterial('texture1', scene);
-  machine2.material.diffuseColor = new Color3(0.19, 0.19, 0.19);
+  machine2.material.diffuseTexture = returnMetalTexture("iron", scene);
 
   let machine3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8}, scene);
   machine3.position.y = 0.25;
   machine3.position.x = x + 20;
   machine3.position.z = z - 20;
   machine3.material = new StandardMaterial('texture1', scene);
-  machine3.material.diffuseColor = new Color3(0.19, 0.19, 0.19);
+  machine3.material.diffuseTexture = returnMetalTexture("iron", scene);
 
   let machine4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8}, scene);
   machine4.position.y = 0.25;
   machine4.position.x = x + 20;
   machine4.position.z = z + 20;
   machine4.material = new StandardMaterial('texture1', scene);
-  machine4.material.diffuseColor = new Color3(0.19, 0.19, 0.19);
+  machine4.material.diffuseTexture = returnMetalTexture("iron", scene);
 
   let wire1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 55, tessellation: 8}, scene);
   wire1.position.y = 0.05;
@@ -240,7 +238,7 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   wire1.rotation.x = Math.PI / 2;
   wire1.rotation.y = 0.785;
   wire1.material = new StandardMaterial('texture1', scene);
-  wire1.material.diffuseColor = new Color3(0, 0, 0);
+  wire1.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
   let wire2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 55, tessellation: 8}, scene);
   wire2.position.y = 0.05;
@@ -249,14 +247,16 @@ function dodgeTurret(x, z, scene, global_objects, item_id, camera) {
   wire2.rotation.z = Math.PI / 2;
   wire2.rotation.y = 0.785;
   wire2.material = new StandardMaterial('texture1', scene);
-  wire2.material.diffuseColor = new Color3(0, 0, 0);
+  wire2.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
   let turretBottom = MeshBuilder.CreateTorus("torus", {diameter: 4, thickness: 2}, scene);
   turretBottom.position.y = 0.5;
   turretBottom.position.x = x;
   turretBottom.position.z = z;
   turretBottom.material = new StandardMaterial('texture1', scene);
-  turretBottom.material.diffuseColor = new Color3(0.08, 0.02, 0.01);
+  turretBottom.material.diffuseTexture = returnMetalTexture("iron_rustydark", scene);
+  turretBottom.material.diffuseTexture.uScale = 4;
+  turretBottom.material.diffuseTexture.vScale = 4;
 }
 
 export {dodgeTurret};

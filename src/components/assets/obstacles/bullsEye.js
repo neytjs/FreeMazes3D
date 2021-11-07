@@ -6,8 +6,8 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {Texture} from "@babylonjs/core/Materials/Textures";
 import {generateBlaster} from "../objects/generateBlaster.js";
+import {returnMetalTexture, returnCrystalTexture, returnWoodTexture} from "../textures.js";
 
 function bullsEye(x, z, scene, global_objects, item_id, camera) {
   function generateTarget(x, z, rot) {
@@ -15,34 +15,36 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
     target1a.position.y = 6;
     target1a.rotation.x = Math.PI / 2;
     target1a.material = new StandardMaterial('texture1', scene);
-    target1a.material.diffuseColor = new Color3(0, 0, 0);
+    target1a.material.diffuseTexture = returnCrystalTexture("gem_black", scene);
 
     let target1b = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 20}, scene);
     target1b.position.y = 6;
     target1b.position.z = 0.01;
     target1b.rotation.x = Math.PI / 2;
     target1b.material = new StandardMaterial('texture1', scene);
-    target1b.material.diffuseColor = new Color3(1, 1, 1);
+    target1b.material.diffuseTexture = returnCrystalTexture("gem_white", scene);
 
     let target1c = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.5, tessellation: 20}, scene);
     target1c.position.y = 6;
     target1c.position.z = 0.02;
     target1c.rotation.x = Math.PI / 2;
     target1c.material = new StandardMaterial('texture1', scene);
-    target1c.material.diffuseColor = new Color3(0, 0, 0);
+    target1c.material.diffuseTexture = returnCrystalTexture("gem_black", scene);
 
     let target1d = MeshBuilder.CreateCylinder("cylinder", {diameter: 2, height: 0.5, tessellation: 20}, scene);
     target1d.position.y = 6;
     target1d.position.z = 0.03;
     target1d.rotation.x = Math.PI / 2;
     target1d.material = new StandardMaterial('texture1', scene);
-    target1d.material.diffuseColor = new Color3(1, 1, 1);
+    target1d.material.diffuseTexture = returnCrystalTexture("gem_white", scene);
 
     let target1support = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 6, tessellation: 20}, scene);
     target1support.position.y = 3;
     target1support.position.z = -0.5;
     target1support.material = new StandardMaterial('texture1', scene);
-    target1support.material.diffuseColor = new Color3(0.46, 0.33, 0.11);
+    target1support.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
+    target1support.material.diffuseTexture.uScale = 2;
+    target1support.material.diffuseTexture.vScale = 2;
 
     let target = Mesh.MergeMeshes([target1a, target1b, target1c, target1d, target1support], true, true, undefined, false, true);
     target.position.x = x;
@@ -60,7 +62,6 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   target1barrier.position.z = z + 20;
   target1barrier.rotation.y = 2.355;
   target1barrier.material = new StandardMaterial('texture1', scene);
-  target1barrier.material.diffuseColor = new Color3(1, 0, 0);
   target1barrier.material.alpha = 0;
   target1barrier.name = "target1barrier";
   target1barrier.physicsImpostor = new PhysicsImpostor(target1barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
@@ -72,7 +73,6 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   target2barrier.position.z = z - 20;
   target2barrier.rotation.y = -0.785;
   target2barrier.material = new StandardMaterial('texture1', scene);
-  target2barrier.material.diffuseColor = new Color3(1, 0, 0);
   target2barrier.material.alpha = 0;
   target2barrier.name = "target2barrier";
   target2barrier.physicsImpostor = new PhysicsImpostor(target2barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
@@ -84,7 +84,6 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   target3barrier.position.z = z - 20;
   target3barrier.rotation.y = 0.785;
   target3barrier.material = new StandardMaterial('texture1', scene);
-  target3barrier.material.diffuseColor = new Color3(1, 0, 0);
   target3barrier.material.alpha = 0;
   target3barrier.name = "target3barrier";
   target3barrier.physicsImpostor = new PhysicsImpostor(target3barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
@@ -96,7 +95,6 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   target4barrier.position.z = z + 20;
   target4barrier.rotation.y = -2.355;
   target4barrier.material = new StandardMaterial('texture1', scene);
-  target4barrier.material.diffuseColor = new Color3(1, 0, 0);
   target4barrier.material.alpha = 0;
   target4barrier.name = "target4barrier";
   target4barrier.physicsImpostor = new PhysicsImpostor(target4barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
@@ -109,7 +107,7 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   bullseye1.rotation.x = Math.PI / 2;
   bullseye1.rotation.y = 2.355;
   bullseye1.material = new StandardMaterial('texture1', scene);
-  bullseye1.material.diffuseColor = new Color3(0, 0, 0);
+  bullseye1.material.diffuseTexture = returnCrystalTexture("gem_black", scene);
   bullseye1.name = "bullseye1";
 
   let bullseye2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.57, tessellation: 20}, scene);
@@ -119,7 +117,7 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   bullseye2.rotation.x = Math.PI / 2;
   bullseye2.rotation.y = -0.785;
   bullseye2.material = new StandardMaterial('texture1', scene);
-  bullseye2.material.diffuseColor = new Color3(0, 0, 0);
+  bullseye2.material.diffuseTexture = returnCrystalTexture("gem_black", scene);
   bullseye2.name = "bullseye2";
 
   let bullseye3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.57, tessellation: 20}, scene);
@@ -129,7 +127,7 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   bullseye3.rotation.x = Math.PI / 2;
   bullseye3.rotation.y = 0.785;
   bullseye3.material = new StandardMaterial('texture1', scene);
-  bullseye3.material.diffuseColor = new Color3(0, 0, 0);
+  bullseye3.material.diffuseTexture = returnCrystalTexture("gem_black", scene);
   bullseye3.name = "bullseye3";
 
   let bullseye4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.57, tessellation: 20}, scene);
@@ -139,7 +137,7 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   bullseye4.rotation.x = Math.PI / 2;
   bullseye4.rotation.y = -2.355;
   bullseye4.material = new StandardMaterial('texture1', scene);
-  bullseye4.material.diffuseColor = new Color3(0, 0, 0);
+  bullseye4.material.diffuseTexture = returnCrystalTexture("gem_black", scene);
   bullseye4.name = "bullseye4";
 
   let podium = MeshBuilder.CreateBox("box", {width: 10, height: 2, depth: 10}, scene);
@@ -147,7 +145,9 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   podium.position.z = z;
   podium.position.x = x;
   podium.material = new StandardMaterial('texture1', scene);
-  podium.material.diffuseColor = new Color3(0.46, 0.33, 0.11);
+  podium.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
+  podium.material.diffuseTexture.uScale = 3;
+  podium.material.diffuseTexture.vScale = 3;
   podium.physicsImpostor = new PhysicsImpostor(podium, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   podium.checkCollisions = true;
   global_objects.push({id: podium.uniqueId, obstacle15_id: item_id, type: "structure", name: ""});
@@ -155,7 +155,7 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   let step1 = MeshBuilder.CreateBox("box", {width: 5, height: 1, depth: 1}, scene);
   step1.position.y = 0.5;
   step1.material = new StandardMaterial('texture1', scene);
-  step1.material.diffuseColor = new Color3(0.46, 0.33, 0.11);
+  step1.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
 
   let stepBarrier = MeshBuilder.CreateBox("box", {width: 5, height: 2, depth: 1}, scene);
   stepBarrier.position.y = 1;
@@ -172,12 +172,12 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   let sign1 = MeshBuilder.CreateBox("box", {width: 2, height: 2, depth: 0.25}, scene);
   sign1.position.y = 4;
   sign1.material = new StandardMaterial('texture1', scene);
-  sign1.material.diffuseColor = new Color3(0.62, 0.57, 0.49);
+  sign1.material.diffuseTexture = returnWoodTexture("wood_lightbrown", scene);
 
   let sign2 = MeshBuilder.CreateBox("box", {width: 0.25, height: 4, depth: 0.25}, scene);
   sign2.position.y = 1;
   sign2.material = new StandardMaterial('texture1', scene);
-  sign2.material.diffuseColor = new Color3(0.21, 0.2, 0.18);
+  sign2.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
 
   let signBarrier = MeshBuilder.CreateBox("box", {width: 2, height: 5, depth: 2}, scene);
   signBarrier.position.y = 2.5;
@@ -195,22 +195,24 @@ function bullsEye(x, z, scene, global_objects, item_id, camera) {
   let canCan = MeshBuilder.CreateCylinder("cylinder", {diameter: 2.5, height: 3, tessellation: 20}, scene);
   canCan.position.y = 1.5;
   canCan.material = new StandardMaterial('texture1', scene);
-  canCan.material.diffuseColor = new Color3(0, 0.98, 0.16);
+  canCan.material.diffuseTexture = returnCrystalTexture("gem_green", scene);
+  canCan.material.diffuseTexture.uScale = 2;
+  canCan.material.diffuseTexture.vScale = 2;
 
   let canRim1 = MeshBuilder.CreateTorus("torus", {diameter: 2.5, thickness: 0.25});
   canRim1.position.y = 3;
   canRim1.material = new StandardMaterial('texture1', scene);
-  canRim1.material.diffuseColor = new Color3(0, 0.98, 0.16);
+  canRim1.material.diffuseTexture = returnCrystalTexture("gem_green", scene);
 
   let canRim2 = MeshBuilder.CreateTorus("torus", {diameter: 2.5, thickness: 0.25});
   canRim2.position.y = 1.625;
   canRim2.material = new StandardMaterial('texture1', scene);
-  canRim2.material.diffuseColor = new Color3(0, 0.98, 0.16);
+  canRim2.material.diffuseTexture = returnCrystalTexture("gem_green", scene);
 
   let canRim3 = MeshBuilder.CreateTorus("torus", {diameter: 2.5, thickness: 0.25});
   canRim3.position.y = 0.125;
   canRim3.material = new StandardMaterial('texture1', scene);
-  canRim3.material.diffuseColor = new Color3(0, 0.98, 0.16);
+  canRim3.material.diffuseTexture = returnCrystalTexture("gem_green", scene);
 
   let canTop = MeshBuilder.CreateCylinder("cylinder", {diameter: 2.5, height: 0.025, tessellation: 20}, scene);
   canTop.position.y = 3;

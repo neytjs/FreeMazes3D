@@ -6,11 +6,12 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {Texture} from "@babylonjs/core/Materials/Textures";
 import {map, length, width, pieces, createEmptyMap, createMap, setMapSize} from "../../generators/maze_generator.js";
 import {PiecesData} from "../pieces_data.js";
 import {plateColors, mazePos, cloneAndShuffleColors, cloneAndShuffleMapPos} from "../pyramid_data.js";
 import {generateMagicPowder} from "../objects/generateMagicPowder.js";
+import {returnMetalTexture, returnWallTexture, returnFloorTexture, returnStoneTexture,
+  returnCrystalTexture} from "../textures.js";
 
 function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   setMapSize("medium")
@@ -57,7 +58,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   buttonHolder1.position.x = (lever1_y * 35) + 15;
   buttonHolder1.position.z = -((lever1_x * 35) + 15);
   buttonHolder1.material = new StandardMaterial('texture1', scene);
-  buttonHolder1.material.diffuseColor = new Color3(0.91, 0.86, 0.59);
+  buttonHolder1.material.diffuseTexture = returnStoneTexture("stone_pyramid", scene);
   buttonHolder1.physicsImpostor = new PhysicsImpostor(buttonHolder1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   buttonHolder1.checkCollisions = true;
 
@@ -74,7 +75,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pushButton1.position.x = (lever1_y * 35) + 15;
   pushButton1.position.z = -((lever1_x * 35) + 15);
   pushButton1.material = new StandardMaterial('texture1', scene);
-  pushButton1.material.diffuseColor = new Color3(0.85, 0.73, 0.49);
+  pushButton1.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
   pushButton1.name = "pushButton1p13";
 
   let buttonHolder2 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
@@ -82,7 +83,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   buttonHolder2.position.x = (lever2_y * 35) + 15;
   buttonHolder2.position.z = -((lever2_x * 35) + 15);
   buttonHolder2.material = new StandardMaterial('texture1', scene);
-  buttonHolder2.material.diffuseColor = new Color3(0.91, 0.86, 0.59);
+  buttonHolder2.material.diffuseTexture = returnStoneTexture("stone_pyramid", scene);
   buttonHolder2.physicsImpostor = new PhysicsImpostor(buttonHolder2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   buttonHolder2.checkCollisions = true;
 
@@ -99,7 +100,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pushButton2.position.x = (lever2_y * 35) + 15;
   pushButton2.position.z = -((lever2_x * 35) + 15);
   pushButton2.material = new StandardMaterial('texture1', scene);
-  pushButton2.material.diffuseColor = new Color3(0.85, 0.73, 0.49);
+  pushButton2.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
   pushButton2.name = "pushButton2p13";
 
   let buttonHolder3 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
@@ -107,7 +108,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   buttonHolder3.position.x = (lever3_y * 35) + 15;
   buttonHolder3.position.z = -((lever3_x * 35) + 15);
   buttonHolder3.material = new StandardMaterial('texture1', scene);
-  buttonHolder3.material.diffuseColor = new Color3(0.91, 0.86, 0.59);
+  buttonHolder3.material.diffuseTexture = returnStoneTexture("stone_pyramid", scene);
   buttonHolder3.physicsImpostor = new PhysicsImpostor(buttonHolder3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   buttonHolder3.checkCollisions = true;
 
@@ -124,18 +125,18 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pushButton3.position.x = (lever3_y * 35) + 15;
   pushButton3.position.z = -((lever3_x * 35) + 15);
   pushButton3.material = new StandardMaterial('texture1', scene);
-  pushButton3.material.diffuseColor = new Color3(0.85, 0.73, 0.49);
+  pushButton3.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
   pushButton3.name = "pushButton3p13";
 
   let plate1holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 20}, scene);
   plate1holder.position.y = 2;
   plate1holder.material = new StandardMaterial('texture1', scene);
-  plate1holder.material.diffuseColor = plateColors[0].plate_code;
+  plate1holder.material.diffuseTexture = returnMetalTexture(plateColors[0].plate_texture, scene);
 
   let plate1support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 20}, scene);
   plate1support.position.y = 1;
   plate1support.material = new StandardMaterial('texture1', scene);
-  plate1support.material.diffuseColor = new Color3(0.19, 0.18, 0.18);
+  plate1support.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
   let plate1Barrier = MeshBuilder.CreateBox("box", {width: 4, height: 10, depth: 4}, scene);
   plate1Barrier.position.y = 5;
@@ -164,19 +165,19 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   powder1Hidden.position.x = (final_y * 35) + 15;
   powder1Hidden.position.z = -((final_x * 35) + 15);
   powder1Hidden.material = new StandardMaterial('texture1', scene);
-  powder1Hidden.material.diffuseColor = plateColors[0].color_code;
+  powder1Hidden.material.diffuseTexture = returnCrystalTexture(plateColors[0].color_texture, scene);
   powder1Hidden.material.alpha = 0;
   powder1Hidden.name = plateColors[0].color_name + "HiddenPowderOb13";
 
   let plate2holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 20}, scene);
   plate2holder.position.y = 2;
   plate2holder.material = new StandardMaterial('texture1', scene);
-  plate2holder.material.diffuseColor = plateColors[1].plate_code;
+  plate2holder.material.diffuseTexture = returnMetalTexture(plateColors[1].plate_texture, scene);
 
   let plate2support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 20}, scene);
   plate2support.position.y = 1;
   plate2support.material = new StandardMaterial('texture1', scene);
-  plate2support.material.diffuseColor = new Color3(0.19, 0.18, 0.18);
+  plate2support.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
   let plate2Barrier = MeshBuilder.CreateBox("box", {width: 4, height: 10, depth: 4}, scene);
   plate2Barrier.position.y = 5;
@@ -205,19 +206,19 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   powder2Hidden.position.x = (final_y * 35) + 10;
   powder2Hidden.position.z = -((final_x * 35) + 15);
   powder2Hidden.material = new StandardMaterial('texture1', scene);
-  powder2Hidden.material.diffuseColor = plateColors[1].color_code;
+  powder2Hidden.material.diffuseTexture = returnCrystalTexture(plateColors[1].color_texture, scene);
   powder2Hidden.material.alpha = 0;
   powder2Hidden.name = plateColors[1].color_name + "HiddenPowderOb13";
 
   let plate3holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 20}, scene);
   plate3holder.position.y = 2;
   plate3holder.material = new StandardMaterial('texture1', scene);
-  plate3holder.material.diffuseColor = plateColors[2].plate_code;
+  plate3holder.material.diffuseTexture = returnMetalTexture(plateColors[2].plate_texture, scene);
 
   let plate3support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 20}, scene);
   plate3support.position.y = 1;
   plate3support.material = new StandardMaterial('texture1', scene);
-  plate3support.material.diffuseColor = new Color3(0.19, 0.18, 0.18);
+  plate3support.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
   let plate3Barrier = MeshBuilder.CreateBox("box", {width: 4, height: 10, depth: 4}, scene);
   plate3Barrier.position.y = 5;
@@ -246,7 +247,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   powder3Hidden.position.x = (final_y * 35) + 20;
   powder3Hidden.position.z = -((final_x * 35) + 15);
   powder3Hidden.material = new StandardMaterial('texture1', scene);
-  powder3Hidden.material.diffuseColor = plateColors[2].color_code;
+  powder3Hidden.material.diffuseTexture = returnCrystalTexture(plateColors[2].color_texture, scene);
   powder3Hidden.material.alpha = 0;
   powder3Hidden.name = plateColors[2].color_name + "HiddenPowderOb13";
 
@@ -255,21 +256,21 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   spawnPoint1.position.x = (lever1_y * 35) + 5;
   spawnPoint1.position.z = -((lever1_x * 35) + 5);
   spawnPoint1.material = new StandardMaterial('texture1', scene);
-  spawnPoint1.material.diffuseColor = new Color3(0.35, 0.29, 0.15);
+  spawnPoint1.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
 
   let spawnPoint2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.2, tessellation: 20}, scene);
   spawnPoint2.position.y = -100;
   spawnPoint2.position.x = (lever2_y * 35) + 5;
   spawnPoint2.position.z = -((lever2_x * 35) + 5);
   spawnPoint2.material = new StandardMaterial('texture1', scene);
-  spawnPoint2.material.diffuseColor = new Color3(0.35, 0.29, 0.15);
+  spawnPoint2.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
 
   let spawnPoint3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.2, tessellation: 20}, scene);
   spawnPoint3.position.y = -100;
   spawnPoint3.position.x = (lever3_y * 35) + 5;
   spawnPoint3.position.z = -((lever3_x * 35) + 5);
   spawnPoint3.material = new StandardMaterial('texture1', scene);
-  spawnPoint3.material.diffuseColor = new Color3(0.35, 0.29, 0.15);
+  spawnPoint3.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
 
   let terrain_pieces = [];
   for (let x = 0; x < width; x++) {
@@ -295,7 +296,9 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
     ground.position.x = 85;
     ground.position.z = -85;
     ground.material = new StandardMaterial('texture1', scene);
-    ground.material.diffuseColor = new Color3(0.65, 0.62, 0.23);
+    ground.material.diffuseTexture = returnFloorTexture("stone_slabs_tan", scene);
+    ground.material.diffuseTexture.uScale = 17.5;
+    ground.material.diffuseTexture.vScale = 17.5;
     ground.physicsImpostor = new PhysicsImpostor(ground, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     ground.checkCollisions = true;
 
@@ -304,7 +307,9 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
     ceiling.position.x = 85;
     ceiling.position.z = -85;
     ceiling.material = new StandardMaterial('texture1', scene);
-    ceiling.material.diffuseColor = new Color3(0.98, 1, 0);
+    ceiling.material.diffuseTexture = returnFloorTexture("stone_slabs_tan", scene);
+    ceiling.material.diffuseTexture.uScale = 17.5;
+    ceiling.material.diffuseTexture.vScale = 17.5;
 
     for (let i = 0, length = terrain_pieces.length; i < length; i++) {
       for (let j = 0, jlength = terrain_pieces[i].length; j < jlength; j++) {
@@ -314,12 +319,12 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
               for (let x = 0, xlength = 7; x < xlength; x++) {
                 if (PiecesData[k].data[z][x] !== "_") {
                   if (PiecesData[k].data[z][x] === "X") {
-                    wall = MeshBuilder.CreateBox("wall", {width: units, height: 15, depth: units}, scene);
+                    wall = MeshBuilder.CreateBox("wall", {width: units, height: 15, depth: units, wrap: true}, scene);
                     wall.position.y = underground + 7.5;
                     wall.position.x = (x * units) + (j * 35);
                     wall.position.z = ((z * units) - (((z * units) * 2) + (i * 35)));
                     wall.material = new StandardMaterial('texture1', scene);
-                    wall.material.diffuseColor = new Color3(0.74, 0.68, 0.12);
+                    wall.material.diffuseTexture = returnWallTexture("stone_blocks_pyramid", scene);
                     wall.physicsImpostor = new PhysicsImpostor(wall, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
                     wall.checkCollisions = true;
                     meshes.push(wall);
@@ -343,14 +348,15 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramid.position.z = z;
   pyramid.position.x = x;
   pyramid.material = new StandardMaterial('texture1', scene);
-  pyramid.material.diffuseColor = new Color3(0.81, 0.76, 0.47);
+  pyramid.material.diffuseTexture = returnStoneTexture("stone_pyramid", scene);
+  pyramid.material.diffuseTexture.uScale = 15;
+  pyramid.material.diffuseTexture.vScale = 15;
 
   let pyramidBarrier = MeshBuilder.CreateBox("box", {width: 29, height: 25, depth: 29}, scene);
   pyramidBarrier.position.y = 12.5;
   pyramidBarrier.position.z = z;
   pyramidBarrier.position.x = x;
   pyramidBarrier.material = new StandardMaterial('texture1', scene);
-  pyramidBarrier.material.diffuseColor = new Color3(0.91, 0.86, 0.59);
   pyramidBarrier.material.alpha = 0;
   pyramidBarrier.physicsImpostor = new PhysicsImpostor(pyramidBarrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidBarrier.checkCollisions = true;
@@ -360,22 +366,23 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   obelisk1.position.y = 8;
   obelisk1.rotation.y = 0.785;
   obelisk1.material = new StandardMaterial('texture1', scene);
-  obelisk1.material.diffuseColor = new Color3(0.81, 0.76, 0.47);
+  obelisk1.material.diffuseTexture = returnStoneTexture("stone_pyramid", scene);
 
   let obelisk2 = MeshBuilder.CreateBox("box", {width: 1.42, height: 7, depth: 1.42}, scene);
   obelisk2.position.y = 3.5;
   obelisk2.material = new StandardMaterial('texture1', scene);
-  obelisk2.material.diffuseColor = new Color3(0.99, 0.93, 0.58);
+  obelisk2.material.diffuseTexture = returnStoneTexture("stone_pyramid", scene);
+  obelisk2.material.diffuseTexture.uScale = 3;
+  obelisk2.material.diffuseTexture.vScale = 3;
 
   let obelisk3 = MeshBuilder.CreateBox("box", {width: 3, height: 0.5, depth: 3}, scene);
   obelisk3.position.y = 0.25;
   obelisk3.material = new StandardMaterial('texture1', scene);
-  obelisk3.material.diffuseColor = new Color3(0.73, 0.67, 0.39);
+  obelisk3.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
 
   let obeliskBarrier = MeshBuilder.CreateBox("box", {width: 3, height: 10, depth: 3}, scene);
   obeliskBarrier.position.y = 5;
   obeliskBarrier.material = new StandardMaterial('texture1', scene);
-  obeliskBarrier.material.diffuseColor = new Color3(0.73, 0.67, 0.39);
   obeliskBarrier.material.alpha = 0;
 
   let obelisk = Mesh.MergeMeshes([obelisk1, obelisk2, obelisk3, obeliskBarrier], true, true, undefined, false, true);
@@ -389,25 +396,31 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidEntrance1.position.z = z + 12;
   pyramidEntrance1.position.x = x;
   pyramidEntrance1.material = new StandardMaterial('texture1', scene);
-  pyramidEntrance1.material.diffuseColor = new Color3(0.91, 0.86, 0.59);
+  pyramidEntrance1.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
+  pyramidEntrance1.material.diffuseTexture.uScale = 5;
+  pyramidEntrance1.material.diffuseTexture.vScale = 5;
   pyramidEntrance1.physicsImpostor = new PhysicsImpostor(pyramidEntrance1, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidEntrance1.checkCollisions = true;
 
-  let pyramidEntrance2 = MeshBuilder.CreateBox("box", {width: 1, height: 7, depth: 1}, scene);
-  pyramidEntrance2.position.y = 3.5;
+  let pyramidEntrance2 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  pyramidEntrance2.position.y = 3.25;
   pyramidEntrance2.position.z = z + 16;
   pyramidEntrance2.position.x = x + 2.5;
   pyramidEntrance2.material = new StandardMaterial('texture1', scene);
-  pyramidEntrance2.material.diffuseColor = new Color3(0.48, 0.45, 0.34);
+  pyramidEntrance2.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
+  pyramidEntrance2.material.diffuseTexture.uScale = 3;
+  pyramidEntrance2.material.diffuseTexture.vScale = 3;
   pyramidEntrance2.physicsImpostor = new PhysicsImpostor(pyramidEntrance2, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidEntrance2.checkCollisions = true;
 
-  let pyramidEntrance3 = MeshBuilder.CreateBox("box", {width: 1, height: 7, depth: 1}, scene);
-  pyramidEntrance3.position.y = 3.5;
+  let pyramidEntrance3 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  pyramidEntrance3.position.y = 3.25;
   pyramidEntrance3.position.z = z + 16;
   pyramidEntrance3.position.x = x - 2.5;
   pyramidEntrance3.material = new StandardMaterial('texture1', scene);
-  pyramidEntrance3.material.diffuseColor = new Color3(0.48, 0.45, 0.34);
+  pyramidEntrance3.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
+  pyramidEntrance3.material.diffuseTexture.uScale = 3;
+  pyramidEntrance3.material.diffuseTexture.vScale = 3;
   pyramidEntrance3.physicsImpostor = new PhysicsImpostor(pyramidEntrance3, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidEntrance3.checkCollisions = true;
 
@@ -416,7 +429,9 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidEntrance4.position.z = z + 16;
   pyramidEntrance4.position.x = x;
   pyramidEntrance4.material = new StandardMaterial('texture1', scene);
-  pyramidEntrance4.material.diffuseColor = new Color3(0.48, 0.45, 0.34);
+  pyramidEntrance4.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
+  pyramidEntrance4.material.diffuseTexture.uScale = 3;
+  pyramidEntrance4.material.diffuseTexture.vScale = 3;
 
   let pyramidTheEntrance = MeshBuilder.CreateBox("pyramidEntrance", {width: 5, height: 7, depth: 0.25}, scene);
   pyramidTheEntrance.position.y = 3.5;
@@ -428,21 +443,25 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidTheEntrance.checkCollisions = true;
   global_objects.push({id: pyramidTheEntrance.uniqueId, type: "pyramidEntrance", exit_pos: {x: 15, z: -5, y: -96}});
 
-  let pyramidExit1 = MeshBuilder.CreateBox("box", {width: 1, height: 7, depth: 1}, scene);
-  pyramidExit1.position.y = -96.5;
+  let pyramidExit1 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  pyramidExit1.position.y = -96.75;
   pyramidExit1.position.z = -2.5;
   pyramidExit1.position.x = 17.5;
   pyramidExit1.material = new StandardMaterial('texture1', scene);
-  pyramidExit1.material.diffuseColor = new Color3(0.48, 0.45, 0.34);
+  pyramidExit1.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
+  pyramidExit1.material.diffuseTexture.uScale = 3;
+  pyramidExit1.material.diffuseTexture.vScale = 3;
   pyramidExit1.physicsImpostor = new PhysicsImpostor(pyramidExit1, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidExit1.checkCollisions = true;
 
-  let pyramidExit2 = MeshBuilder.CreateBox("box", {width: 1, height: 7, depth: 1}, scene);
-  pyramidExit2.position.y = -96.5;
+  let pyramidExit2 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  pyramidExit2.position.y = -96.75;
   pyramidExit2.position.z = -2.5;
   pyramidExit2.position.x = 12.5;
   pyramidExit2.material = new StandardMaterial('texture1', scene);
-  pyramidExit2.material.diffuseColor = new Color3(0.48, 0.45, 0.34);
+  pyramidExit2.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
+  pyramidExit2.material.diffuseTexture.uScale = 3;
+  pyramidExit2.material.diffuseTexture.vScale = 3;
   pyramidExit2.physicsImpostor = new PhysicsImpostor(pyramidExit2, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidExit2.checkCollisions = true;
 
@@ -451,7 +470,9 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidExit3.position.z = -2.5;
   pyramidExit3.position.x = 15;
   pyramidExit3.material = new StandardMaterial('texture1', scene);
-  pyramidExit3.material.diffuseColor = new Color3(0.48, 0.45, 0.34);
+  pyramidExit3.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
+  pyramidExit3.material.diffuseTexture.uScale = 3;
+  pyramidExit3.material.diffuseTexture.vScale = 3;
 
   let pyramidTheExit = MeshBuilder.CreateBox("pyramidExit", {width: 5, height: 7, depth: 0.25}, scene);
   pyramidTheExit.position.y = -96.5;

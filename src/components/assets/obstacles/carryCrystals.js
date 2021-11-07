@@ -12,17 +12,18 @@ import {generateSpear} from "../objects/generateSpear.js";
 import {distinguishTwoArrays} from "../../utilities/distinguishTwoArrays.js";
 import {degrees} from "../../utilities/math.js";
 import {generateCarryingCrystal} from "../objects/generateCarryingCrystal.js";
+import {returnMetalTexture, returnCrystalTexture} from "../textures.js";
 
 function carryCrystals(x, z, scene, global_objects, item_id, camera) {
   let global_pedestalcrystal_data = {};
 
   let colors_base = [
-    {color_name: "red", color_code: new Color3(0.59, 0.13, 0.13)},
-    {color_name: "teal", color_code: new Color3(0.28, 0.85, 0.68)},
-    {color_name: "pink", color_code: new Color3(0.99, 0.1, 0.54)},
-    {color_name: "green", color_code: new Color3(0.25, 0.47, 0.22)},
-    {color_name: "blue", color_code: new Color3(0.11, 0.47, 0.95)},
-    {color_name: "purple", color_code: new Color3(0.25, 0.05, 0.41)}
+    {color_name: "red", texture: "gem_darkred"},
+    {color_name: "teal", texture: "gem_teal"},
+    {color_name: "pink", texture: "gem_hotpink"},
+    {color_name: "green", texture: "gem_darkgreen"},
+    {color_name: "blue", texture: "gem_skyblue"},
+    {color_name: "purple", texture: "gem_verydarkpurple"}
   ];
 
   generateCarryingCrystal(scene, camera);
@@ -37,7 +38,7 @@ function carryCrystals(x, z, scene, global_objects, item_id, camera) {
     pedestal.position.x = (17.5 * Math.cos(degrees[i])) + x;
     pedestal.position.z = (17.5 * Math.sin(degrees[i])) + z;
     pedestal.material = new StandardMaterial('texture1', scene);
-    pedestal.material.diffuseColor = pedestal_colors[i].color_code;
+    pedestal.material.diffuseTexture = returnCrystalTexture(pedestal_colors[i].texture, scene);
 
     let barrier = MeshBuilder.CreateBox("barrier", {width: 5, height: 10, depth: 5}, scene);
     barrier.position.y = 5;
@@ -61,12 +62,12 @@ function carryCrystals(x, z, scene, global_objects, item_id, camera) {
     colorfulCrystal.position.x = (17.5 * Math.cos(degrees[i])) + x;
     colorfulCrystal.position.z = (17.5 * Math.sin(degrees[i])) + z;
     colorfulCrystal.material = new StandardMaterial('texture1', scene);
-    colorfulCrystal.material.diffuseColor = crystal_colors[i].color_code;
+    colorfulCrystal.material.diffuseTexture = returnCrystalTexture(crystal_colors[i].texture, scene);
     colorfulCrystal.name = pedestal_colors[i].color_name + "Crystal";
 
     global_pedestalcrystal_data[pedestal_colors[i].color_name] = {
       color_name: crystal_colors[i].color_name,
-      color_code: crystal_colors[i].color_code
+      texture: crystal_colors[i].texture
     };
 
   // make it rotate
@@ -80,7 +81,7 @@ function carryCrystals(x, z, scene, global_objects, item_id, camera) {
   let bench = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 3, diameter: 5, height: 3, tessellation: 8}, scene);
   bench.position.y = 1.5;
   bench.material = new StandardMaterial('texture1', scene);
-  bench.material.diffuseColor = new Color3(0.5, 0.5, 0.5);
+  bench.material.diffuseTexture = returnMetalTexture("iron_rusty", scene);
 
   let benchBarrier = MeshBuilder.CreateBox("barrier", {width: 5, height: 10, depth: 5}, scene);
   benchBarrier.position.y = 5;
@@ -104,13 +105,12 @@ function carryCrystals(x, z, scene, global_objects, item_id, camera) {
   workBenchCrystal.position.x = x;
   workBenchCrystal.position.z = z;
   workBenchCrystal.material = new StandardMaterial('texture1', scene);
-  workBenchCrystal.material.diffuseColor = new Color3(0.5, 0.5, 0.5);
   workBenchCrystal.material.alpha = 0;
   workBenchCrystal.name = "greyCrystal";
 
   global_pedestalcrystal_data["grey"] = {
     color_name: "empty",
-    color_code: new Color3(0.5, 0.5, 0.5)
+    texture: "gem_teal"
   };
 
 // make it rotate

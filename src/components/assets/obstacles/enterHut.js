@@ -10,29 +10,30 @@ import {Texture} from "@babylonjs/core/Materials/Textures";
 import {Sound} from "@babylonjs/core/Audio";
 import {generateSpear} from "../objects/generateSpear.js";
 import {arrayShuffler} from "../../utilities/shuffler.js";
+import {returnMetalTexture, returnCrystalTexture, returnWoodTexture} from "../textures.js";
 
 function enterHut(x, z, scene, global_objects, item_id, camera) {
 // generate the spear
   generateSpear("item", "hut", scene, x, z);
   generateSpear("holding", "hut", scene, x, z);
   global_objects.push({id: "", type: "holdable", name: "hutSpear", puzzle_pos: {x: x, z: z, y: 4}});
-  // declare and shuffle the colors
-    let power_colors = [
-      new Color3(0.23, 0.83, 0.25),
-      new Color3(1, 1, 0),
-      new Color3(1, 0, 0)
+  // declare and shuffle the textures
+    let power_textures = [
+      "gem_green",
+      "gem_yellow",
+      "gem_red"
     ];
-    power_colors = arrayShuffler(power_colors);
-    let color1 = power_colors[0];
-    let color2 = power_colors[1];
-    let color3 = power_colors[2];
+    power_textures = arrayShuffler(power_textures);
+    let texture1 = power_textures[0];
+    let texture2 = power_textures[1];
+    let texture3 = power_textures[2];
 
     let buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
     buttonHolder1.position.y = 1.5;
     buttonHolder1.position.x = x;
     buttonHolder1.position.z = z;
     buttonHolder1.material = new StandardMaterial('texture1', scene);
-    buttonHolder1.material.diffuseColor = new Color3(0.37, 0.32, 0.32);
+    buttonHolder1.material.diffuseTexture = returnMetalTexture("iron", scene);
     buttonHolder1.physicsImpostor = new PhysicsImpostor(buttonHolder1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     buttonHolder1.checkCollisions = true;
 
@@ -49,17 +50,17 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     pushButton1.position.x = x;
     pushButton1.position.z = z;
     pushButton1.material = new StandardMaterial('texture1', scene);
-    pushButton1.material.diffuseColor = new Color3(0.64, 0.11, 0.11);
+    pushButton1.material.diffuseTexture = returnCrystalTexture("gem_darkred", scene);
     pushButton1.name = "pushButton1p7a";
     global_objects.push({id: buttonBarrier1.uniqueId, obstacle7_id: item_id, type: "structure", name: ""}); // just for obstacle7_id
 
 // hut
-    let wall1 = MeshBuilder.CreateBox("box", {width: 10, height: 10, depth: 1}, scene);
+    let wall1 = MeshBuilder.CreateBox("box", {width: 9, height: 10, depth: 1}, scene);
     wall1.position.y = 5;
     wall1.position.x = x;
     wall1.position.z = z + 5;
     wall1.material = new StandardMaterial('texture1', scene);
-    wall1.material.diffuseColor = new Color3(0.53, 0.43, 0.24);
+    wall1.material.diffuseTexture = returnWoodTexture("wood_lightbrown", scene);
     wall1.physicsImpostor = new PhysicsImpostor(wall1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     wall1.checkCollisions = true;
 
@@ -68,7 +69,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     wall2.position.x = x - 5;
     wall2.position.z = z + 0.5;
     wall2.material = new StandardMaterial('texture1', scene);
-    wall2.material.diffuseColor = new Color3(0.53, 0.43, 0.24);
+    wall2.material.diffuseTexture = returnWoodTexture("wood_lightbrown", scene);
     wall2.physicsImpostor = new PhysicsImpostor(wall2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     wall2.checkCollisions = true;
 
@@ -77,7 +78,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     wall3.position.x = x + 5;
     wall3.position.z = z + 0.5;
     wall3.material = new StandardMaterial('texture1', scene);
-    wall3.material.diffuseColor = new Color3(0.53, 0.43, 0.24);
+    wall3.material.diffuseTexture = returnWoodTexture("wood_lightbrown", scene);
     wall3.physicsImpostor = new PhysicsImpostor(wall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     wall3.checkCollisions = true;
 
@@ -86,7 +87,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     wall4.position.x = x - 4;
     wall4.position.z = z - 5;
     wall4.material = new StandardMaterial('texture1', scene);
-    wall4.material.diffuseColor = new Color3(0.53, 0.43, 0.24);
+    wall4.material.diffuseTexture = returnWoodTexture("wood_lightbrown", scene);
     wall4.physicsImpostor = new PhysicsImpostor(wall4, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     wall4.checkCollisions = true;
 
@@ -95,16 +96,16 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     wall5.position.x = x + 4;
     wall5.position.z = z - 5;
     wall5.material = new StandardMaterial('texture1', scene);
-    wall5.material.diffuseColor = new Color3(0.53, 0.43, 0.24);
+    wall5.material.diffuseTexture = returnWoodTexture("wood_lightbrown", scene);
     wall5.physicsImpostor = new PhysicsImpostor(wall5, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     wall5.checkCollisions = true;
 
-    var wall6 = MeshBuilder.CreateBox("box", {width: 5, height: 2, depth: 1}, scene);
+    let wall6 = MeshBuilder.CreateBox("box", {width: 5, height: 2, depth: 1}, scene);
     wall6.position.y = 9;
     wall6.position.x = x;
     wall6.position.z = z - 5;
     wall6.material = new StandardMaterial('texture1', scene);
-    wall6.material.diffuseColor = new Color3(0.53, 0.43, 0.24);
+    wall6.material.diffuseTexture = returnWoodTexture("wood_lightbrown", scene);
     wall6.physicsImpostor = new PhysicsImpostor(wall6, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     wall6.checkCollisions = true;
 
@@ -113,7 +114,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     roof1.position.x = x;
     roof1.position.z = z;
     roof1.material = new StandardMaterial('texture1', scene);
-    roof1.material.diffuseColor = new Color3(0.39, 0.3, 0.1);
+    roof1.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
     roof1.physicsImpostor = new PhysicsImpostor(roof1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     roof1.checkCollisions = true;
 
@@ -122,49 +123,49 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     part1.position.x = x - 1.5;
     part1.position.z = z - 5;
     part1.material = new StandardMaterial('texture1', scene);
-    part1.material.diffuseColor = new Color3(0, 0, 0);
+    part1.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let part2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
     part2.position.y = 0.25;
     part2.position.x = x;
     part2.position.z = z - 5;
     part2.material = new StandardMaterial('texture1', scene);
-    part2.material.diffuseColor = new Color3(0, 0, 0);
+    part2.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let part3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
     part3.position.y = 0.25;
     part3.position.x = x + 1.5;
     part3.position.z = z - 5;
     part3.material = new StandardMaterial('texture1', scene);
-    part3.material.diffuseColor = new Color3(0, 0, 0);
+    part3.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let part4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
     part4.position.y = 7.75;
     part4.position.x = x - 1.5;
     part4.position.z = z - 5;
     part4.material = new StandardMaterial('texture1', scene);
-    part4.material.diffuseColor = new Color3(0, 0, 0);
+    part4.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let part5 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
     part5.position.y = 7.75;
     part5.position.x = x;
     part5.position.z = z - 5;
     part5.material = new StandardMaterial('texture1', scene);
-    part5.material.diffuseColor = new Color3(0, 0, 0);
+    part5.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let part6 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
     part6.position.y = 7.75;
     part6.position.x = x + 1.5;
     part6.position.z = z - 5;
     part6.material = new StandardMaterial('texture1', scene);
-    part6.material.diffuseColor = new Color3(0, 0, 0);
+    part6.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let power1 = MeshBuilder.CreateCylinder("power1", {diameter: 1, height: 7, tessellation: 8}, scene);
     power1.position.y = 4;
     power1.position.x = x - 1.5;
     power1.position.z = z - 5;
     power1.material = new StandardMaterial('texture1', scene);
-    power1.material.diffuseColor = color1;
+    power1.material.diffuseTexture = returnCrystalTexture(texture1, scene);
     power1.material.alpha = 0.5;
 
     let power2 = MeshBuilder.CreateCylinder("power2", {diameter: 1, height: 7, tessellation: 8}, scene);
@@ -172,7 +173,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     power2.position.x = x;
     power2.position.z = z - 5;
     power2.material = new StandardMaterial('texture1', scene);
-    power2.material.diffuseColor = color2;
+    power2.material.diffuseTexture = returnCrystalTexture(texture2, scene);
     power2.material.alpha = 0.5;
 
     let power3 = MeshBuilder.CreateCylinder("power3", {diameter: 1, height: 7, tessellation: 8}, scene);
@@ -180,7 +181,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     power3.position.x = x + 1.5;
     power3.position.z = z - 5;
     power3.material = new StandardMaterial('texture1', scene);
-    power3.material.diffuseColor = color3;
+    power3.material.diffuseTexture = returnCrystalTexture(texture3, scene);
     power3.material.alpha = 0.5;
 
     let hutBarrier = MeshBuilder.CreateBox("hutBarrier", {width: 5, height: 8, depth: 1}, scene);
@@ -188,7 +189,6 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     hutBarrier.position.x = x;
     hutBarrier.position.z = z - 5;
     hutBarrier.material = new StandardMaterial('texture1', scene);
-    hutBarrier.material.diffuseColor = new Color3(0, 0, 0);
     hutBarrier.physicsImpostor = new PhysicsImpostor(hutBarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     hutBarrier.checkCollisions = true;
     hutBarrier.material.alpha = 0;
@@ -199,12 +199,14 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     let power1Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
     power1Shard1.position.y = 6;
     power1Shard1.material = new StandardMaterial('texture1', scene);
-    power1Shard1.material.diffuseColor = color1;
+    power1Shard1.material.diffuseTexture = returnCrystalTexture(texture1, scene);
+    power1Shard1.material.diffuseTexture.uScale = 3;
+    power1Shard1.material.diffuseTexture.vScale = 3;
 
     let power1Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
     power1Shard2.position.y = 2;
     power1Shard2.material = new StandardMaterial('texture1', scene);
-    power1Shard2.material.diffuseColor = color1;
+    power1Shard2.material.diffuseTexture = returnCrystalTexture(texture1, scene);
 
     let powerCrystal1Barrier = MeshBuilder.CreateBox("barrier", {width: 3.5, height: 10, depth: 3.5}, scene);
     powerCrystal1Barrier.position.y = 5;
@@ -221,12 +223,14 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     let power2Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
     power2Shard1.position.y = 6;
     power2Shard1.material = new StandardMaterial('texture1', scene);
-    power2Shard1.material.diffuseColor = color2;
+    power2Shard1.material.diffuseTexture = returnCrystalTexture(texture2, scene);
+    power2Shard1.material.diffuseTexture.uScale = 3;
+    power2Shard1.material.diffuseTexture.vScale = 3;
 
     let power2Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
     power2Shard2.position.y = 2;
     power2Shard2.material = new StandardMaterial('texture1', scene);
-    power2Shard2.material.diffuseColor = color2;
+    power2Shard2.material.diffuseTexture = returnCrystalTexture(texture2, scene);
 
     let powerCrystal2Barrier = MeshBuilder.CreateBox("barrier", {width: 3.5, height: 10, depth: 3.5}, scene);
     powerCrystal2Barrier.position.y = 5;
@@ -243,12 +247,14 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     let power3Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
     power3Shard1.position.y = 6;
     power3Shard1.material = new StandardMaterial('texture1', scene);
-    power3Shard1.material.diffuseColor = color3;
+    power3Shard1.material.diffuseTexture = returnCrystalTexture(texture3, scene);
+    power3Shard1.material.diffuseTexture.uScale = 3;
+    power3Shard1.material.diffuseTexture.vScale = 3;
 
     let power3Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
     power3Shard2.position.y = 2;
     power3Shard2.material = new StandardMaterial('texture1', scene);
-    power3Shard2.material.diffuseColor = color3;
+    power3Shard2.material.diffuseTexture = returnCrystalTexture(texture3, scene);
 
     let powerCrystal3Barrier = MeshBuilder.CreateBox("barrier", {width: 3.5, height: 10, depth: 3.5}, scene);
     powerCrystal3Barrier.position.y = 5;
@@ -275,35 +281,35 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     machine1.position.x = x - 20;
     machine1.position.z = z + 20;
     machine1.material = new StandardMaterial('texture1', scene);
-    machine1.material.diffuseColor = new Color3(0.19, 0.19, 0.19);
+    machine1.material.diffuseTexture = returnMetalTexture("iron", scene);
 
     let machine2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8}, scene);
     machine2.position.y = 0.25;
     machine2.position.x = x - 20;
     machine2.position.z = z - 20;
     machine2.material = new StandardMaterial('texture1', scene);
-    machine2.material.diffuseColor = new Color3(0.19, 0.19, 0.19);
+    machine2.material.diffuseTexture = returnMetalTexture("iron", scene);
 
     let machine3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8}, scene);
     machine3.position.y = 0.25;
     machine3.position.x = x + 20;
     machine3.position.z = z - 20;
     machine3.material = new StandardMaterial('texture1', scene);
-    machine3.material.diffuseColor = new Color3(0.19, 0.19, 0.19);
+    machine3.material.diffuseTexture = returnMetalTexture("iron", scene);
 
     let machine4 = MeshBuilder.CreateBox("box", {width: 1, height: 1, depth: 2}, scene);
     machine4.position.y = 0.5;
     machine4.position.x = x + 20;
     machine4.position.z = z - 3;
     machine4.material = new StandardMaterial('texture1', scene);
-    machine4.material.diffuseColor = new Color3(0.33, 0.32, 0.32);
+    machine4.material.diffuseTexture = returnMetalTexture("iron", scene);
 
     let machine5 = MeshBuilder.CreateBox("box", {width: 1, height: 1, depth: 2}, scene);
     machine5.position.y = 0.5;
     machine5.position.x = x + 6;
     machine5.position.z = z - 3;
     machine5.material = new StandardMaterial('texture1', scene);
-    machine5.material.diffuseColor = new Color3(0.33, 0.32, 0.32);
+    machine5.material.diffuseTexture = returnMetalTexture("iron", scene);
 
     let wire1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 37, tessellation: 8}, scene);
     wire1.position.y = 0.05;
@@ -311,7 +317,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     wire1.position.z = z;
     wire1.rotation.x = Math.PI / 2;
     wire1.material = new StandardMaterial('texture1', scene);
-    wire1.material.diffuseColor = new Color3(0, 0, 0);
+    wire1.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let wire2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 37, tessellation: 8}, scene);
     wire2.position.y = 0.05;
@@ -319,7 +325,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     wire2.position.z = z - 20;
     wire2.rotation.z = Math.PI / 2;
     wire2.material = new StandardMaterial('texture1', scene);
-    wire2.material.diffuseColor = new Color3(0, 0, 0);
+    wire2.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let wire3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 15, tessellation: 8}, scene);
     wire3.position.y = 0.05;
@@ -327,7 +333,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     wire3.position.z = z - 11;
     wire3.rotation.x = Math.PI / 2;
     wire3.material = new StandardMaterial('texture1', scene);
-    wire3.material.diffuseColor = new Color3(0, 0, 0);
+    wire3.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
     let wire4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 13, tessellation: 8}, scene);
     wire4.position.y = 0.05;
@@ -335,7 +341,7 @@ function enterHut(x, z, scene, global_objects, item_id, camera) {
     wire4.position.z = z - 3;
     wire4.rotation.z = Math.PI / 2;
     wire4.material = new StandardMaterial('texture1', scene);
-    wire4.material.diffuseColor = new Color3(0, 0, 0);
+    wire4.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 }
 
 export {enterHut};

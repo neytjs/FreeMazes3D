@@ -8,6 +8,7 @@ import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 import {arrayShuffler} from "../../utilities/shuffler.js";
+import {returnMetalTexture} from "../textures.js";
 
 function coinMatch(x, z, scene, global_objects, item_id, camera) {
   let pos_array = [-15, 0, 15];
@@ -17,7 +18,7 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   c_pedestal.position.x = x + pos_array[0];
   c_pedestal.position.z = z;
   c_pedestal.material = new StandardMaterial('texture1', scene);
-  c_pedestal.material.diffuseColor = new Color3(0.71, 0.4, 0.15);
+  c_pedestal.material.diffuseTexture = returnMetalTexture("copper", scene);
   c_pedestal.physicsImpostor = new PhysicsImpostor(c_pedestal, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   c_pedestal.checkCollisions = true;
 
@@ -26,7 +27,6 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   cp_barrier.position.x = x + pos_array[0];
   cp_barrier.position.z = z;
   cp_barrier.material = new StandardMaterial('texture1', scene);
-  cp_barrier.material.diffuseColor = new Color3(0.71, 0.4, 0.15);
   cp_barrier.material.alpha = 0;
   cp_barrier.physicsImpostor = new PhysicsImpostor(cp_barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   cp_barrier.checkCollisions = true;
@@ -40,7 +40,7 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   c_invisible_coin.position.z = z;
   c_invisible_coin.rotation.z = Math.PI / 2;
   c_invisible_coin.material = new StandardMaterial('texture1', scene);
-  c_invisible_coin.material.diffuseColor = new Color3(0.71, 0.4, 0.15);
+  c_invisible_coin.material.diffuseTexture = returnMetalTexture("copper", scene);
   c_invisible_coin.material.alpha = 0;
   c_invisible_coin.name = "c_invisible_coin";
 
@@ -51,7 +51,7 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   s_pedestal.position.x = x + pos_array[1];
   s_pedestal.position.z = z;
   s_pedestal.material = new StandardMaterial('texture1', scene);
-  s_pedestal.material.diffuseColor = new Color3(0.73, 0.73, 0.72);
+  s_pedestal.material.diffuseTexture = returnMetalTexture("silver", scene);
   s_pedestal.physicsImpostor = new PhysicsImpostor(s_pedestal, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   s_pedestal.checkCollisions = true;
 
@@ -60,7 +60,6 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   sp_barrier.position.x = x + pos_array[1];
   sp_barrier.position.z = z;
   sp_barrier.material = new StandardMaterial('texture1', scene);
-  sp_barrier.material.diffuseColor = new Color3(0.73, 0.73, 0.72);
   sp_barrier.material.alpha = 0;
   sp_barrier.physicsImpostor = new PhysicsImpostor(sp_barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   sp_barrier.checkCollisions = true;
@@ -74,7 +73,7 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   s_invisible_coin.position.z = z;
   s_invisible_coin.rotation.z = Math.PI / 2;
   s_invisible_coin.material = new StandardMaterial('texture1', scene);
-  s_invisible_coin.material.diffuseColor = new Color3(0.73, 0.73, 0.72);
+  s_invisible_coin.material.diffuseTexture = returnMetalTexture("silver", scene);
   s_invisible_coin.material.alpha = 0;
   s_invisible_coin.name = "s_invisible_coin";
 
@@ -85,7 +84,7 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   g_pedestal.position.x = x + pos_array[2];
   g_pedestal.position.z = z;
   g_pedestal.material = new StandardMaterial('texture1', scene);
-  g_pedestal.material.diffuseColor = new Color3(0.87, 0.83, 0.21);
+  g_pedestal.material.diffuseTexture = returnMetalTexture("gold", scene);
   g_pedestal.physicsImpostor = new PhysicsImpostor(g_pedestal, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   g_pedestal.checkCollisions = true;
 
@@ -94,7 +93,6 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   gp_barrier.position.x = x + pos_array[2];
   gp_barrier.position.z = z;
   gp_barrier.material = new StandardMaterial('texture1', scene);
-  gp_barrier.material.diffuseColor = new Color3(0.87, 0.83, 0.21);
   gp_barrier.material.alpha = 0;
   gp_barrier.physicsImpostor = new PhysicsImpostor(gp_barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   gp_barrier.checkCollisions = true;
@@ -108,7 +106,7 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   g_invisible_coin.position.z = z;
   g_invisible_coin.rotation.z = Math.PI / 2;
   g_invisible_coin.material = new StandardMaterial('texture1', scene);
-  g_invisible_coin.material.diffuseColor = new Color3(0.87, 0.83, 0.21);
+  g_invisible_coin.material.diffuseTexture = returnMetalTexture("gold", scene);
   g_invisible_coin.material.alpha = 0;
   g_invisible_coin.name = "g_invisible_coin";
 
@@ -120,12 +118,11 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   c_coin.position.y = 3.5;
   c_coin.rotation.z = Math.PI / 2;
   c_coin.material = new StandardMaterial('texture1', scene);
-  c_coin.material.diffuseColor = new Color3(0.71, 0.4, 0.15);
+  c_coin.material.diffuseTexture = returnMetalTexture("copper", scene);
 
   let cc_barrier = MeshBuilder.CreateBox("barrier", {width: 2, height: 10, depth: 2}, scene);
   cc_barrier.position.y = 5;
   cc_barrier.material = new StandardMaterial('texture1', scene);
-  cc_barrier.material.diffuseColor = new Color3(0.71, 0.4, 0.15);
   cc_barrier.material.alpha = 0;
 
   var copper_coin = Mesh.MergeMeshes([c_coin, cc_barrier], true, true, undefined, false, true);
@@ -140,12 +137,11 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   s_coin.position.y = 3.5;
   s_coin.rotation.z = Math.PI / 2;
   s_coin.material = new StandardMaterial('texture1', scene);
-  s_coin.material.diffuseColor = new Color3(0.73, 0.73, 0.72);
+  s_coin.material.diffuseTexture = returnMetalTexture("silver", scene);
 
   let sc_barrier = MeshBuilder.CreateBox("barrier", {width: 2, height: 10, depth: 2}, scene);
   sc_barrier.position.y = 5;
   sc_barrier.material = new StandardMaterial('texture1', scene);
-  sc_barrier.material.diffuseColor = new Color3(0.73, 0.73, 0.72);
   sc_barrier.material.alpha = 0;
 
   var silver_coin = Mesh.MergeMeshes([s_coin, sc_barrier], true, true, undefined, false, true);
@@ -160,12 +156,11 @@ function coinMatch(x, z, scene, global_objects, item_id, camera) {
   g_coin.position.y = 3.5;
   g_coin.rotation.z = Math.PI / 2;
   g_coin.material = new StandardMaterial('texture1', scene);
-  g_coin.material.diffuseColor = new Color3(0.87, 0.83, 0.21);
+  g_coin.material.diffuseTexture = returnMetalTexture("gold", scene);
 
   let gc_barrier = MeshBuilder.CreateBox("barrier", {width: 2, height: 10, depth: 2}, scene);
   gc_barrier.position.y = 5;
   gc_barrier.material = new StandardMaterial('texture1', scene);
-  gc_barrier.material.diffuseColor = new Color3(0.87, 0.83, 0.21);
   gc_barrier.material.alpha = 0;
 
   var gold_coin = Mesh.MergeMeshes([g_coin, gc_barrier], true, true, undefined, false, true);

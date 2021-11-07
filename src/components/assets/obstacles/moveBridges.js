@@ -9,16 +9,17 @@ import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 import {ParticleSystem} from "@babylonjs/core/Particles";
 import {arrayShuffler} from "../../utilities/shuffler.js";
+import {returnMetalTexture, returnCrystalTexture} from "../textures.js";
 
 function moveBridges(x, z, scene, global_objects, item_id, camera) {
   // declare and shuffle the colors
     let bridge_colors = [
-      new Color3(1, 0, 0),
-      new Color3(0.13, 0.55, 0.13),
-      new Color3(0, 0, 1),
-      new Color3(0.55, 0, 1),
-      new Color3(1, 1, 0),
-      new Color3(1, 0.4, 0)
+      "gem_red",
+      "gem_orange",
+      "gem_yellow",
+      "gem_darkgreen",
+      "gem_blue",
+      "gem_darkpurple"
     ];
     bridge_colors = arrayShuffler(bridge_colors);
     let color1 = bridge_colors[0];
@@ -30,7 +31,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   buttonHolder1.position.x = x + 20;
   buttonHolder1.position.z = z - 20;
   buttonHolder1.material = new StandardMaterial('texture1', scene);
-  buttonHolder1.material.diffuseColor = new Color3(0.37, 0.32, 0.32);
+  buttonHolder1.material.diffuseTexture = returnMetalTexture("iron", scene);
   buttonHolder1.physicsImpostor = new PhysicsImpostor(buttonHolder1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   buttonHolder1.checkCollisions = true;
 
@@ -48,7 +49,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   pushButton1.position.x = x + 20;
   pushButton1.position.z = z - 20;
   pushButton1.material = new StandardMaterial('texture1', scene);
-  pushButton1.material.diffuseColor = new Color3(0.64, 0.11, 0.11);
+  pushButton1.material.diffuseTexture = returnCrystalTexture("gem_darkred", scene);
   pushButton1.name = "pushButton1p4a";
 
   let buttonHolder2 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
@@ -56,7 +57,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   buttonHolder2.position.x = x - 20;
   buttonHolder2.position.z = z + 20;
   buttonHolder2.material = new StandardMaterial('texture1', scene);
-  buttonHolder2.material.diffuseColor = new Color3(0.37, 0.32, 0.32);
+  buttonHolder2.material.diffuseTexture = returnMetalTexture("iron", scene);
   buttonHolder2.physicsImpostor = new PhysicsImpostor(buttonHolder2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   buttonHolder2.checkCollisions = true;
 
@@ -73,7 +74,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   pushButton2.position.x = x - 20;
   pushButton2.position.z = z + 20;
   pushButton2.material = new StandardMaterial('texture1', scene);
-  pushButton2.material.diffuseColor = new Color3(0.64, 0.11, 0.11);
+  pushButton2.material.diffuseTexture = returnCrystalTexture("gem_darkred", scene);
   pushButton2.name = "pushButton1p4b";
 
   let buttonHolder3 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
@@ -81,7 +82,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   buttonHolder3.position.x = x - 20;
   buttonHolder3.position.z = z - 20;
   buttonHolder3.material = new StandardMaterial('texture1', scene);
-  buttonHolder3.material.diffuseColor = new Color3(0.37, 0.32, 0.32);
+  buttonHolder3.material.diffuseTexture = returnMetalTexture("iron", scene);
   buttonHolder3.physicsImpostor = new PhysicsImpostor(buttonHolder3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   buttonHolder3.checkCollisions = true;
 
@@ -98,7 +99,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   pushButton3.position.x = x - 20;
   pushButton3.position.z = z - 20;
   pushButton3.material = new StandardMaterial('texture1', scene);
-  pushButton3.material.diffuseColor = new Color3(0.64, 0.11, 0.11);
+  pushButton3.material.diffuseTexture = returnCrystalTexture("gem_darkred", scene);
   pushButton3.name = "pushButton1p4c";
 
   let teleporterVisualPad = MeshBuilder.CreateBox("box", {width: 5, height: 0.2, depth: 5}, scene);
@@ -106,7 +107,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   teleporterVisualPad.position.x = x;
   teleporterVisualPad.position.z = z;
   teleporterVisualPad.material = new StandardMaterial('texture1', scene);
-  teleporterVisualPad.material.diffuseColor = new Color3(0, 0, 0);
+  teleporterVisualPad.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
   let teleportPad = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 4, tessellation: 8}, scene);
   teleportPad.position.y = 2;
@@ -124,7 +125,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theStartBase.position.x = x + 20;
   theStartBase.position.z = z + 20;
   theStartBase.material = new StandardMaterial('texture1', scene);
-  theStartBase.material.diffuseColor = color1;
+  theStartBase.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theStartBase.physicsImpostor = new PhysicsImpostor(theStartBase, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theStartBase.checkCollisions = true;
 
@@ -133,7 +134,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theStartWall1.position.x = x + 23.75;
   theStartWall1.position.z = z + 15.5;
   theStartWall1.material = new StandardMaterial('texture1', scene);
-  theStartWall1.material.diffuseColor = color1;
+  theStartWall1.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theStartWall1.physicsImpostor = new PhysicsImpostor(theStartWall1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theStartWall1.checkCollisions = true;
 
@@ -142,7 +143,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theStartWall2.position.x = x + 16.25;
   theStartWall2.position.z = z + 15.5;
   theStartWall2.material = new StandardMaterial('texture1', scene);
-  theStartWall2.material.diffuseColor = color1;
+  theStartWall2.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theStartWall2.physicsImpostor = new PhysicsImpostor(theStartWall2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theStartWall2.checkCollisions = true;
 
@@ -151,7 +152,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theStartWall3.position.x = x + 15.5;
   theStartWall3.position.z = z + 16.75;
   theStartWall3.material = new StandardMaterial('texture1', scene);
-  theStartWall3.material.diffuseColor = color1;
+  theStartWall3.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theStartWall3.physicsImpostor = new PhysicsImpostor(theStartWall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theStartWall3.checkCollisions = true;
 
@@ -160,7 +161,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theStartWall4.position.x = x + 15.5;
   theStartWall4.position.z = z + 23.75;
   theStartWall4.material = new StandardMaterial('texture1', scene);
-  theStartWall4.material.diffuseColor = color1;
+  theStartWall4.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theStartWall4.physicsImpostor = new PhysicsImpostor(theStartWall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theStartWall4.checkCollisions = true;
 
@@ -171,7 +172,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theMiddleBase.position.x = x - 20;
   theMiddleBase.position.z = z + 20;
   theMiddleBase.material = new StandardMaterial('texture1', scene);
-  theMiddleBase.material.diffuseColor = color1;
+  theMiddleBase.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theMiddleBase.physicsImpostor = new PhysicsImpostor(theMiddleBase, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theMiddleBase.checkCollisions = true;
 
@@ -180,7 +181,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theMiddleWall1.position.x = x - 23.75;
   theMiddleWall1.position.z = z + 15.5;
   theMiddleWall1.material = new StandardMaterial('texture1', scene);
-  theMiddleWall1.material.diffuseColor = color1;
+  theMiddleWall1.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theMiddleWall1.physicsImpostor = new PhysicsImpostor(theMiddleWall1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theMiddleWall1.checkCollisions = true;
 
@@ -189,7 +190,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theMiddleWall2.position.x = x - 16.25;
   theMiddleWall2.position.z = z + 15.5;
   theMiddleWall2.material = new StandardMaterial('texture1', scene);
-  theMiddleWall2.material.diffuseColor = color1;
+  theMiddleWall2.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theMiddleWall2.physicsImpostor = new PhysicsImpostor(theMiddleWall2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theMiddleWall2.checkCollisions = true;
 
@@ -198,7 +199,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theMiddleWall3.position.x = x - 15.5;
   theMiddleWall3.position.z = z + 16.75;
   theMiddleWall3.material = new StandardMaterial('texture1', scene);
-  theMiddleWall3.material.diffuseColor = color1;
+  theMiddleWall3.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theMiddleWall3.physicsImpostor = new PhysicsImpostor(theMiddleWall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theMiddleWall3.checkCollisions = true;
 
@@ -207,7 +208,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theMiddleWall4.position.x = x - 15.5;
   theMiddleWall4.position.z = z + 23.75;
   theMiddleWall4.material = new StandardMaterial('texture1', scene);
-  theMiddleWall4.material.diffuseColor = color1;
+  theMiddleWall4.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theMiddleWall4.physicsImpostor = new PhysicsImpostor(theMiddleWall4, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theMiddleWall4.checkCollisions = true;
 
@@ -218,7 +219,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theMiddle2Base.position.x = x + 20;
   theMiddle2Base.position.z = z - 20;
   theMiddle2Base.material = new StandardMaterial('texture1', scene);
-  theMiddle2Base.material.diffuseColor = color1;
+  theMiddle2Base.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theMiddle2Base.physicsImpostor = new PhysicsImpostor(theMiddle2Base, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theMiddle2Base.checkCollisions = true;
 
@@ -227,7 +228,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theMiddle2Wall1.position.x = x + 23.75;
   theMiddle2Wall1.position.z = z - 15.5;
   theMiddle2Wall1.material = new StandardMaterial('texture1', scene);
-  theMiddle2Wall1.material.diffuseColor = color1;
+  theMiddle2Wall1.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theMiddle2Wall1.physicsImpostor = new PhysicsImpostor(theMiddle2Wall1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theMiddle2Wall1.checkCollisions = true;
 
@@ -236,7 +237,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theMiddle2Wall2.position.x = x + 16.25;
   theMiddle2Wall2.position.z = z - 15.5;
   theMiddle2Wall2.material = new StandardMaterial('texture1', scene);
-  theMiddle2Wall2.material.diffuseColor = color1;
+  theMiddle2Wall2.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theMiddle2Wall2.physicsImpostor = new PhysicsImpostor(theMiddle2Wall2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theMiddle2Wall2.checkCollisions = true;
 
@@ -245,7 +246,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theMiddle2Wall3.position.x = x + 15.5;
   theMiddle2Wall3.position.z = z - 20.75;
   theMiddle2Wall3.material = new StandardMaterial('texture1', scene);
-  theMiddle2Wall3.material.diffuseColor = color1;
+  theMiddle2Wall3.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theMiddle2Wall3.physicsImpostor = new PhysicsImpostor(theMiddle2Wall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theMiddle2Wall3.checkCollisions = true;
 
@@ -256,7 +257,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theExitBase.position.x = x - 20;
   theExitBase.position.z = z - 20;
   theExitBase.material = new StandardMaterial('texture1', scene);
-  theExitBase.material.diffuseColor = color1;
+  theExitBase.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theExitBase.physicsImpostor = new PhysicsImpostor(theExitBase, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theExitBase.checkCollisions = true;
 
@@ -265,7 +266,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theExitWall1.position.x = x - 23.75;
   theExitWall1.position.z = z - 15.5;
   theExitWall1.material = new StandardMaterial('texture1', scene);
-  theExitWall1.material.diffuseColor = color1;
+  theExitWall1.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theExitWall1.physicsImpostor = new PhysicsImpostor(theExitWall1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theExitWall1.checkCollisions = true;
 
@@ -274,7 +275,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theExitWall2.position.x = x - 16.25;
   theExitWall2.position.z = z - 15.5;
   theExitWall2.material = new StandardMaterial('texture1', scene);
-  theExitWall2.material.diffuseColor = color1;
+  theExitWall2.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theExitWall2.physicsImpostor = new PhysicsImpostor(theExitWall2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theExitWall2.checkCollisions = true;
 
@@ -283,7 +284,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   theExitWall3.position.x = x - 15.5;
   theExitWall3.position.z = z - 20.75;
   theExitWall3.material = new StandardMaterial('texture1', scene);
-  theExitWall3.material.diffuseColor = color1;
+  theExitWall3.material.diffuseTexture = returnCrystalTexture(color1, scene);
   theExitWall3.physicsImpostor = new PhysicsImpostor(theExitWall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theExitWall3.checkCollisions = true
 
@@ -292,7 +293,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   greenBridge.position.x = x;
   greenBridge.position.z = z;
   greenBridge.material = new StandardMaterial('texture1', scene);
-  greenBridge.material.diffuseColor = color2;
+  greenBridge.material.diffuseTexture = returnCrystalTexture(color2, scene);
   greenBridge.physicsImpostor = new PhysicsImpostor(greenBridge, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   greenBridge.checkCollisions = true;
   greenBridge.name = "greenBridge";
@@ -302,7 +303,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   blueBridge.position.x = x + 20;
   blueBridge.position.z = z;
   blueBridge.material = new StandardMaterial('texture1', scene);
-  blueBridge.material.diffuseColor = color3;
+  blueBridge.material.diffuseTexture = returnCrystalTexture(color3, scene);
   blueBridge.physicsImpostor = new PhysicsImpostor(greenBridge, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   blueBridge.checkCollisions = true;
   blueBridge.name = "blueBridge";

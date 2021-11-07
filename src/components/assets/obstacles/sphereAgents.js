@@ -6,10 +6,10 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {Texture} from "@babylonjs/core/Materials/Textures";
 import {sphere_colors, pole_colors, cloneAndShuffleColors, cloneAndShufflePoleColors} from "../sphere_pole_colors.js";
 import {generateNavMesh, sendAgent, createCrowd} from "../sphere_pole_crowd.js";
 import {degrees} from "../../utilities/math.js";
+import {returnMetalTexture, returnCrystalTexture, returnWoodTexture} from "../textures.js";
 
 function sphereAgents(x, z, scene, global_objects, item_id, camera) {
   if (sphere_colors.length === 0) {
@@ -22,7 +22,7 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
   buttonHolder1.position.x = x - 20;
   buttonHolder1.position.z = z - 20;
   buttonHolder1.material = new StandardMaterial('texture1', scene);
-  buttonHolder1.material.diffuseColor = new Color3(0.37, 0.32, 0.32);
+  buttonHolder1.material.diffuseTexture = returnMetalTexture("iron", scene);
   buttonHolder1.physicsImpostor = new PhysicsImpostor(buttonHolder1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   buttonHolder1.checkCollisions = true;
 
@@ -40,7 +40,7 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
   pushButton1.position.x = x - 20;
   pushButton1.position.z = z - 20;
   pushButton1.material = new StandardMaterial('texture1', scene);
-  pushButton1.material.diffuseColor = new Color3(0.64, 0.11, 0.11);
+  pushButton1.material.diffuseTexture = returnCrystalTexture("gem_darkred", scene);
   pushButton1.name = "pushButton1p3";
 
   let wire1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 10, tessellation: 8}, scene);
@@ -49,14 +49,14 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
   wire1.position.z = z - 14;
   wire1.rotation.x = Math.PI / 2;
   wire1.material = new StandardMaterial('texture1', scene);
-  wire1.material.diffuseColor = new Color3(0, 0, 0);
+  wire1.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
   var powerBox = MeshBuilder.CreateBox("box", {width: 1, height: 1, depth: 1}, scene);
   powerBox.position.y = 0;
   powerBox.position.x = x - 20;
   powerBox.position.z = z - 9;
   powerBox.material = new StandardMaterial('texture1', scene);
-  powerBox.material.diffuseColor = new Color3(0.37, 0.32, 0.32);
+  powerBox.material.diffuseTexture = returnMetalTexture("iron", scene);
 
   let wire2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 5, tessellation: 8}, scene);
   wire2.position.y = 0.05;
@@ -64,7 +64,7 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
   wire2.position.z = z - 9;
   wire2.rotation.z = Math.PI / 2;
   wire2.material = new StandardMaterial('texture1', scene);
-  wire2.material.diffuseColor = new Color3(0, 0, 0);
+  wire2.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
   for (let i = 0, length = degrees.length; i < length; i++) {
     let pole = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3.5, tessellation: 8}, scene);
@@ -72,7 +72,7 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
     pole.position.x = (17.5 * Math.cos(degrees[i])) + x;
     pole.position.z = (17.5 * Math.sin(degrees[i])) + z;
     pole.material = new StandardMaterial('texture1', scene);
-    pole.material.diffuseColor = pole_colors[i].color_code;
+    pole.material.diffuseTexture = returnCrystalTexture(pole_colors[i].texture, scene);
     pole.name = pole_colors[i].color_name + "Pole";
 
     let bulb = Mesh.CreateSphere('mob', 5, 2.5, scene);
@@ -82,7 +82,7 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
     bulb.material = new StandardMaterial('texture1', scene);
     for (let j = 0, jlength = sphere_colors.length; j < jlength; j++) {
       if (pole_colors[i].color_name === sphere_colors[j].color_name) {
-        bulb.material.diffuseColor = sphere_colors[j].color_code;
+        bulb.material.emissiveColor = sphere_colors[j].color_code;
         break;
       }
     }
@@ -95,17 +95,18 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
     poleBarrier.position.z = (17.5 * Math.sin(degrees[i])) + z;
     poleBarrier.material = new StandardMaterial('texture1', scene);
     poleBarrier.material.alpha = 0;
-    poleBarrier.material.diffuseColor = new Color3(0.37, 0.32, 0.32);
     poleBarrier.physicsImpostor = new PhysicsImpostor(poleBarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
     poleBarrier.checkCollisions = true;
   }
 
-  let bigPlatform = MeshBuilder.CreateCylinder("cylinder", {diameter: 35, height: 2, tessellation: 20}, scene);
+  let bigPlatform = MeshBuilder.CreateCylinder("cylinder", {diameter: 35, height: 2, tessellation: 20, wrap: true}, scene);
   bigPlatform.position.y = 1;
   bigPlatform.position.x = x;
   bigPlatform.position.z = z;
   bigPlatform.material = new StandardMaterial('texture1', scene);
-  bigPlatform.material.diffuseColor = new Color3(0.71, 0.4, 0.15);
+  bigPlatform.material.diffuseTexture = returnWoodTexture("wood_lightbrown", scene);
+  bigPlatform.material.diffuseTexture.uScale = 10;
+  bigPlatform.material.diffuseTexture.vScale = 10;
   bigPlatform.physicsImpostor = new PhysicsImpostor(bigPlatform, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   bigPlatform.checkCollisions = true;
   bigPlatform.name = "bigPlatform";
