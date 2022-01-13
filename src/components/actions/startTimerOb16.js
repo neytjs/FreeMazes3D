@@ -3,7 +3,7 @@ import {GUI_Warning} from "../gui/gui_warning.js";
 import {GUI_Score} from "../gui/gui_score.js";
 import {playSound} from "../assets/playSound.js";
 
-function startTimerOb16(ob16, scene, obstacle_objects, forcefield_objects, score) {
+function startTimerOb16(ob16, scene, obstacle_objects, forcefield_objects, score, solved) {
   let counter = 0;
   const time_limit = 10;
   GUI_Warning("You have "+time_limit+" seconds.", 1500);
@@ -19,6 +19,7 @@ function startTimerOb16(ob16, scene, obstacle_objects, forcefield_objects, score
       if (counter < time_limit) {
         innerFunction();
       } else {
+        solved.solvedP16 = true;
         if (ob16.hint_bulb1 === ob16.puzz_bulb1 && ob16.hint_bulb2 === ob16.puzz_bulb2 && ob16.hint_bulb3 === ob16.puzz_bulb3 && ob16.hint_bulb4 === ob16.puzz_bulb4) {
           for (let l = 0, llength = forcefield_objects.length; l < llength; l++) {
             for (let n = 0, nlength = obstacle_objects.length; n < nlength; n++) {
@@ -58,7 +59,7 @@ function startTimerOb16(ob16, scene, obstacle_objects, forcefield_objects, score
           bulb4.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
         }
       }
-    }, 1125);
+    }, 1200);
   }
   innerFunction();
 }
