@@ -1,5 +1,4 @@
 import {Scene} from "@babylonjs/core/scene";
-import {SceneLoader} from "@babylonjs/core/Loading";
 import "@babylonjs/core/Physics/physicsEngineComponent";
 import {PhysicsImpostor} from "@babylonjs/core/Physics";
 import {DefaultCollisionCoordinator} from "@babylonjs/core/Collisions";
@@ -254,7 +253,7 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
               let ztra = 0;
               if (doors[l].direction === "top") {
                 xtra = 0;
-                ztra = +30;
+                ztra = 30;
               }
               if (doors[l].direction === "right") {
                 xtra = 30;
