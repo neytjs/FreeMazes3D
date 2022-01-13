@@ -165,7 +165,7 @@ function growGarden(x, z, scene, global_objects, item_id, camera) {
   pineTrunk.material.diffuseTexture.uScale = 2;
   pineTrunk.material.diffuseTexture.vScale = 2;
 
-  let pineNeedles = MeshBuilder.CreateCylinder("cone", {diameterTop: 0, diameter: 3.5, height: 4.5, tessellation: 8}, scene);
+  let pineNeedles = MeshBuilder.CreateCylinder("cone", {diameterTop: 0, diameter: 3.5, height: 4.5, tessellation: 8, wrap: true}, scene);
   pineNeedles.position.y = 4;
   pineNeedles.material = new StandardMaterial('texture1', scene);
   pineNeedles.material.diffuseTexture = returnTreeTexture(pineTreeTextures[0].needles, scene);
@@ -431,6 +431,11 @@ function growGarden(x, z, scene, global_objects, item_id, camera) {
   roof2.material = new StandardMaterial('texture1', scene);
   roof2.material.diffuseTexture = returnWoodTexture("wood_lightbrown", scene);
 
+  let roof3 = MeshBuilder.CreateBox("box", {width: 7.1, height: 0.57, depth: 0.57, wrap: true}, scene);
+  roof3.position.y = 6.75;
+  roof3.material = new StandardMaterial('texture1', scene);
+  roof3.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
+
   let roller = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 4.75, tessellation: 8}, scene);
   roller.position.y = 5;
   roller.rotation.z = Math.PI / 2;
@@ -472,7 +477,7 @@ function growGarden(x, z, scene, global_objects, item_id, camera) {
   wellBarrier.material = new StandardMaterial('texture1', scene);
   wellBarrier.material.alpha = 0;
 
-  let well = Mesh.MergeMeshes([stones, rim, hole, support1, support2, roof1, roof2, roller, rod, crank, handle, rope1, rope2, wellBarrier], true, true, undefined, false, true);
+  let well = Mesh.MergeMeshes([stones, rim, hole, support1, support2, roof1, roof2, roof3, roller, rod, crank, handle, rope1, rope2, wellBarrier], true, true, undefined, false, true);
   well.position.x = x;
   well.position.z = z;
   well.physicsImpostor = new PhysicsImpostor(wellBarrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);

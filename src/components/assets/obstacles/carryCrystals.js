@@ -26,7 +26,7 @@ function carryCrystals(x, z, scene, global_objects, item_id, camera) {
     {color_name: "purple", texture: "gem_verydarkpurple"}
   ];
 
-  generateCarryingCrystal(scene, camera);
+  generateCarryingCrystal(scene, "carryingCrystal");
 
   let two_arrays = distinguishTwoArrays(colors_base, "color_name");
   let pedestal_colors = two_arrays.first_clone_and_shuffle;

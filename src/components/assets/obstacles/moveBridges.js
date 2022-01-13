@@ -118,7 +118,7 @@ function moveBridges(x, z, scene, global_objects, item_id, camera) {
   teleportPad.material.alpha = 0;
   teleportPad.physicsImpostor = new PhysicsImpostor(teleportPad, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   teleportPad.checkCollisions = true;
-  global_objects.push({id: teleportPad.uniqueId, type: "teleporter", exit_pos: {x: (x + 20), z: (z + 20), y: 10.5}});
+  global_objects.push({id: teleportPad.uniqueId, type: "teleporter4", exit_pos: {x: (x + 20), z: (z + 20), y: 10.5}});
 
   let theStartBase = MeshBuilder.CreateBox("box", {width: 10, height: 1, depth: 10}, scene);
   theStartBase.position.y = 6;

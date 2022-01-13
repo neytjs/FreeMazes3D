@@ -7,7 +7,8 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {puzzleColors, buttonColors, cloneAndShufflePuzzleColors, buttonColorOrganizer} from "../bulb_button_colors.js";
-import {returnMetalTexture, returnCrystalTexture} from "../textures.js";
+import {returnMetalTexture, returnCrystalTexture, returnStoneTexture} from "../textures.js";
+import {generatePole} from "../objects/generatePole.js";
 
 function timedButtons(x, z, scene, global_objects, item_id, camera) {
   cloneAndShufflePuzzleColors();
@@ -125,44 +126,28 @@ function timedButtons(x, z, scene, global_objects, item_id, camera) {
   controlBase4.material = new StandardMaterial('texture1', scene);
   controlBase4.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-  function generatePole(x, z, bulb_name, bulb_color) {
-    let pole = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.25, height: 4, tessellation: 8}, scene);
-    pole.position.y = 2;
-    pole.position.x = x;
-    pole.position.z = z;
-    pole.material = new StandardMaterial('texture1', scene);
-    pole.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
-
-    let bulb = Mesh.CreateSphere("sphere", 8, 1, scene);
-    bulb.position.y = 4;
-    bulb.position.x = x;
-    bulb.position.z = z;
-    bulb.material = new StandardMaterial('texture1', scene);
-    bulb.material.emissiveColor = bulb_color;
-    bulb.name = bulb_name;
-  }
-  generatePole((x + 2.25), (z + 4.5), "bulb1Ob16", new Color3(0.55, 0.48, 0.48));
-  generatePole((x + 0.75), (z + 4.5), "bulb2Ob16", new Color3(0.55, 0.48, 0.48));
-  generatePole((x - 0.75), (z + 4.5), "bulb3Ob16", new Color3(0.55, 0.48, 0.48));
-  generatePole((x - 2.25), (z + 4.5), "bulb4Ob16", new Color3(0.55, 0.48, 0.48));
-  generatePole((x + 2.25), (z - 4.5), "", puzzleColors[0].color_code);
-  generatePole((x + 0.75), (z - 4.5), "", puzzleColors[1].color_code);
-  generatePole((x - 0.75), (z - 4.5), "", puzzleColors[2].color_code);
-  generatePole((x - 2.25), (z - 4.5), "", puzzleColors[3].color_code);
+  generatePole((x + 2.25), 0, (z + 4.5), "bulb1Ob16", new Color3(0.55, 0.48, 0.48), scene);
+  generatePole((x + 0.75), 0, (z + 4.5), "bulb2Ob16", new Color3(0.55, 0.48, 0.48), scene);
+  generatePole((x - 0.75), 0, (z + 4.5), "bulb3Ob16", new Color3(0.55, 0.48, 0.48), scene);
+  generatePole((x - 2.25), 0, (z + 4.5), "bulb4Ob16", new Color3(0.55, 0.48, 0.48), scene);
+  generatePole((x + 2.25), 0, (z - 4.5), "", puzzleColors[0].color_code, scene);
+  generatePole((x + 0.75), 0, (z - 4.5), "", puzzleColors[1].color_code, scene);
+  generatePole((x - 0.75), 0, (z - 4.5), "", puzzleColors[2].color_code, scene);
+  generatePole((x - 2.25), 0, (z - 4.5), "", puzzleColors[3].color_code, scene);
 
   let polesBase1 = MeshBuilder.CreateBox("box", {width: 6, height: 0.5, depth: 0.5}, scene);
   polesBase1.position.y = 0.25;
   polesBase1.position.x = x;
   polesBase1.position.z = z + 4.5;
   polesBase1.material = new StandardMaterial('texture1', scene);
-  polesBase1.material.diffuseTexture = returnMetalTexture("copper", scene);
+  polesBase1.material.diffuseTexture = returnStoneTexture("stone_pink", scene);
 
   let polesBase2 = MeshBuilder.CreateBox("box", {width: 6, height: 0.5, depth: 0.5}, scene);
   polesBase2.position.y = 0.25;
   polesBase2.position.x = x;
   polesBase2.position.z = z - 4.5;
   polesBase2.material = new StandardMaterial('texture1', scene);
-  polesBase2.material.diffuseTexture = returnMetalTexture("copper", scene);
+  polesBase2.material.diffuseTexture = returnStoneTexture("stone_pink", scene);
 
   let polesBarrier1 = MeshBuilder.CreateBox("box", {width: 6, height: 5, depth: 0.5}, scene);
   polesBarrier1.position.y = 2.5;
