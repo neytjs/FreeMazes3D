@@ -105,6 +105,21 @@ import {shootBlasterOb15} from "./actions/shootBlasterOb15.js";
 import {removeBarrierOb15} from "./actions/removeBarrierOb15.js";
 import {pushButtonsOb16} from "./actions/pushButtonsOb16.js";
 import {handleButtonPressOb16} from "./actions/handleButtonPressOb16.js";
+import {pourPotionOb17} from "./actions/pourPotionOb17.js";
+import {removePotionOb17} from "./actions/removePotionOb17.js";
+import {teleportPlayerOb18} from "./actions/teleportPlayerOb18.js";
+import {warnMessageOb18} from "./actions/warnMessageOb18.js";
+import {activateSoundMachineOb18} from "./actions/activateSoundMachineOb18.js";
+import {pushButtonsOb18} from "./actions/pushButtonsOb18.js";
+import {removeBarrierOb18} from "./actions/removeBarrierOb18.js";
+import {teleportPlayerOb19} from "./actions/teleportPlayerOb19.js";
+import {removeCrystalOb19} from "./actions/removeCrystalOb19.js";
+import {setCrystalOb19} from "./actions/setCrystalOb19.js";
+import {pickUpCrystalOb19} from "./actions/pickUpCrystalOb19.js";
+import {rollingBallOb20} from "./actions/rollingBallOb20.js";
+import {pushButtonsOb20} from "./actions/pushButtonsOb20.js";
+import {handleButtonPressOb20} from "./actions/handleButtonPressOb20.js";
+import {warnMessageOb20} from "./actions/warnMessageOb20.js";
 
 const {app, BrowserWindow} = window.require('@electron/remote');
 const DataStore = window.require('nedb');
@@ -347,7 +362,8 @@ class Canvas extends Component {
     this.camera = new UniversalCamera("UniversalCamera", new Vector3(0, 0, -10), this.scene);
     this.scene.activeCamera = this.camera;
     this.scene.activeCamera.attachControl(canvas);
-
+    this.camera.minZ = 0;
+    this.camera.maxZ = 900;
     this.camera.position.y = 4;
     this.camera.speed = 0.7;
     this.camera.keysUp = [global_keys.move_up.code];
@@ -370,12 +386,13 @@ class Canvas extends Component {
     let glow = new GlowLayer("glow", this.scene);
     glow.intensity = 2;
 
-    setTimer(timer, map_size);
     let puzzles = [];
 
   // call the sceneGenerator to create the map and generate the maze.
     sceneGenerator(this.scene, this.camera, door_objects, forcefield_objects, key_objects, portal_objects, gem_objects, treasure_objects, treasure_stats, obstacle_objects, secret_walls, secret_data, map_size, puzzles);
     this.updateEventListener();
+
+    setTimer(timer, map_size, puzzles);
 
     let buttons = {
       pushingButton: "",
@@ -389,7 +406,8 @@ class Canvas extends Component {
       spear_forward: true,
       walking_sound: false,
       already_walking: false,
-      health: 100
+      health: 100,
+      grounded: true
     };
     let solved = {
       solvedP1: 0,
@@ -407,7 +425,11 @@ class Canvas extends Component {
       solvedP13: false,
       solvedP14: false,
       solvedP15: false,
-      solvedP16: false
+      solvedP16: false,
+      solvedP17: false,
+      solvedP18: false,
+      solvedP19: false,
+      solvedP20: false
     };
     let ob1 = {
       warned: false
@@ -577,6 +599,50 @@ class Canvas extends Component {
       puzz_bulb2: "",
       puzz_bulb3: "",
       puzz_bulb4: ""
+    };
+    let ob17 = {
+      liquid_color: ""
+    };
+    let ob18 = {
+      warned: false,
+      light_counter: 0,
+      sounds: [],
+      smachine_one: false,
+      smachine_two: false,
+      smachine_three: false,
+      smachine_four: false,
+      smachine_five: false,
+      smachine_six: false
+    };
+    let ob19 = {
+      portal_warned: false,
+      just_accessed: false,
+      holding: "",
+      red_deviceOb19: "",
+      orange_deviceOb19: "",
+      yellow_deviceOb19: "",
+      green_deviceOb19: "",
+      empty1_deviceOb19: "",
+      empty2_deviceOb19: "",
+      empty3_deviceOb19: "",
+      empty4_deviceOb19: ""
+    };
+    let ob20 = {
+      warned: false,
+      ball_phase: "ball1",
+      rollingBall: false,
+      playing_sound: false,
+      rolling_sound: {},
+      bulb_colors: [],
+      bulb_color: {},
+      bulb_counter: 0,
+      b2pi1: (Math.PI + 0.5),
+      b3pi1: (Math.PI + 2.5),
+      b4pi1: (Math.PI + 2.5),
+      radius1: 10,
+      radius2: 5,
+      rate1: 0.2,
+      rate2: 0.03
     };
     let current_secret = {
       secret: {}
@@ -791,7 +857,58 @@ class Canvas extends Component {
     }
 
     function timed_buttons_btn() {
-      handleButtonPressOb16(buttons, ob16, this.scene, obstacle_objects, forcefield_objects, score);
+      handleButtonPressOb16(buttons, ob16, this.scene, obstacle_objects, forcefield_objects, score, solved);
+    }
+
+    function potion_cauldron_hcc_oo(obstacle_objects, colMesh) {
+      removePotionOb17(obstacle_objects, inventory, inventory_tracker, colMesh, this.scene);
+    }
+
+    function potion_cauldron_run_hit(hit) {
+      pourPotionOb17(hit, this.scene, this.camera, solved, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score, ob17, player);
+    }
+
+    function crystal_temple_hcc_oo(obstacle_objects, colMesh) {
+      teleportPlayerOb18(obstacle_objects, colMesh, this.camera, this.scene, ob18);
+    }
+
+    function crystal_temple_hcc(colMesh) {
+      warnMessageOb18(colMesh, ob18, this.scene, solved);
+    }
+
+    function crystal_temple_run_hit(hit) {
+      activateSoundMachineOb18(hit, solved, ob18, this.scene);
+      pushButtonsOb18(hit, solved, buttons, this.scene);
+    }
+
+    function crystal_temple_btn() {
+      removeBarrierOb18(buttons, solved, obstacle_objects, forcefield_objects, this.scene, score);
+    }
+
+    function crystal_shards_hcc_oo(obstacle_objects, colMesh) {
+      teleportPlayerOb19(obstacle_objects, colMesh, this.camera, this.scene, player, ob19, pressedKeys);
+    }
+
+    function crystal_shards_run_hit(hit) {
+      removeCrystalOb19(hit.pickedMesh.name, this.scene, this.camera, solved, ob19, player, obstacle_objects);
+      pickUpCrystalOb19(hit.pickedMesh.name, ob19, solved, this.scene, this.camera, player)
+      setCrystalOb19(hit.pickedMesh.name, ob19, solved, this.scene, obstacle_objects, forcefield_objects, score, player);
+    }
+
+    function rolling_pipes_hcc(colMesh) {
+      warnMessageOb20(colMesh, ob20, this.scene, solved);
+    }
+
+    function rolling_pipes_run() {
+      rollingBallOb20(ob20, this.scene, solved, score, obstacle_objects, forcefield_objects);
+    }
+
+    function rolling_pipes_run_hit(hit) {
+      pushButtonsOb20(hit, solved, buttons, this.scene, ob20);
+    }
+
+    function rolling_pipes_btn() {
+      handleButtonPressOb20(buttons, ob20, this.scene, obstacle_objects);
     }
 
     let puzzles_data = {
@@ -906,9 +1023,37 @@ class Canvas extends Component {
         run: noop,
         run_hit: timed_buttons_run_hit.bind(this),
         btn: timed_buttons_btn.bind(this)
+      },
+      potion_cauldron: {
+        hcc: noop,
+        hcc_oo: potion_cauldron_hcc_oo.bind(this),
+        run: noop,
+        run_hit: potion_cauldron_run_hit.bind(this),
+        btn: noop
+      },
+      crystal_temple: {
+        hcc: crystal_temple_hcc.bind(this),
+        hcc_oo: crystal_temple_hcc_oo.bind(this),
+        run: noop,
+        run_hit: crystal_temple_run_hit.bind(this),
+        btn: crystal_temple_btn.bind(this)
+      },
+      crystal_shards: {
+        hcc: noop,
+        hcc_oo: crystal_shards_hcc_oo.bind(this),
+        run: noop,
+        run_hit: crystal_shards_run_hit.bind(this),
+        btn: noop
+      },
+      rolling_pipes: {
+        hcc: rolling_pipes_hcc.bind(this),
+        hcc_oo: noop,
+        run: rolling_pipes_run.bind(this),
+        run_hit: rolling_pipes_run_hit.bind(this),
+        btn: rolling_pipes_btn.bind(this)
       }
     };
-    function selectLeter(kbInfo, global_keys) {
+    function selectLetter(kbInfo, global_keys) {
       if (kbInfo.event.which === global_keys.move_up.code) {
         return global_keys.move_up.default_letter;
       }
@@ -929,8 +1074,8 @@ class Canvas extends Component {
           if (player.health > 0 && menu_gui.toggle === false) {
             if (kbInfo.event.which === global_keys.move_up.code || kbInfo.event.which === global_keys.move_down.code || kbInfo.event.which === global_keys.move_left.code || kbInfo.event.which === global_keys.move_right.code) {
               if (pressedKeys.w === false || pressedKeys.s === false || pressedKeys.a === false || pressedKeys.d === false) {
-                pressedKeys[selectLeter(kbInfo, global_keys)] = true;
-                if (player.already_walking === false) {
+                pressedKeys[selectLetter(kbInfo, global_keys)] = true;
+                if (player.already_walking === false && player.grounded === true) {
                   player.already_walking = true;
                   if (this.camera.speed > 0) {
                     player.walking_sound = new Sound("Sound", "./sound/sfx_footsteps.wav", this.scene, null, { loop: true, autoplay: true });
@@ -942,7 +1087,7 @@ class Canvas extends Component {
         break;
         case KeyboardEventTypes.KEYUP:
           if (kbInfo.event.which === global_keys.move_up.code || kbInfo.event.which === global_keys.move_down.code || kbInfo.event.which === global_keys.move_left.code || kbInfo.event.which === global_keys.move_right.code) {
-            pressedKeys[selectLeter(kbInfo, global_keys)] = false;
+            pressedKeys[selectLetter(kbInfo, global_keys)] = false;
             if (pressedKeys.w === false && pressedKeys.s === false && pressedKeys.a === false && pressedKeys.d === false) {
               if (player.walking_sound) {
                 player.walking_sound.dispose(true, true);
