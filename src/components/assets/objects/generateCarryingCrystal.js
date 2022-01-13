@@ -8,7 +8,7 @@ import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 
-function generateCarryingCrystal(scene, camera) {
+function generateCarryingCrystal(scene, name) {
   let carryingCrystalShard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
   carryingCrystalShard1.position.y = 8;
 
@@ -19,7 +19,7 @@ function generateCarryingCrystal(scene, camera) {
   carryingCrystal.material = new StandardMaterial('texture1', scene);
   carryingCrystal.material.alpha = 0;
   carryingCrystal.position.y = -1000;
-  carryingCrystal.name = "carryingCrystal";
+  carryingCrystal.name = name;
   carryingCrystal.rotation.x = Math.PI / 3;
 }
 
