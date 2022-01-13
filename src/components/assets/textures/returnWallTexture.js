@@ -34,6 +34,9 @@ function returnWallTexture(texture_name, scene) {
     case "stone_blocks_teal":
       texture = new Texture("./textures/walls/stone_blocks_teal.png", scene);
     break;
+    case "stone_blocks_temple":
+      texture = new Texture("./textures/walls/stone_blocks_temple.png", scene);
+    break;
     case "stone_blocks_tomb":
       texture = new Texture("./textures/walls/stone_blocks_tomb.png", scene);
     break;

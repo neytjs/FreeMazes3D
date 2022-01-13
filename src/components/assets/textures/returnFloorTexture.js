@@ -46,6 +46,9 @@ function returnFloorTexture(texture_name, scene) {
     case "stone_slabs_tan":
       texture = new Texture("./textures/floors/stone_slabs_tan.png", scene);
     break;
+    case "stone_slabs_temple":
+      texture = new Texture("./textures/floors/stone_slabs_temple.png", scene);
+    break;
     case "stone_slabs_tomb":
       texture = new Texture("./textures/floors/stone_slabs_tomb.png", scene);
     break;

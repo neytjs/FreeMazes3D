@@ -31,6 +31,12 @@ function returnStoneTexture(texture_name, scene) {
     case "stone_pyramidverydark":
       texture = new Texture("./textures/stone/stone_pyramidverydark.png", scene);
     break;
+    case "stone_teal":
+      texture = new Texture("./textures/stone/stone_teal.png", scene);
+    break;
+    case "stone_tealdark":
+      texture = new Texture("./textures/stone/stone_tealdark.png", scene);
+    break;
     case "stone_tomb":
       texture = new Texture("./textures/stone/stone_tomb.png", scene);
     break;
