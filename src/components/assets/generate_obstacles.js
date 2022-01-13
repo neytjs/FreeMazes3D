@@ -14,6 +14,10 @@ import {powderPyramid} from "./obstacles/powderPyramid.js";
 import {hauntedCrypt} from "./obstacles/hauntedCrypt.js";
 import {bullsEye} from "./obstacles/bullsEye.js";
 import {timedButtons} from "./obstacles/timedButtons.js";
+import {potionCauldron} from "./obstacles/potionCauldron.js";
+import {crystalTemple} from "./obstacles/crystalTemple.js";
+import {crystalShards} from "./obstacles/crystalShards.js";
+import {rollingPipes} from "./obstacles/rollingPipes.js";
 
 function generateObstacles(object_name, x, z, scene, global_objects, item_id, camera) {
   switch (object_name) {
@@ -64,6 +68,18 @@ function generateObstacles(object_name, x, z, scene, global_objects, item_id, ca
     break;
     case "timed_buttons":
       timedButtons(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "potion_cauldron":
+      potionCauldron(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "crystal_temple":
+      crystalTemple(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "crystal_shards":
+      crystalShards(x, z, scene, global_objects, item_id, camera);
+    break;
+    case "rolling_pipes":
+      rollingPipes(x, z, scene, global_objects, item_id, camera);
     break;
   }
 }

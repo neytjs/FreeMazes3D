@@ -1,5 +1,6 @@
 import {generateKey} from "./objects/generateKey.js";
-import {generateDoor} from "./objects/generateDoor.js";
+import {generateGate} from "./objects/generateGate.js";
+import {generateForceField} from "./objects/generateForceField.js";
 import {generatePortal} from "./objects/generatePortal.js";
 import {generateGem} from "./objects/generateGem.js";
 import {generateTreasure} from "./objects/generateTreasure.js";
@@ -16,10 +17,10 @@ function generateObjects(object_name, x, z, scene, global_objects, item_id, spec
       generateKey("gold", x, z, scene, global_objects, item_id, special);
     break;
     case "force_field":
-      generateDoor("force_field", x, z, scene, global_objects, item_id, special);
+      generateForceField(x, z, scene, global_objects, item_id, special);
     break;
     case "gate":
-      generateDoor("dungeon_gate", x, z, scene, global_objects, item_id, special);
+      generateGate(x, z, scene, global_objects, item_id, special);
     break;
     case "start":
       generatePortal("start_portal", x, z, scene, global_objects, item_id, special);

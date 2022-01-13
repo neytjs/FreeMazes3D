@@ -51,6 +51,20 @@ function playSound(sound_file, time, scene, callback) {
         autoplay: true
       });
     break;
+    case "five":
+      sound_object = new Sound("Sound", "./sound/five.mp3", scene, null, {
+        loop: false,
+        autoplay: true,
+        volume: 1.5
+      });
+    break;
+    case "four":
+      sound_object = new Sound("Sound", "./sound/four.mp3", scene, null, {
+        loop: false,
+        autoplay: true,
+        volume: 1.5
+      });
+    break;
     case "ghost":
       sound_object = new Sound("Sound", "./sound/ghost.wav", scene, null, {
         loop: false,
@@ -111,6 +125,13 @@ function playSound(sound_file, time, scene, callback) {
         autoplay: true
       });
     break;
+    case "one":
+      sound_object = new Sound("Sound", "./sound/one.mp3", scene, null, {
+        loop: false,
+        autoplay: true,
+        volume: 1.5
+      });
+    break;
     case "Rifleprimary2":
       sound_object = new Sound("Sound", "./sound/Rifleprimary2.ogg", scene, null, {
         loop: false,
@@ -136,6 +157,13 @@ function playSound(sound_file, time, scene, callback) {
         autoplay: true
       });
     break;
+    case "six":
+      sound_object = new Sound("Sound", "./sound/six.mp3", scene, null, {
+        loop: false,
+        autoplay: true,
+        volume: 1.5
+      });
+    break;
     case "swish_2":
       sound_object = new Sound("Sound", "./sound/swish_2.wav", scene, null, {
         loop: false,
@@ -146,6 +174,13 @@ function playSound(sound_file, time, scene, callback) {
       sound_object = new Sound("Sound", "./sound/swish_4.wav", scene, null, {
         loop: false,
         autoplay: true
+      });
+    break;
+    case "three":
+      sound_object = new Sound("Sound", "./sound/three.mp3", scene, null, {
+        loop: false,
+        autoplay: true,
+        volume: 1.5
       });
     break;
     case "tick":
@@ -164,6 +199,13 @@ function playSound(sound_file, time, scene, callback) {
       sound_object = new Sound("Sound", "./sound/tock.wav", scene, null, {
         loop: false,
         autoplay: true
+      });
+    break;
+    case "two":
+      sound_object = new Sound("Sound", "./sound/two.mp3", scene, null, {
+        loop: false,
+        autoplay: true,
+        volume: 1.5
       });
     break;
   }
