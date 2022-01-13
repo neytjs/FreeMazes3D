@@ -8,24 +8,59 @@ function calcTime(time) {
   return minutes + ":" + seconds;
 }
 
-function setTimer(timer, map_size) {
+function setTimer(timer, map_size, puzzles) {
   if (timer.setTimer === false) {
     timer.setTimer = true;
-    let time = 0;
+
+    let puzzle_counter = 0;
+    let total_puzzle_time = 0;
+    function getPuzzleTimes() {
+      const puzzle = {
+        coin_match: 60,
+        bulb_match: 120,
+        sphere_agents: 120,
+        move_bridges: 60,
+        ghost_button: 60,
+        carry_crystals: 120,
+        enter_hut: 60,
+        grow_garden: 120,
+        down_pipes: 60,
+        tight_rope: 120,
+        dodge_turret: 60,
+        mob_shoots: 60,
+        powder_pyramid: 120,
+        haunted_crypt: 120,
+        bulls_eye: 60,
+        timed_buttons: 60,
+        potion_cauldron: 60,
+        crystal_temple: 180,
+        crystal_shards: 60,
+        rolling_pipes: 180
+      };
+      total_puzzle_time = puzzle[puzzles[puzzle_counter]] + total_puzzle_time;
+      puzzle_counter = puzzle_counter + 1;
+
+      if (puzzle_counter < puzzles.length) {
+        getPuzzleTimes();
+      }
+    }
+    getPuzzleTimes();
+
+    let time = total_puzzle_time;
     if (map_size.type === "tl") {
       switch (map_size.size) {
         case "small":
-          time = 300;
+          time = time + 180;
           timer.counter = time;
           timer.max_time = time;
         break;
         case "medium":
-          time = 600;
+          time = time + 300;
           timer.counter = time;
           timer.max_time = time;
         break;
         case "large":
-          time = 900;
+          time = time + 600;
           timer.counter = time;
           timer.max_time = time;
         break;
