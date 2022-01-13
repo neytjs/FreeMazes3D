@@ -280,7 +280,7 @@ canvas {
   border-left: #001a00 2px solid;
   border-bottom-right-radius: 15px;
   border-bottom-left-radius: 15px;
-  background-color: #004d00;
+  background-image: url("./textures/gui/logo.png");
   user-select: none;
 }
 #new_game {

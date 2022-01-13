@@ -11,7 +11,9 @@ Q: What is the difference between a regular maze and a (Time Limit) maze?
 A: In the regular mazes, you can take as long as you want to solve them. The time limited mazes
 require you to finish before the timer runs out. If you complete a time limited maze within the
 time limit you will receive a nice score bonus as a reward. You may want to consider playing a
-few regular mazes first.
+few regular mazes first. The amount of time provided per maze varies due to both the overall
+maze size and the puzzle difficulty. So, for example, two Easy mazes may give you two different
+time limits.
 
 Q: How does the score system work in this game?
 A: Your score is based on your entire play session, from the time you start the game until you
