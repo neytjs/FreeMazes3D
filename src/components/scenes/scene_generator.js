@@ -86,15 +86,19 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
           storeExitPos(exit_pos);
         // generate the keys to open the doors blocking the map_areas
           keys = generateKeys(map_areas, start_pos, obstacles);
-        // generate the portal gem to power the portal
-          gem = generateGem(map_areas);
-        // declare the doors
-          doors = declareDoors(map_areas, obstacles, keys, exit_pos, total_areas);
-        // generate treasure
-          treasure = generateTreasure(start_pos, exit_pos, keys, gem, doors, updated_map);
-          treasure_stats.treasure_total = treasure.length;
-        // finally generate clutter
-          clutter = generateClutterLocations(start_pos, exit_pos, keys, gem, doors, map_areas);
+          if (keys.length < (total_areas - 1)) {
+            generatePlayableMap();
+          } else {
+          // generate the portal gem to power the portal
+            gem = generateGem(map_areas);
+          // declare the doors
+            doors = declareDoors(map_areas, obstacles, keys, exit_pos, total_areas);
+          // generate treasure
+            treasure = generateTreasure(start_pos, exit_pos, keys, gem, doors, updated_map);
+            treasure_stats.treasure_total = treasure.length;
+          // finally generate clutter
+            clutter = generateClutterLocations(start_pos, exit_pos, keys, gem, doors, map_areas);
+          }
         }
       }
     }
