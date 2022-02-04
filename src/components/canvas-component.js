@@ -134,7 +134,8 @@ let global_keys = {
   action_key: {default_letter: "e", code: 69, new_key: "e"},
   show_fps: {default_letter: "f", code: 70, new_key: "f"},
   toggle_left: {default_letter: "[", code: 219, new_key: "["},
-  toggle_right: {default_letter: "]", code: 221, new_key: "]"}
+  toggle_right: {default_letter: "]", code: 221, new_key: "]"},
+  use_weapon: {default_letter: "mouse", code: 1337, new_key: "mouse"}
 };
 let door_objects = [];
 let forcefield_objects = [];
@@ -1106,14 +1107,7 @@ class Canvas extends Component {
       }
     });
 
-    document.addEventListener("mousemove", () => {
-    // makes alt-tabbing work as intended
-      if (!this.engine.isPointerLock && BrowserWindow.getFocusedWindow()) {
-        this.engine.enterPointerlock();
-        canvas.focus();
-      }
-    }, false);
-    document.addEventListener("click", () => {
+    function useWeapon() {
       if (player.holding === "ghostSpear" || player.holding === "hutSpear") {
         player.swing_spear = true;
       }
@@ -1123,6 +1117,19 @@ class Canvas extends Component {
         setTimeout(() => {
           ob15.currently_firing = false;
         }, 750);
+      }
+    }
+
+    document.addEventListener("mousemove", () => {
+    // makes alt-tabbing work as intended
+      if (!this.engine.isPointerLock && BrowserWindow.getFocusedWindow()) {
+        this.engine.enterPointerlock();
+        canvas.focus();
+      }
+    }, false);
+    document.addEventListener("click", () => {
+      if (global_keys.use_weapon.code === 1337) {
+        useWeapon();
       }
     }, false);
     document.addEventListener("keydown", () => {
@@ -1142,6 +1149,10 @@ class Canvas extends Component {
           ob8.pouring_sound.dispose(true, true);
           ob8.pouring_sound = null;
         }
+      }
+    // if they re-map the use_weapon key
+      if (event.keyCode === global_keys.use_weapon.code) {
+        useWeapon();
       }
     }, false);
 
