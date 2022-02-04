@@ -9,7 +9,8 @@ const default_data = {
   action_key: "e",
   show_fps: "f",
   toggle_left: "[",
-  toggle_right: "]"
+  toggle_right: "]",
+  use_weapon: "mouse"
 }
 
 function writeConfig(filepath) {

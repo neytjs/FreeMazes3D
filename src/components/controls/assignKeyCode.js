@@ -139,6 +139,18 @@ function assignKeyCode(key) {
     case "=":
       key_num = 187;
     break;
+    case "space":
+      key_num = 32;
+    break;
+    case "ctrl":
+      key_num = 17;
+    break;
+    case "control":
+      key_num = 17;
+    break;
+    case "alt":
+      key_num = 18;
+    break;
     default:
       key_num = 1337;
     break;
