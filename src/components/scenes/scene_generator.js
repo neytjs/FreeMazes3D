@@ -16,18 +16,19 @@ import {map, length, width, total_areas, createEmptyMap, createMap, createMapAre
   setStartPosition, setExitPosition, generateKeys, generateGem, generateTreasure,
   generateSecrets, declareObstacles, declareDoors, storeExitPos, storeStartPos, setMapSize,
   generateClutterLocations} from "../generators/maze_generator.js";
-import {returnWallTexture, returnFloorTexture} from "../assets/textures.js";
+import {returnWallTexture, returnFloorTexture, genCubeFaceUV} from "../assets/textures.js";
 import {wallTextures} from "../assets/wall_textures.js";
 import {floorTextures} from "../assets/floor_textures.js";
-import {skyColors} from "../assets/sky_colors.js";
+import {dayNightCycle} from "../assets/dayNightCycle.js";
 import {generateSecretArea} from "../assets/generate_secret_area.js";
 import {selectTreasure} from "../assets/select_treasure.js";
 import {selectPuzzle} from "../assets/select_puzzle.js";
 import {generateClutter} from "../assets/generateClutter.js";
 import {selectClutter} from "../assets/selectClutter.js";
 import {selectEnvironment} from "../assets/selectEnvironment.js";
+import {updateExclusions} from "../controls/puzzleExclusions.js";
 
-function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_objects, portal_objects, gem_objects, treasure_objects, treasure_stats, obstacle_objects, secret_walls, secret_data, map_size, puzzles) {
+function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_objects, portal_objects, gem_objects, treasure_objects, treasure_stats, obstacle_objects, secret_walls, secret_data, map_size, puzzles, global_language, exclusions, app_data) {
   let light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
 
   light.intensity = 1;
@@ -139,22 +140,24 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
   let units = 10;
   let wall_textures = wallTextures();
   let floor_textures = floorTextures();
-  let sky_colors = skyColors();
-// set sky color
-  scene.clearColor = sky_colors[0];
+  dayNightCycle(scene);
 
   let walls = [];
   let start = [];
   let exit = [];
   let floor = [];
 
-  let easy_puzzles = selectPuzzle("easy");
-  let hard_puzzles = selectPuzzle("hard");
+  let easy_puzzles = selectPuzzle("easy", exclusions);
+  let hard_puzzles = selectPuzzle("hard", exclusions);
+  updateExclusions(easy_puzzles, hard_puzzles, exclusions);
+// long term persist the exclusions data
+  app_data.update({}, {$set:{exclusions: exclusions}});
+
   let clutter_types = selectClutter();
   let secret_environments = selectEnvironment();
   for (let i = 0, length = terrain_pieces.length; i < length; i++) {
     for (let j = 0, jlength = terrain_pieces[i].length; j < jlength; j++) {
-      let floor_tile = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+      let floor_tile = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70, wrap: true, faceUV: genCubeFaceUV([7, 0.1, 7, 0.1, 7, 0.1, 7, 0.1, 7, 7, 7, 7])}, scene);
       floor_tile.position.x = (j * 70);
       floor_tile.position.z = (i * 70);
       floor_tile.material = new StandardMaterial('texture1', scene);
@@ -177,8 +180,6 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
           floor_tile.material.diffuseTexture = returnFloorTexture(floor_textures[4], scene);
         break;
       }
-      floor_tile.material.diffuseTexture.uScale = 7;
-	    floor_tile.material.diffuseTexture.vScale = 7;
       floor.push(floor_tile);
     }
   }
@@ -187,6 +188,7 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
   floor_final.position.x = 30;
   floor_final.position.z = -30;
   floor_final.rotation.x = Math.PI;
+  floor_final.name = "landableSoftSurface";
 
   let secret_counter = 0;
 
@@ -257,18 +259,18 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
               let ztra = 0;
               if (doors[l].direction === "top") {
                 xtra = 0;
-                ztra = 30;
+                ztra = 35;
               }
               if (doors[l].direction === "right") {
-                xtra = 30;
+                xtra = 35;
                 ztra = 0;
               }
               if (doors[l].direction === "bottom") {
                 xtra = 0;
-                ztra = -30;
+                ztra = -35;
               }
               if (doors[l].direction === "left") {
-                xtra = -30;
+                xtra = -35;
                 ztra = 0;
               }
             // for the portal gem force field
@@ -290,31 +292,31 @@ function sceneGenerator(scene, camera, door_objects, forcefield_objects, key_obj
               } else {
                 key_type = "gold_key";
               }
-              generateObjects(key_type, (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, key_objects, keys[m].key_id);
+              generateObjects(key_type, (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, key_objects, keys[m].key_id, {}, global_language);
             }
           }
         // check for obstacles
           for (let n = 0, nlength = obstacles.length; n < nlength; n++) {
             if (obstacles[n].pos.x === i && obstacles[n].pos.y === j && obstacles[n].obstacle_id === 1) {
-              generateObstacles(easy_puzzles[0], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera);
+              generateObstacles(easy_puzzles[0], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera, global_language);
               puzzles.push(easy_puzzles[0]);
             }
             if (obstacles[n].pos.x === i && obstacles[n].pos.y === j && obstacles[n].obstacle_id === 2) {
-              generateObstacles(hard_puzzles[0], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera);
+              generateObstacles(hard_puzzles[0], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera, global_language);
               puzzles.push(hard_puzzles[0]);
             }
             if (obstacles[n].pos.x === i && obstacles[n].pos.y === j && obstacles[n].obstacle_id === 3) {
-              generateObstacles(hard_puzzles[1], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera);
+              generateObstacles(hard_puzzles[1], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera, global_language);
               puzzles.push(hard_puzzles[1]);
             }
             if (obstacles[n].pos.x === i && obstacles[n].pos.y === j && obstacles[n].obstacle_id === 4) {
-              generateObstacles(easy_puzzles[1], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera);
+              generateObstacles(easy_puzzles[1], (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, obstacle_objects, obstacles[n].obstacle_id, camera, global_language);
               puzzles.push(easy_puzzles[1]);
             }
           }
         // check for gem
           if (gem.pos.x === i && gem.pos.y === j) {
-            generateObjects("portal_gem", (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, gem_objects);
+            generateObjects("portal_gem", (j * 70) + 30, ((i * 70) - ((i * 70) * 2)) - 30, scene, gem_objects, 0, {}, global_language);
           }
         // check for start
           if (start_pos.x === i && start_pos.y === j) {
