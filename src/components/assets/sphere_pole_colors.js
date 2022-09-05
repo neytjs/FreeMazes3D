@@ -3,12 +3,12 @@ import {arrayShuffler} from '../utilities/shuffler.js';
 import {Color3} from "@babylonjs/core/Maths/math";
 
 let sphere_colors_base = [
-  {color_name: "red", color_code: new Color3(0.61, 0, 0)},
-  {color_name: "orange", color_code: new Color3(0.31, 0.13, 0.01)},
-  {color_name: "yellow", color_code: new Color3(1, 1, 0)},
-  {color_name: "green", color_code: new Color3(0.05, 0.34, 0.01)},
-  {color_name: "blue", color_code: new Color3(0, 0.34, 0.61)},
-  {color_name: "purple", color_code: new Color3(0.27, 0, 0.49)}
+  {color_name: "red", color_code: new Color3(1, 0, 0)},
+  {color_name: "pink", color_code: new Color3(0.99, 0.1, 0.54)},
+  {color_name: "teal", color_code: new Color3(0, 0.65, 0.65)},
+  {color_name: "green", color_code: new Color3(0.06, 0.64, 0.06)},
+  {color_name: "blue", color_code: new Color3(0, 0, 1)},
+  {color_name: "yellow", color_code: new Color3(1, 1, 0)}
 ];
 let sphere_colors = [];
 function cloneAndShuffleColors() {
@@ -19,11 +19,11 @@ cloneAndShuffleColors();
 
 let pole_colors_base = [
   {color_name: "red", texture: "gem_darkred"},
-  {color_name: "orange", texture: "gem_orange"},
-  {color_name: "yellow", texture: "gem_yellow"},
+  {color_name: "pink", texture: "gem_hotpink"},
+  {color_name: "teal", texture: "gem_teal"},
   {color_name: "green", texture: "gem_darkgreen"},
   {color_name: "blue", texture: "gem_blue"},
-  {color_name: "purple", texture: "gem_darkpurple"}
+  {color_name: "yellow", texture: "gem_yellow"}
 ];
 let pole_colors = [];
 function cloneAndShufflePoleColors() {

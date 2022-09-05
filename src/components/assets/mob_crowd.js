@@ -6,7 +6,12 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import {TransformNode} from "@babylonjs/core/Meshes";
 import {sphere_colors} from "./sphere_pole_colors.js";
 
-var navigationPlugin = new RecastJSPlugin(Recast);
+var navigationPlugin = {};
+async function buildNav() {
+  let recast = await Recast();
+  navigationPlugin = new RecastJSPlugin(recast);
+}
+buildNav();
 
 var x = 0;
 var z = 0;

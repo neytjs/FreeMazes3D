@@ -6,6 +6,9 @@ import {returnCrystalTexture} from './textures/returnCrystalTexture.js';
 import {returnWoodTexture} from './textures/returnWoodTexture.js';
 import {returnStoneTexture} from './textures/returnStoneTexture.js';
 import {returnLiquidTexture} from './textures/returnLiquidTexture.js';
+import {genCubeFaceUV} from './textures/genCubeFaceUV.js';
+import {genCylinderFaceUV} from './textures/genCylinderFaceUV.js';
 
-export {returnCrystalTexture, returnWallTexture, returnTreeTexture, returnMetalTexture, 
-  returnFloorTexture, returnWoodTexture, returnStoneTexture, returnLiquidTexture};
+export {returnCrystalTexture, returnWallTexture, returnTreeTexture, returnMetalTexture,
+  returnFloorTexture, returnWoodTexture, returnStoneTexture, returnLiquidTexture,
+  genCubeFaceUV, genCylinderFaceUV};

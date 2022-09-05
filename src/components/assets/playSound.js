@@ -10,13 +10,13 @@ function playSound(sound_file, time, scene, callback) {
       });
     break;
     case "anchor_action_sum":
-      sound_object = new Sound("Sound", "./sound/anchor_action_sum.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/anchor_action_sum.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
     break;
     case "anchor_action_ind":
-      sound_object = new Sound("Sound", "./sound/anchor_action_ind.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/anchor_action_ind.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
@@ -46,7 +46,7 @@ function playSound(sound_file, time, scene, callback) {
       });
     break;
     case "Falling_Rock":
-      sound_object = new Sound("Sound", "./sound/Falling_Rock.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/Falling_Rock.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
@@ -66,31 +66,37 @@ function playSound(sound_file, time, scene, callback) {
       });
     break;
     case "ghost":
-      sound_object = new Sound("Sound", "./sound/ghost.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/ghost.mp3", scene, null, {
+        loop: false,
+        autoplay: true
+      });
+    break;
+    case "grunt2":
+      sound_object = new Sound("Sound", "./sound/grunt2.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
     break;
     case "load":
-      sound_object = new Sound("Sound", "./sound/load.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/load.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
     break;
     case "magnet_action":
-      sound_object = new Sound("Sound", "./sound/magnet_action.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/magnet_action.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
     break;
     case "misc_menu_3":
-      sound_object = new Sound("Sound", "./sound/misc_menu_3.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/misc_menu_3.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
     break;
     case "misc_menu_4":
-      sound_object = new Sound("Sound", "./sound/misc_menu_4.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/misc_menu_4.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
@@ -102,25 +108,19 @@ function playSound(sound_file, time, scene, callback) {
       });
     break;
     case "MS_Realization":
-      sound_object = new Sound("Sound", "./sound/MS_Realization.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/MS_Realization.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
     break;
     case "negative":
-      sound_object = new Sound("Sound", "./sound/negative.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/negative.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
     break;
     case "negative_2":
-      sound_object = new Sound("Sound", "./sound/negative_2.wav", scene, null, {
-        loop: false,
-        autoplay: true
-      });
-    break;
-    case "positive":
-      sound_object = new Sound("Sound", "./sound/positive.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/negative_2.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
@@ -130,6 +130,12 @@ function playSound(sound_file, time, scene, callback) {
         loop: false,
         autoplay: true,
         volume: 1.5
+      });
+    break;
+    case "positive":
+      sound_object = new Sound("Sound", "./sound/positive.mp3", scene, null, {
+        loop: false,
+        autoplay: true
       });
     break;
     case "Rifleprimary2":
@@ -146,7 +152,7 @@ function playSound(sound_file, time, scene, callback) {
       });
     break;
     case "save":
-      sound_object = new Sound("Sound", "./sound/save.wav", scene, null, {
+      sound_object = new Sound("Sound", "./sound/save.mp3", scene, null, {
         loop: false,
         autoplay: true
       });
@@ -206,6 +212,12 @@ function playSound(sound_file, time, scene, callback) {
         loop: false,
         autoplay: true,
         volume: 1.5
+      });
+    break;
+    case "unlink":
+      sound_object = new Sound("Sound", "./sound/unlink.wav", scene, null, {
+        loop: false,
+        autoplay: true
       });
     break;
   }

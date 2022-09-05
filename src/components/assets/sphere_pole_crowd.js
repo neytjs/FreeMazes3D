@@ -6,14 +6,19 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import {TransformNode} from "@babylonjs/core/Meshes";
 import {sphere_colors} from "./sphere_pole_colors.js";
 
-var navigationPlugin = new RecastJSPlugin(Recast);
+var navigationPlugin = {};
+async function buildNav() {
+  let recast = await Recast();
+  navigationPlugin = new RecastJSPlugin(recast);
+}
+buildNav();
 
 let agent_object = {};
 
-var x = 0;
-var z = 0;
+let x = 0;
+let z = 0;
 
-var navmeshParameters = {
+let navmeshParameters = {
   cs: 0.2,
   ch: 0.2,
   walkableSlopeAngle: 90,
@@ -37,13 +42,13 @@ function generateNavMesh(scene) {
   z = bigPlatform.position.z;
 }
 
-var crowd = {};
+let crowd = {};
 
 function createCrowd(scene) {
   crowd = navigationPlugin.createCrowd(1, 0.1, scene);
 }
 
-var agentParams = {
+let agentParams = {
   radius: 1,
   height: 2,
   maxAcceleration: 4.0,
@@ -53,7 +58,7 @@ var agentParams = {
   separationWeight: 1.0
 };
 
-var agentIndex = {};
+let agentIndex = {};
 let agent_counter = 0;
 let sphere_color_counter = -1;
 
@@ -68,15 +73,18 @@ function generateSphere(scene, just_spliced) {
       sphere_color_counter = 0;
     }
 
-    var width = 2;
-    var agentSphere = Mesh.CreateSphere('mob', 5, 2.5, scene);
-    agentSphere.position.y = 2;
+    let width = 2;
+    let agentSphere = Mesh.CreateSphere('mob', 5, 2.5, scene);
+    agentSphere.position.y = 4;
     agentSphere.name = "agentSphere";
-    var matAgent = new StandardMaterial('mat2', scene);
+    let matAgent = new StandardMaterial('mat2', scene);
+    matAgent.diffuseColor = sphere_colors[sphere_color_counter].color_code;
+    matAgent.specularColor = sphere_colors[sphere_color_counter].color_code;
     matAgent.emissiveColor = sphere_colors[sphere_color_counter].color_code;
+    matAgent.ambientColor = sphere_colors[sphere_color_counter].color_code;
     agentSphere.material = matAgent;
-    var starPos = navigationPlugin.getRandomPointAround(new Vector3(x, 1, z), 0.5);
-    var transform = new TransformNode();
+    let starPos = navigationPlugin.getRandomPointAround(new Vector3(x, 1, z), 0.5);
+    let transform = new TransformNode();
     agentSphere.parent = transform;
     agentIndex = crowd.addAgent(starPos, agentParams, transform);
 
@@ -97,7 +105,7 @@ function sendAgent(camera) {
   let aX = cX + vX / magV * r;
   let aY = cY + vY / magV * r;
 
-  var agents = crowd.getAgents();
+  let agents = crowd.getAgents();
   crowd.agentGoto(agents[0], navigationPlugin.getClosestPoint(new Vector3(aX, 1, aY)));
 }
 

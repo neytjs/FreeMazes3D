@@ -21,9 +21,9 @@ let bulb_master_color = [];
 bulb_master_color = cloneDeep(bulb_colors);
 
 // now test to make sure that element 0 does not = bulb_master_color
-function masterColorTest(colors, master_color) {
+function masterColorTest(colors, master_color, num) {
   let test_colors = JSON.stringify(colors[0]);
-  let test_master_color = JSON.stringify(master_color[0]);
+  let test_master_color = JSON.stringify(master_color[num]);
   if (test_colors === test_master_color) {
     let element_zero = colors[0];
     let element_one = colors[1];
@@ -41,7 +41,7 @@ function colorRowTest() {
 			for (let k = 0, klength = bulb3colors.length; k < klength; k++) {
 				for (let l = 0, llength = bulb4colors.length; l < llength; l++) {
 					if ((i === j && j === k && k === l )) {
-						if (JSON.stringify(bulb_master_color[0]) === JSON.stringify(bulb1colors[i]) && JSON.stringify(bulb_master_color[0]) === JSON.stringify(bulb2colors[j]) && JSON.stringify(bulb_master_color[0]) === JSON.stringify(bulb3colors[k]) && JSON.stringify(bulb_master_color[0]) === JSON.stringify(bulb4colors[l])) {
+						if (JSON.stringify(bulb_master_color[0]) === JSON.stringify(bulb1colors[i]) && JSON.stringify(bulb_master_color[1]) === JSON.stringify(bulb2colors[j]) && JSON.stringify(bulb_master_color[2]) === JSON.stringify(bulb3colors[k]) && JSON.stringify(bulb_master_color[3]) === JSON.stringify(bulb4colors[l])) {
 							function colorSwap(new_elm) {
 								function b1Swap(new_elm) {
 									let bulb1Oldcs = bulb1colors[new_elm];
@@ -117,15 +117,15 @@ function cloneAndShuffleMasterColor() {
   bulb2colors = arrayShuffler(bulb2colors);
   bulb3colors = arrayShuffler(bulb3colors);
   bulb4colors = arrayShuffler(bulb4colors);
-  bulb1colors = masterColorTest(bulb1colors, bulb_master_color);
-  bulb2colors = masterColorTest(bulb2colors, bulb_master_color);
-  bulb3colors = masterColorTest(bulb3colors, bulb_master_color);
-  bulb4colors = masterColorTest(bulb4colors, bulb_master_color);
+  bulb1colors = masterColorTest(bulb1colors, bulb_master_color, 0);
+  bulb2colors = masterColorTest(bulb2colors, bulb_master_color, 1);
+  bulb3colors = masterColorTest(bulb3colors, bulb_master_color, 2);
+  bulb4colors = masterColorTest(bulb4colors, bulb_master_color, 3);
 	colorRowTest();
 }
 
 function getBulbMasterColor() {
-  return bulb_master_color[0];
+  return bulb_master_color;
 }
 
 function getBulb1colors(elm) {

@@ -9,7 +9,7 @@ import {StandardMaterial} from "@babylonjs/core/Materials";
 import {generateTree} from "./generate_tree.js";
 import {generateObjects} from "./generate_objects.js";
 import {selectTreasure} from "./select_treasure.js";
-import {returnFloorTexture} from "../assets/textures.js";
+import {returnFloorTexture, genCubeFaceUV} from "../assets/textures.js";
 
 function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objects, secret_environments) {
   let ground_textures = {
@@ -100,7 +100,7 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
   }
   let secret_ground = {};
   if (secret_data.type === "horizontal_up") {
-    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70, wrap: true, faceUV: genCubeFaceUV([7, 0.1, 7, 0.1, 7, 0.1, 7, 0.1, 7, 7, 7, 7])}, scene);
     secret_ground.position.x = (floor_x * 70) + 30;
     secret_ground.position.z = ((floor_y * 70) + 40);
     secret_ground.position.y = -0.5;
@@ -112,7 +112,7 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
     generateObjects(selectTreasure(), (floor_x * 70) + 30, ((floor_y * 70) + 40), scene, treasure_objects);
   }
   if (secret_data.type === "horizontal_down") {
-    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70, wrap: true, faceUV: genCubeFaceUV([7, 0.1, 7, 0.1, 7, 0.1, 7, 0.1, 7, 7, 7, 7])}, scene);
     secret_ground.position.x = (floor_x * 70) + 30;
     secret_ground.position.z = -((floor_y * 70) + 100);
     secret_ground.position.y = -0.5;
@@ -124,7 +124,7 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
     generateObjects(selectTreasure(), (floor_x * 70) + 30, -((floor_y * 70) + 100), scene, treasure_objects);
   }
   if (secret_data.type === "vertical_left") {
-    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70, wrap: true, faceUV: genCubeFaceUV([7, 0.1, 7, 0.1, 7, 0.1, 7, 0.1, 7, 7, 7, 7])}, scene);
     secret_ground.position.x = (floor_x * 70) - 40;
     secret_ground.position.z = -((floor_y * 70) + 30);
     secret_ground.position.y = -0.5;
@@ -136,7 +136,7 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
     generateObjects(selectTreasure(), (floor_x * 70) - 40, -((floor_y * 70) + 30), scene, treasure_objects);
   }
   if (secret_data.type === "vertical_right") {
-    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70}, scene);
+    secret_ground = MeshBuilder.CreateBox("floor", {width: 70, height: 1, depth: 70, wrap: true, faceUV: genCubeFaceUV([7, 0.1, 7, 0.1, 7, 0.1, 7, 0.1, 7, 7, 7, 7])}, scene);
     secret_ground.position.x = (floor_x * 70) + 100;
     secret_ground.position.z = -((floor_y * 70) + 30);
     secret_ground.position.y = -0.5;
@@ -147,8 +147,6 @@ function generateSecretArea(floor_x, floor_y, secret_data, scene, treasure_objec
     generateTreeBarriers("vertical_right", floor_x, floor_y, 0, 70);
     generateObjects(selectTreasure(), (floor_x * 70) + 100, -((floor_y * 70) + 30), scene, treasure_objects);
   }
-  secret_ground.material.diffuseTexture.uScale = 7;
-  secret_ground.material.diffuseTexture.vScale = 7;
 }
 
 export {generateSecretArea};

@@ -8,7 +8,7 @@ import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {returnTreeTexture} from "../assets/textures.js";
 
-function generateTree(secret_environments, scene, x, z, floor_x, floor_z, plus_x, plus_z) {
+function generateTree(secret_environments, scene) {
   let trunk_textures = {
     alpine: "bark_alpine",
     winter: "bark_winter",
