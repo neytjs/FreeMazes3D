@@ -28,7 +28,7 @@ canvas {
   line-height: 200px;
   text-align: center;
   bottom: 0;
-  background-color: #808080;
+  background-image: url("./textures/metals/iron.png");
   color: #FFFFFF;
   width: 1200px;
   height: 200px;
@@ -44,7 +44,7 @@ canvas {
 #warn {
   position: absolute;
   top: 50%;
-  background-color: #663300;
+  background-image: url("./textures/wood/wood_brown.png");
   padding: 15px;
   color: #FFFFFF;
   width: 600px;
@@ -60,7 +60,7 @@ canvas {
   position: absolute;
   top: 50%;
   z-index: 11;
-  background-color: #000000;
+  background-image: url("./textures/gui/menu.png");
   padding: 15px;
   color: #00FF00;
   width: 600px;
@@ -75,7 +75,7 @@ canvas {
   position: absolute;
   line-height: 40px;
   text-align: center;
-  background-color: #808080;
+  background-image: url("./textures/metals/iron.png");
   color: #FFFFFF;
   width: 200px;
   height: 200px;
@@ -99,7 +99,7 @@ canvas {
   position: absolute;
   line-height: 40px;
   text-align: center;
-  background-color: #FF0000;
+  background-image: url("./textures/crystals/gem_darkred.png");
   color: #FFFFFF;
   width: 100px;
   height: 40px;
@@ -113,7 +113,7 @@ canvas {
   position: absolute;
   line-height: 40px;
   text-align: center;
-  background-color: #808080;
+  background-image: url("./textures/metals/iron.png");
   color: #FFFFFF;
   width: 200px;
   height: 40px;
@@ -126,7 +126,7 @@ canvas {
   position: absolute;
   line-height: 40px;
   text-align: center;
-  background-color: #808080;
+  background-image: url("./textures/metals/iron.png");
   color: #FFFFFF;
   width: 200px;
   height: 40px;
@@ -139,41 +139,29 @@ canvas {
 }
 #loading {
   position: absolute;
-  background-color: #000000;
-  color: #FFFFFF;
+  background-image: url("./textures/gui/logo.png");
   width: 100%;
   height: 100%;
   left: 0px;
-  font-size: 30px;
   user-select: none;
 }
 #loading_text {
-  position: absolute;
-  width: 100%;
-  height: 20%;
-  top: 25%;
+  color: #FFFFFF;
   font-size: 80px;
-  text-align: center;
-  user-select: none;
+  text-shadow: 1px 1px 10px #FFFFFF, 1px 1px 10px #FFFFFF;
 }
 #reviving {
   position: absolute;
-  background-color: #000000;
-  color: #FFFFFF;
+  background-image: url("./textures/gui/logo.png");
   width: 100%;
   height: 100%;
   left: -10000px;
-  font-size: 30px;
   user-select: none;
 }
 #reviving_text {
-  position: absolute;
-  width: 100%;
-  height: 20%;
-  top: 25%;
+  color: #FFFFFF;
   font-size: 80px;
-  text-align: center;
-  user-select: none;
+  text-shadow: 1px 1px 10px #FFFFFF, 1px 1px 10px #FFFFFF;
 }
 #results {
   position: absolute;
@@ -208,7 +196,7 @@ canvas {
 #menu {
   position: absolute;
   text-align: center;
-  background-color: #808080;
+  background-color: rgba(128, 0, 0, 0.75);
   color: #FFFFFF;
   width: 100%;
   height: 100%;
@@ -219,7 +207,7 @@ canvas {
 #difficulty {
   position: absolute;
   text-align: center;
-  background-color: #808080;
+  background-color: rgba(128, 0, 0, 0.75);
   color: #FFFFFF;
   width: 100%;
   height: 100%;
@@ -230,7 +218,7 @@ canvas {
 #key_controls {
   position: absolute;
   text-align: center;
-  background-color: #808080;
+  background-color: rgba(128, 0, 0, 0.75);
   color: #FFFFFF;
   width: 100%;
   height: 100%;
@@ -241,7 +229,7 @@ canvas {
 #scores {
   position: absolute;
   text-align: center;
-  background-color: #808080;
+  background-color: rgba(128, 0, 0, 0.75);
   color: #FFFFFF;
   width: 100%;
   height: 100%;
@@ -252,7 +240,7 @@ canvas {
 #achieves {
   position: absolute;
   text-align: center;
-  background-color: #808080;
+  background-color: rgba(128, 0, 0, 0.75);
   color: #FFFFFF;
   width: 100%;
   height: 100%;
@@ -263,7 +251,7 @@ canvas {
 #credits_list {
   position: absolute;
   text-align: center;
-  background-color: #808080;
+  background-color: rgba(128, 0, 0, 0.75);
   color: #FFFFFF;
   width: 100%;
   height: 100%;
@@ -274,6 +262,7 @@ canvas {
 .game_title {
   width: 40%;
   color: #FFFFFF;
+  text-shadow: 1px 1px 10px #FFFFFF, 1px 1px 10px #FFFFFF;
   font-size: 80px;
   border-bottom: #001a00 2px solid;
   border-right: #001a00 2px solid;
@@ -286,6 +275,7 @@ canvas {
 #new_game {
   color: #00FF00;
   font-size: 50px;
+  text-shadow: 1px 1px 10px #00FF00, 1px 1px 10px #00FF00;
 }
 #controls {
   color: #FF0000;
@@ -308,7 +298,7 @@ canvas {
   font-size: 50px;
 }
 #easy {
-  color: #00FF00;
+  color: #FF0000;
   font-size: 50px;
 }
 #medium {
@@ -332,13 +322,14 @@ canvas {
   font-size: 50px;
 }
 #back {
-  color: #FF0000;
+  color: #00FF00;
   font-size: 50px;
+  text-shadow: 1px 1px 10px #00FF00, 1px 1px 10px #00FF00;
 }
 #okay {
   border-radius: 5px;
   font-size: 24px;
-  background-color: #FF0000;
+  background-image: url("./textures/crystals/gem_red.png");
   color: #000000;
   border: 1px solid #000000;
   margin: 10px 10px;
@@ -351,7 +342,7 @@ canvas {
 #cancel {
   border-radius: 5px;
   font-size: 24px;
-  background-color: #00FF00;
+  background-image: url("./textures/crystals/gem_green.png");
   color: #000000;
   border: 1px solid #000000;
   margin: 10px 10px;
@@ -370,6 +361,7 @@ canvas {
 .back {
   color: #00FF00;
   font-size: 50px;
+  text-shadow: 1px 1px 10px #00FF00, 1px 1px 10px #00FF00;
 }
 .achieved {
   color: #00FF00;
@@ -377,13 +369,17 @@ canvas {
 .not_achieved {
   color: #FF0000;
 }
+.table_specs {
+  width: 50%;
+  height: 100%;
+}
 table {
   color: #00FF00;
 }
 td, th {
   padding: 3px 7px 2px 7px;
   border: 2px solid #6600cc;
-  background-color: #000000;
+  background-image: url("./textures/gui/menu.png");
   border-radius: 10px;
 }
 th {

@@ -6,9 +6,7 @@
 </head>
 <body>
   <div id="results">
-    <div id="results_title">
-      <h1><b><i>Results</i></b></h1>
-    </div>
+    <div id="results_title"></div>
     <div id="results_body"></div>
     <ul id="results_stats">
       <li id="difficulty_stats"></li>
@@ -18,182 +16,140 @@
     </ul>
     <br>
     <div id="results_end">
-      <div class="back">Press ESC to return to menu.</div>
+      <div class="back"><div id="return"></div></div>
     </div>
-    <div class="version">Version 0.6</div>
+    <div class="version"></div>
   </div>
   <div id="achiev1"></div>
-  <div id="fps">0</div>
-  <div id="menu_button">Menu (F1)</div>
-  <div id="score">Score: 0</div>
-  <div id="timer">Time: </div>
+  <div id="fps"></div>
+  <div id="menu_button"></div>
+  <div id="score"></div>
+  <div id="timer"></div>
   <div id="inventory">
-    <div>Inventory:</div>
+    <div id="inventory_text"></div>
     <div id="inventory_img"></div>
     <div id="inventory_item_label"></div>
   </div>
   <div id="warning"></div>
-  <div id="loading">
-    <div id="loading_text"><h3>Loading...</h3></div>
-  </div>
   <div id="reviving">
-    <div id="reviving_text"><h3>Reviving...</h3></div>
+    <table class="table_specs" align="center">
+      <tr>
+        <td valign="middle" align="center" id="reviving_text"></td>
+      </tr>
+    </table>
   </div>
   <div id="menu">
-    <center><center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center></center>
+    <center><div class="game_title"></div></center>
     <br>
     <table class="menu_list" align="center">
       <tr>
         <td align="left">
-          <div id="new_game">New Game</div>
-          <div id="controls">Controls</div>
-          <div id="high_scores">High Scores</div>
-          <div id="achievements">Achievements</div>
-          <div id="credits">Credits</div>
-          <div id="exit_game">Exit Game</div>
+          <div id="new_game"></div>
+          <div id="controls"></div>
+          <div id="high_scores"></div>
+          <div id="achievements"></div>
+          <div id="credits"></div>
+          <div id="exit_game"></div>
         </td>
       </tr>
     </table>
-    <div class="version">Version 0.6</div>
+    <div class="version"></div>
   </div>
   <div id="difficulty">
-    <center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center>
+    <center><div class="game_title"></div></center>
     <br>
     <table class="menu_list" align="center">
       <tr>
         <td align="left">
-          <div id="easy">Easy</div>
-          <div id="medium">Medium</div>
-          <div id="hard">Hard</div>
-          <div id="easy_tl">Easy (Time Limit)</div>
-          <div id="medium_tl">Medium (Time Limit)</div>
-          <div id="hard_tl">Hard (Time Limit)</div>
-          <div id="back">BACK</div>
+          <div id="back"><div class="back_text"></div></div>
+          <div id="easy"></div>
+          <div id="medium"></div>
+          <div id="hard"></div>
+          <div id="easy_tl"></div>
+          <div id="medium_tl"></div>
+          <div id="hard_tl"></div>
         </td>
       </tr>
     </table>
-    <div class="version">Version 0.6</div>
+    <div class="version"></div>
   </div>
   <div id="warn">
     <div id="warn_message"></div>
     <br>
-    <span id="okay">Okay</span> <span id="cancel">Cancel</span>
+    <span id="okay"></span> <span id="cancel"></span>
   </div>
   <div id="key_controls">
-    <center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center>
-    <h3>Key Controls:</h3>
-    <p>Key controls can be changed by editing and saving the config.json file.</p>
+    <center><div class="game_title"></div></center>
+    <h3 id="controls_title"></h3>
+    <p id="kc_notice"></p>
     <table align="center">
       <tr>
-        <th>Key</th>
-        <th>Action</th>
+        <th id="kc_key"></th>
+        <th id="kc_action"></th>
       </tr>
       <tr>
         <td id="keys_movement"></td>
-        <td>
-          movement
-        </td>
+        <td id="kc_movement"></td>
       </tr>
       <tr>
         <td id="keys_activate"></td>
-        <td>
-          activate environment objects
-        </td>
-      </tr>
-      <tr>
-        <td id="keys_toggleleft"></td>
-        <td>
-          toggle left through inventory
-        </td>
-      </tr>
-      <tr>
-        <td id="keys_toggleright"></td>
-        <td>
-          toggle right through inventory
-        </td>
-      </tr>
-      <tr>
-        <td id="keys_fps"></td>
-        <td>
-          toggle frames per second
-        </td>
-      </tr>
-      <tr>
-        <td>
-          F1/ESC
-        </td>
-        <td>
-          view/close menu
-        </td>
+        <td id="kc_activate"></td>
       </tr>
       <tr>
         <td id="keys_weapon"></td>
-        <td>
-          use weapon
-        </td>
+        <td id="kc_use"></td>
+      </tr>
+      <tr>
+        <td id="keys_toggleleft"></td>
+        <td id="kc_toggleleft"></td>
+      </tr>
+      <tr>
+        <td id="keys_toggleright"></td>
+        <td id="kc_toggleright"></td>
+      </tr>
+      <tr>
+        <td id="keys_fps"></td>
+        <td id="kc_fps"></td>
+      </tr>
+      <tr>
+        <td id="keys_esc"></td>
+        <td id="kc_esc"></td>
       </tr>
     </table>
-    <div class="back">BACK</div>
-    <div class="version">Version 0.6</div>
+    <div class="back"><div class="back_text"></div></div>
+    <div class="version"></div>
   </div>
   <div id="scores">
-    <center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center>
-    <h3>High Scores:</h3>
+    <center><div class="game_title"></div></center>
+    <h3 id="scores_title"></h3>
     <table id="scores_list" class="menu_list" align="center"></table>
-    <div class="back">BACK</div>
-    <div class="version">Version 0.6</div>
+    <div class="back"><div class="back_text"></div></div>
+    <div class="version"></div>
   </div>
   <div id="achieves">
-    <center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center>
-    <h3>Achievements:</h3>
+    <center><div class="game_title"></div></center>
+    <h3 id="achievements_title"></h3>
     <table id="achieves_list" align="center"></table>
-    <div class="back">BACK</div>
-    <div class="version">Version 0.6</div>
+    <div class="back"><div class="back_text"></div></div>
+    <div class="version"></div>
   </div>
   <div id="credits_list">
-    <center><div class="game_title"><b><i>FreeMazes3D</i></b></div></center>
-    <h3>Credits:</h3>
+    <center><div class="game_title"></div></center>
+    <h3 id="credits_title"></h3>
     <table class="menu_list" align="center">
       <tr>
-        <td align="left">
-          <b><u>Game Development</u>:</b><br>
-          All scripting, 3D modeling, textures and game design – neytjs<br>
-          <br>
-          <b><u>3D Engine</u>:</b><br>
-          Babylon.js – the Babylon.js team (thanks guys!)<br>
-          <br>
-          <b><u>Music (from opengameart.org)</u>:</b><br>
-          <i>Night City Lights, Great Pyramids, Life in Forest</i> – Alexandr Zhelanov<br>
-          <i>My Friends, It's Love, Good Bye, Little Party, Sea Star, The Golden Mansion</i> – Snabisch<br>
-          <i>Caketown</i> – Matthew Pablo<br>
-          <i>Virus Hunter Toon Level Music</i> – TyberiusGames<br>
-          <i>Sonar Tuning Electro Track</i> – SouljahdeShiva<br>
-          <i>Distorted Memory</i> – soled<br>
-          <i>Falling Organ</i> – vandalorum<br>
-          <i>Roy Batty's Boombox</i> – joeBaxterWebb<br>
-          <br>
-          <b><u>Sound Effects (from opengameart.org)</u>:</b><br>
-          <i>GUI Sound Effects</i> – Lokif<br>
-          <i>Battle Sound Effects</i>, <i>Inventory Sound Effects</i> – artisticdude<br>
-          <i>Atmospheric Interaction Sound Pack</i> – legoluft<br>
-          <i>Door Open, Door Close Set, Bowling Ball Rolling</i> – qubodup<br>
-          <i>Mouse Click</i> – LFA<br>
-          <i>Realization, Sci-Fi Drone Loop</i> – Jason Dagenet<br>
-          <i>Ghost</i> – Ogrebane<br>
-          <i>Aargh!</i> – congusbongus<br>
-          <i>Bomb Explosion 8bit</i> – Luke.RUSTLTD<br>
-          <i>40 CC0 water / splash / slime SFX</i> – rubberduck<br>
-          <i>4 Atmospheric Ghostly Loops</i> – Independent.nu<br>
-          <i>Grass Foot Step Sounds, Lava Loop</i> – Blender Foundation<br>
-          <i>Falling Rock</i> – spookymodem<br>
-          <i>Laser Rifle</i> – Skorpio<br>
-          <i>Laser Fire</i> – farfadet46<br>
-          <i>Slow Clock Ticking</i> – Nicole Marie T<br>
-        </td>
+        <td align="left" id="credits_text"></td>
       </tr>
     </table>
-    <div class="back">BACK</div>
-    <div class="version">Version 0.6</div>
+    <div class="back"><div class="back_text"></div></div>
+    <div class="version"></div>
+  </div>
+  <div id="loading">
+    <table class="table_specs" align="center">
+      <tr>
+        <td valign="middle" align="center" id="loading_text"></td>
+      </tr>
+    </table>
   </div>
   <div id="output"></div>
   <script src="./dist/bundle.js"></script>
