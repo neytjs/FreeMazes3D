@@ -6,39 +6,39 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {returnMetalTexture} from "../../textures.js";
+import {returnMetalTexture, genCylinderFaceUV} from "../../textures.js";
 
 function generateLadder(x, z, scene) {
-  let rail1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 9, tessellation: 12}, scene);
+  let rail1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 9, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 4.5, 0.25, 0.25])}, scene);
   rail1.position.y = 0.25;
   rail1.position.x = 1.5;
   rail1.rotation.x = Math.PI / 2;
 
-  let rail2 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 9, tessellation: 12}, scene);
+  let rail2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 9, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 4.5, 0.25, 0.25])}, scene);
   rail2.position.y = 0.25;
   rail2.position.x = -1.5;
   rail2.rotation.x = Math.PI / 2;
 
-  let rung1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 3, tessellation: 12}, scene);
+  let rung1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.5, 0.25, 0.25])}, scene);
   rung1.position.y = 0.25;
   rung1.position.z = -4;
   rung1.rotation.z = Math.PI / 2;
 
-  let rung2 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 3, tessellation: 12}, scene);
+  let rung2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.5, 0.25, 0.25])}, scene);
   rung2.position.y = 0.25;
   rung2.position.z = -2;
   rung2.rotation.z = Math.PI / 2;
 
-  let rung3 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 3, tessellation: 12}, scene);
+  let rung3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.5, 0.25, 0.25])}, scene);
   rung3.position.y = 0.25;
   rung3.rotation.z = Math.PI / 2;
 
-  let rung4 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 3, tessellation: 12}, scene);
+  let rung4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.5, 0.25, 0.25])}, scene);
   rung4.position.y = 0.25;
   rung4.position.z = 2;
   rung4.rotation.z = Math.PI / 2;
 
-  let rung5 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 3, tessellation: 12}, scene);
+  let rung5 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.5, 0.25, 0.25])}, scene);
   rung5.position.y = 0.25;
   rung5.position.z = 4;
   rung5.rotation.z = Math.PI / 2;

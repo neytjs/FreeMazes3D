@@ -6,7 +6,8 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {returnMetalTexture, returnTreeTexture, returnWoodTexture} from "../../textures.js";
+import {returnMetalTexture, returnTreeTexture, returnWoodTexture,
+  returnFloorTexture} from "../../textures.js";
 
 function generatePottedTree(x, z, scene) {
   let pot = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 2, diameterBottom: 2, height: 2, tessellation: 12}, scene);
@@ -28,6 +29,13 @@ function generatePottedTree(x, z, scene) {
   trunk.material.diffuseTexture.uScale = 2;
   trunk.material.diffuseTexture.vScale = 2;
 
+  let dirt = MeshBuilder.CreateCylinder("cylinder", {diameter: 2, height: 0.005, tessellation: 12}, scene);
+  dirt.position.y = 2.02;
+  dirt.material = new StandardMaterial('texture1', scene);
+  dirt.material.diffuseTexture = returnFloorTexture("soil", scene);
+  dirt.material.diffuseTexture.uScale = 0.5;
+  dirt.material.diffuseTexture.vScale = 0.5;
+
   let leaves = Mesh.CreateSphere("sphere", 8, 3, scene);
   leaves.position.y = 5;
   leaves.material = new StandardMaterial('texture1', scene);
@@ -40,7 +48,7 @@ function generatePottedTree(x, z, scene) {
   barrier.material = new StandardMaterial('texture1', scene);
   barrier.material.alpha = 0;
 
-  let tree = Mesh.MergeMeshes([pot, rim, trunk, leaves, barrier], true, true, undefined, false, true);
+  let tree = Mesh.MergeMeshes([pot, rim, trunk, dirt, leaves, barrier], true, true, undefined, false, true);
   tree.position.x = x + 3.5;
   tree.position.z = z + 3.5;
   tree.physicsImpostor = new PhysicsImpostor(barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);

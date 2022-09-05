@@ -15,6 +15,8 @@ function generateMachine(x, z, scene) {
   box1.position.z = z + 3;
   box1.material = new StandardMaterial('texture1', scene);
   box1.material.diffuseTexture = returnMetalTexture("iron", scene);
+  box1.physicsImpostor = new PhysicsImpostor(box1, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
+  box1.checkCollisions = true;
 
   let pipe1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.75, tessellation: 12}, scene);
   pipe1.position.y = 2.25;
