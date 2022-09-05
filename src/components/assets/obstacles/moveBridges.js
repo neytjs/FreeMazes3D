@@ -9,327 +9,298 @@ import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 import {ParticleSystem} from "@babylonjs/core/Particles";
 import {arrayShuffler} from "../../utilities/shuffler.js";
-import {returnMetalTexture, returnCrystalTexture} from "../textures.js";
+import {setBridgeGlobals, shuffleMasterBridges, masterBridges} from "../bridge_data.js";
+import {returnMetalTexture, returnCrystalTexture, returnLiquidTexture,
+  genCubeFaceUV, genCylinderFaceUV} from "../textures.js";
 
-function moveBridges(x, z, scene, global_objects, item_id, camera) {
-  // declare and shuffle the colors
-    let bridge_colors = [
-      "gem_red",
-      "gem_orange",
-      "gem_yellow",
-      "gem_darkgreen",
-      "gem_blue",
-      "gem_darkpurple"
-    ];
-    bridge_colors = arrayShuffler(bridge_colors);
-    let color1 = bridge_colors[0];
-    let color2 = bridge_colors[1];
-    let color3 = bridge_colors[2];
+function moveBridges(x, z, scene, global_objects, item_id, camera, global_language) {
+  setBridgeGlobals(x, z);
+  shuffleMasterBridges();
 
-  let buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
-  buttonHolder1.position.y = 7.5;
-  buttonHolder1.position.x = x + 20;
-  buttonHolder1.position.z = z - 20;
-  buttonHolder1.material = new StandardMaterial('texture1', scene);
-  buttonHolder1.material.diffuseTexture = returnMetalTexture("iron", scene);
-  buttonHolder1.physicsImpostor = new PhysicsImpostor(buttonHolder1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  buttonHolder1.checkCollisions = true;
+// declare and shuffle the colors
+  let structure_colors = [
+    "gem_red",
+    "gem_orange",
+    "gem_hotpink",
+    "gem_teal",
+    "gem_blue",
+    "gem_darkpurple"
+  ];
+  structure_colors = arrayShuffler(structure_colors);
 
-  let buttonBarrier1 = MeshBuilder.CreateBox("box", {width: 2, height: 10, depth: 2}, scene);
-  buttonBarrier1.position.y = 11;
-  buttonBarrier1.position.x = x + 20;
-  buttonBarrier1.position.z = z - 20;
-  buttonBarrier1.material = new StandardMaterial('texture1', scene);
-  buttonBarrier1.material.alpha = 0;
-  buttonBarrier1.name = "button1p4a";
-  global_objects.push({id: buttonBarrier1.uniqueId, obstacle4_id: item_id, type: "structure", name: ""}); // just for obstacle4_id
+  let color1 = structure_colors[0];
+  let color2 = structure_colors[1];
+  let color3 = structure_colors[2];
+  let color4 = structure_colors[3];
 
-  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
-  pushButton1.position.y = 9.25;
-  pushButton1.position.x = x + 20;
-  pushButton1.position.z = z - 20;
-  pushButton1.material = new StandardMaterial('texture1', scene);
-  pushButton1.material.diffuseTexture = returnCrystalTexture("gem_darkred", scene);
-  pushButton1.name = "pushButton1p4a";
+  function generateTeleporter(x, z, name) {
+    let teleporterVisualPad = MeshBuilder.CreateBox("box", {width: 5, height: 0.2, depth: 5, wrap: true, faceUV: genCubeFaceUV([2.5, 0.1, 2.5, 0.1, 2.5, 0.1, 2.5, 0.1, 2.5, 2.5, 2.5, 2.5])}, scene);
+    teleporterVisualPad.position.y = 0.1;
+    teleporterVisualPad.position.x = x;
+    teleporterVisualPad.position.z = z;
+    teleporterVisualPad.material = new StandardMaterial('texture1', scene);
+    teleporterVisualPad.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
-  let buttonHolder2 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
-  buttonHolder2.position.y = 7.5;
-  buttonHolder2.position.x = x - 20;
-  buttonHolder2.position.z = z + 20;
-  buttonHolder2.material = new StandardMaterial('texture1', scene);
-  buttonHolder2.material.diffuseTexture = returnMetalTexture("iron", scene);
-  buttonHolder2.physicsImpostor = new PhysicsImpostor(buttonHolder2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  buttonHolder2.checkCollisions = true;
+    let teleportPad = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 4, tessellation: 8}, scene);
+    teleportPad.position.y = 2;
+    teleportPad.position.x = x;
+    teleportPad.position.z = z;
+    teleportPad.name = name;
+    teleportPad.material = new StandardMaterial('texture1', scene);
+    teleportPad.material.alpha = 0;
+    teleportPad.physicsImpostor = new PhysicsImpostor(teleportPad, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+    teleportPad.checkCollisions = true;
+    global_objects.push({id: teleportPad.uniqueId, type: "teleporter4", exit_pos: {x: x, z: z, y: 10.5}});
 
-  let buttonBarrier2 = MeshBuilder.CreateBox("box", {width: 2, height: 10, depth: 2}, scene);
-  buttonBarrier2.position.y = 11;
-  buttonBarrier2.position.x = x - 20;
-  buttonBarrier2.position.z = z + 20;
-  buttonBarrier2.material = new StandardMaterial('texture1', scene);
-  buttonBarrier2.material.alpha = 0;
-  buttonBarrier2.name = "button1p4b";
+    let particleSystem = new ParticleSystem("particles", 3000, scene);
+    particleSystem.particleTexture = new Texture("./imgs/circle_light.png", scene);
+    particleSystem.emitter = teleportPad;
 
-  let pushButton2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
-  pushButton2.position.y = 9.25;
-  pushButton2.position.x = x - 20;
-  pushButton2.position.z = z + 20;
-  pushButton2.material = new StandardMaterial('texture1', scene);
-  pushButton2.material.diffuseTexture = returnCrystalTexture("gem_darkred", scene);
-  pushButton2.name = "pushButton1p4b";
+    particleSystem.addColorGradient(0, new Color4(0.01, 0.04, 0.45));
+    particleSystem.addColorGradient(1, new Color4(0.33, 0.04, 0.33));
 
-  let buttonHolder3 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
-  buttonHolder3.position.y = 7.5;
-  buttonHolder3.position.x = x - 20;
-  buttonHolder3.position.z = z - 20;
-  buttonHolder3.material = new StandardMaterial('texture1', scene);
-  buttonHolder3.material.diffuseTexture = returnMetalTexture("iron", scene);
-  buttonHolder3.physicsImpostor = new PhysicsImpostor(buttonHolder3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  buttonHolder3.checkCollisions = true;
+    particleSystem.minSize = 0.1;
+    particleSystem.maxSize = 0.5;
 
-  let buttonBarrier3 = MeshBuilder.CreateBox("box", {width: 2, height: 10, depth: 2}, scene);
-  buttonBarrier3.position.y = 11;
-  buttonBarrier3.position.x = x - 20;
-  buttonBarrier3.position.z = z - 20;
-  buttonBarrier3.material = new StandardMaterial('texture1', scene);
-  buttonBarrier3.material.alpha = 0;
-  buttonBarrier3.name = "button1p4c";
+    particleSystem.minLifeTime = 0.3;
+    particleSystem.maxLifeTime = 1;
 
-  let pushButton3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
-  pushButton3.position.y = 9.25;
-  pushButton3.position.x = x - 20;
-  pushButton3.position.z = z - 20;
-  pushButton3.material = new StandardMaterial('texture1', scene);
-  pushButton3.material.diffuseTexture = returnCrystalTexture("gem_darkred", scene);
-  pushButton3.name = "pushButton1p4c";
+    particleSystem.emitRate = 3000;
 
-  let teleporterVisualPad = MeshBuilder.CreateBox("box", {width: 5, height: 0.2, depth: 5}, scene);
-  teleporterVisualPad.position.y = 0.1;
-  teleporterVisualPad.position.x = x;
-  teleporterVisualPad.position.z = z;
-  teleporterVisualPad.material = new StandardMaterial('texture1', scene);
-  teleporterVisualPad.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
+    particleSystem.createSphereEmitter(2);
 
-  let teleportPad = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 4, tessellation: 8}, scene);
-  teleportPad.position.y = 2;
-  teleportPad.position.x = x;
-  teleportPad.position.z = z;
-  teleportPad.name = "teleportPad";
-  teleportPad.material = new StandardMaterial('texture1', scene);
-  teleportPad.material.alpha = 0;
-  teleportPad.physicsImpostor = new PhysicsImpostor(teleportPad, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  teleportPad.checkCollisions = true;
-  global_objects.push({id: teleportPad.uniqueId, type: "teleporter4", exit_pos: {x: (x + 20), z: (z + 20), y: 10.5}});
+    particleSystem.minEmitPower = 1;
+    particleSystem.maxEmitPower = 3;
+    particleSystem.updateSpeed = 0.005;
 
-  let theStartBase = MeshBuilder.CreateBox("box", {width: 10, height: 1, depth: 10}, scene);
-  theStartBase.position.y = 6;
-  theStartBase.position.x = x + 20;
-  theStartBase.position.z = z + 20;
-  theStartBase.material = new StandardMaterial('texture1', scene);
-  theStartBase.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theStartBase.physicsImpostor = new PhysicsImpostor(theStartBase, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theStartBase.checkCollisions = true;
+    particleSystem.start();
+  }
+  generateTeleporter(masterBridges.portal1_x, masterBridges.portal1_z, "teleportPadOb4_1");
+  generateTeleporter(masterBridges.portal2_x, masterBridges.portal2_z, "teleportPadOb4_2");
 
-  let theStartWall1 = MeshBuilder.CreateBox("box", {width: 2.5, height: 2, depth: 1}, scene);
-  theStartWall1.position.y = 7.5;
-  theStartWall1.position.x = x + 23.75;
-  theStartWall1.position.z = z + 15.5;
-  theStartWall1.material = new StandardMaterial('texture1', scene);
-  theStartWall1.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theStartWall1.physicsImpostor = new PhysicsImpostor(theStartWall1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theStartWall1.checkCollisions = true;
+  function generatePlatform(x, z, rotation) {
+    let theBase = MeshBuilder.CreateBox("box", {width: 10, height: 1, depth: 10, faceUV: genCubeFaceUV([2, 0.2, 2, 0.2, 0.2, 2, 0.2, 2, 2, 2, 2, 2])}, scene);
+    theBase.position.y = 6;
+    theBase.material = new StandardMaterial('texture1', scene);
+    theBase.material.diffuseTexture = returnCrystalTexture(color1, scene);
+    theBase.physicsImpostor = new PhysicsImpostor(theBase, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+    theBase.checkCollisions = true;
 
-  let theStartWall2 = MeshBuilder.CreateBox("box", {width: 2.5, height: 2, depth: 1}, scene);
-  theStartWall2.position.y = 7.5;
-  theStartWall2.position.x = x + 16.25;
-  theStartWall2.position.z = z + 15.5;
-  theStartWall2.material = new StandardMaterial('texture1', scene);
-  theStartWall2.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theStartWall2.physicsImpostor = new PhysicsImpostor(theStartWall2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theStartWall2.checkCollisions = true;
+    let theWall1 = MeshBuilder.CreateBox("box", {width: 2.5, height: 2, depth: 1, faceUV: genCubeFaceUV([0.4, 0.5, 0.4, 0.5, 0.5, 0.2, 0.5, 0.2, 0.2, 0.5, 0.2, 0.5])}, scene);
+    theWall1.position.y = 7.5;
+    theWall1.position.x = 3.75;
+    theWall1.position.z = -4.5;
+    theWall1.material = new StandardMaterial('texture1', scene);
+    theWall1.material.diffuseTexture = returnCrystalTexture(color1, scene);
+    theWall1.physicsImpostor = new PhysicsImpostor(theWall1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+    theWall1.checkCollisions = true;
 
-  let theStartWall3 = MeshBuilder.CreateBox("box", {width: 1, height: 2, depth: 1.5}, scene);
-  theStartWall3.position.y = 7.5;
-  theStartWall3.position.x = x + 15.5;
-  theStartWall3.position.z = z + 16.75;
-  theStartWall3.material = new StandardMaterial('texture1', scene);
-  theStartWall3.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theStartWall3.physicsImpostor = new PhysicsImpostor(theStartWall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theStartWall3.checkCollisions = true;
+    let theWall2 = MeshBuilder.CreateBox("box", {width: 2.5, height: 2, depth: 1, faceUV: genCubeFaceUV([0.4, 0.5, 0.4, 0.5, 0.5, 0.2, 0.5, 0.2, 0.2, 0.5, 0.2, 0.5])}, scene);
+    theWall2.position.y = 7.5;
+    theWall2.position.x = -3.75;
+    theWall2.position.z = -4.5;
+    theWall2.material = new StandardMaterial('texture1', scene);
+    theWall2.material.diffuseTexture = returnCrystalTexture(color1, scene);
+    theWall2.physicsImpostor = new PhysicsImpostor(theWall2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+    theWall2.checkCollisions = true;
 
-  let theStartWall4 = MeshBuilder.CreateBox("box", {width: 1, height: 2, depth: 2.5}, scene);
-  theStartWall4.position.y = 7.5;
-  theStartWall4.position.x = x + 15.5;
-  theStartWall4.position.z = z + 23.75;
-  theStartWall4.material = new StandardMaterial('texture1', scene);
-  theStartWall4.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theStartWall4.physicsImpostor = new PhysicsImpostor(theStartWall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theStartWall4.checkCollisions = true;
+    let theWall3 = MeshBuilder.CreateBox("box", {width: 1, height: 2, depth: 1.5, faceUV: genCubeFaceUV([0.2, 0.3, 0.2, 0.3, 0.4, 0.3, 0.4, 0.3, 0.3, 0.2, 0.3, 0.2])}, scene);
+    theWall3.position.y = 7.5;
+    theWall3.position.x = -4.5;
+    theWall3.position.z = -3.25;
+    theWall3.material = new StandardMaterial('texture1', scene);
+    theWall3.material.diffuseTexture = returnCrystalTexture(color1, scene);
+    theWall3.physicsImpostor = new PhysicsImpostor(theWall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+    theWall3.checkCollisions = true;
 
-  let theStart = Mesh.MergeMeshes([theStartBase, theStartWall1, theStartWall2, theStartWall3, theStartWall4], true, true, undefined, false, true);
+    let theWall4 = MeshBuilder.CreateBox("box", {width: 1, height: 2, depth: 2.5, faceUV: genCubeFaceUV([0.2, 0.5, 0.2, 0.5, 0.4, 0.5, 0.4, 0.5, 0.5, 0.2, 0.5, 0.2])}, scene);
+    theWall4.position.y = 7.5;
+    theWall4.position.x = -4.5;
+    theWall4.position.z = 3.75;
+    theWall4.material = new StandardMaterial('texture1', scene);
+    theWall4.material.diffuseTexture = returnCrystalTexture(color1, scene);
+    theWall4.physicsImpostor = new PhysicsImpostor(theWall4, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+    theWall4.checkCollisions = true;
 
-  let theMiddleBase = MeshBuilder.CreateBox("box", {width: 10, height: 1, depth: 10}, scene);
-  theMiddleBase.position.y = 6;
-  theMiddleBase.position.x = x - 20;
-  theMiddleBase.position.z = z + 20;
-  theMiddleBase.material = new StandardMaterial('texture1', scene);
-  theMiddleBase.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theMiddleBase.physicsImpostor = new PhysicsImpostor(theMiddleBase, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theMiddleBase.checkCollisions = true;
+    let thePlatform = Mesh.MergeMeshes([theBase, theWall1, theWall2, theWall3, theWall4], true, true, undefined, false, true);
+    thePlatform.position.x = x;
+    thePlatform.position.z = z;
+    thePlatform.rotation.y = rotation;
+  }
 
-  let theMiddleWall1 = MeshBuilder.CreateBox("box", {width: 2.5, height: 2, depth: 1}, scene);
-  theMiddleWall1.position.y = 7.5;
-  theMiddleWall1.position.x = x - 23.75;
-  theMiddleWall1.position.z = z + 15.5;
-  theMiddleWall1.material = new StandardMaterial('texture1', scene);
-  theMiddleWall1.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theMiddleWall1.physicsImpostor = new PhysicsImpostor(theMiddleWall1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theMiddleWall1.checkCollisions = true;
+  generatePlatform((x + 20), (z + 20), 0);
+  generatePlatform((x - 20), (z + 20), -1.57);
+  generatePlatform((x + 20), (z - 20), 1.57);
+  generatePlatform((x - 20), (z - 20), 3.14);
 
-  let theMiddleWall2 = MeshBuilder.CreateBox("box", {width: 2.5, height: 2, depth: 1}, scene);
-  theMiddleWall2.position.y = 7.5;
-  theMiddleWall2.position.x = x - 16.25;
-  theMiddleWall2.position.z = z + 15.5;
-  theMiddleWall2.material = new StandardMaterial('texture1', scene);
-  theMiddleWall2.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theMiddleWall2.physicsImpostor = new PhysicsImpostor(theMiddleWall2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theMiddleWall2.checkCollisions = true;
+  let centralPlatformFloor = MeshBuilder.CreateBox("box", {width: 10, height: 1, depth: 10, faceUV: genCubeFaceUV([2, 0.2, 2, 0.2, 0.2, 2, 0.2, 2, 2, 2, 2, 2])}, scene);
+  centralPlatformFloor.position.y = 6;
+  centralPlatformFloor.position.x = x;
+  centralPlatformFloor.position.z = z;
+  centralPlatformFloor.material = new StandardMaterial('texture1', scene);
+  centralPlatformFloor.material.diffuseTexture = returnCrystalTexture(color1, scene);
+  centralPlatformFloor.physicsImpostor = new PhysicsImpostor(centralPlatformFloor, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  centralPlatformFloor.checkCollisions = true;
+  global_objects.push({id: centralPlatformFloor.uniqueId, obstacle4_id: item_id, type: "structure", name: ""});
 
-  let theMiddleWall3 = MeshBuilder.CreateBox("box", {width: 1, height: 2, depth: 1.5}, scene);
-  theMiddleWall3.position.y = 7.5;
-  theMiddleWall3.position.x = x - 15.5;
-  theMiddleWall3.position.z = z + 16.75;
-  theMiddleWall3.material = new StandardMaterial('texture1', scene);
-  theMiddleWall3.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theMiddleWall3.physicsImpostor = new PhysicsImpostor(theMiddleWall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theMiddleWall3.checkCollisions = true;
+  let centralPlatformCeiling = MeshBuilder.CreateBox("box", {width: 10, height: 1, depth: 10, faceUV: genCubeFaceUV([2, 0.2, 2, 0.2, 0.2, 2, 0.2, 2, 2, 2, 2, 2])}, scene);
+  centralPlatformCeiling.position.y = 13;
+  centralPlatformCeiling.position.x = x;
+  centralPlatformCeiling.position.z = z;
+  centralPlatformCeiling.material = new StandardMaterial('texture1', scene);
+  centralPlatformCeiling.material.diffuseTexture = returnCrystalTexture(color1, scene);
 
-  let theMiddleWall4 = MeshBuilder.CreateBox("box", {width: 1, height: 2, depth: 2.5}, scene);
-  theMiddleWall4.position.y = 7.5;
-  theMiddleWall4.position.x = x - 15.5;
-  theMiddleWall4.position.z = z + 23.75;
-  theMiddleWall4.material = new StandardMaterial('texture1', scene);
-  theMiddleWall4.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theMiddleWall4.physicsImpostor = new PhysicsImpostor(theMiddleWall4, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theMiddleWall4.checkCollisions = true;
+  let centralPlatformPillar1 = MeshBuilder.CreateBox("box", {width: 1, height: 6, depth: 1, faceUV: genCubeFaceUV([0.2, 1.2, 0.2, 1.2, 1.2, 0.2, 1.2, 0.2, 0.2, 0.2, 0.2, 0.2])}, scene);
+  centralPlatformPillar1.position.y = 9.5;
+  centralPlatformPillar1.position.x = x + 4.5;
+  centralPlatformPillar1.position.z = z + 4.5;
+  centralPlatformPillar1.material = new StandardMaterial('texture1', scene);
+  centralPlatformPillar1.material.diffuseTexture = returnCrystalTexture(color2, scene);
+  centralPlatformPillar1.physicsImpostor = new PhysicsImpostor(centralPlatformPillar1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  centralPlatformPillar1.checkCollisions = true;
 
-  let theMiddle = Mesh.MergeMeshes([theMiddleBase, theMiddleWall1, theMiddleWall2, theMiddleWall3, theMiddleWall4], true, true, undefined, false, true);
+  let centralPlatformPillar2 = MeshBuilder.CreateBox("box", {width: 1, height: 6, depth: 1, faceUV: genCubeFaceUV([0.2, 1.2, 0.2, 1.2, 1.2, 0.2, 1.2, 0.2, 0.2, 0.2, 0.2, 0.2])}, scene);
+  centralPlatformPillar2.position.y = 9.5;
+  centralPlatformPillar2.position.x = x - 4.5;
+  centralPlatformPillar2.position.z = z + 4.5;
+  centralPlatformPillar2.material = new StandardMaterial('texture1', scene);
+  centralPlatformPillar2.material.diffuseTexture = returnCrystalTexture(color2, scene);
+  centralPlatformPillar2.physicsImpostor = new PhysicsImpostor(centralPlatformPillar2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  centralPlatformPillar2.checkCollisions = true;
 
-  let theMiddle2Base = MeshBuilder.CreateBox("box", {width: 10, height: 1, depth: 10}, scene);
-  theMiddle2Base.position.y = 6;
-  theMiddle2Base.position.x = x + 20;
-  theMiddle2Base.position.z = z - 20;
-  theMiddle2Base.material = new StandardMaterial('texture1', scene);
-  theMiddle2Base.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theMiddle2Base.physicsImpostor = new PhysicsImpostor(theMiddle2Base, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theMiddle2Base.checkCollisions = true;
+  let centralPlatformPillar3 = MeshBuilder.CreateBox("box", {width: 1, height: 6, depth: 1, faceUV: genCubeFaceUV([0.2, 1.2, 0.2, 1.2, 1.2, 0.2, 1.2, 0.2, 0.2, 0.2, 0.2, 0.2])}, scene);
+  centralPlatformPillar3.position.y = 9.5;
+  centralPlatformPillar3.position.x = x + 4.5;
+  centralPlatformPillar3.position.z = z - 4.5;
+  centralPlatformPillar3.material = new StandardMaterial('texture1', scene);
+  centralPlatformPillar3.material.diffuseTexture = returnCrystalTexture(color2, scene);
+  centralPlatformPillar3.physicsImpostor = new PhysicsImpostor(centralPlatformPillar3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  centralPlatformPillar3.checkCollisions = true;
 
-  let theMiddle2Wall1 = MeshBuilder.CreateBox("box", {width: 2.5, height: 2, depth: 1}, scene);
-  theMiddle2Wall1.position.y = 7.5;
-  theMiddle2Wall1.position.x = x + 23.75;
-  theMiddle2Wall1.position.z = z - 15.5;
-  theMiddle2Wall1.material = new StandardMaterial('texture1', scene);
-  theMiddle2Wall1.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theMiddle2Wall1.physicsImpostor = new PhysicsImpostor(theMiddle2Wall1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theMiddle2Wall1.checkCollisions = true;
+  let centralPlatformPillar4 = MeshBuilder.CreateBox("box", {width: 1, height: 6, depth: 1, faceUV: genCubeFaceUV([0.2, 1.2, 0.2, 1.2, 1.2, 0.2, 1.2, 0.2, 0.2, 0.2, 0.2, 0.2])}, scene);
+  centralPlatformPillar4.position.y = 9.5;
+  centralPlatformPillar4.position.x = x - 4.5;
+  centralPlatformPillar4.position.z = z - 4.5;
+  centralPlatformPillar4.material = new StandardMaterial('texture1', scene);
+  centralPlatformPillar4.material.diffuseTexture = returnCrystalTexture(color2, scene);
+  centralPlatformPillar4.physicsImpostor = new PhysicsImpostor(centralPlatformPillar4, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  centralPlatformPillar4.checkCollisions = true;
 
-  let theMiddle2Wall2 = MeshBuilder.CreateBox("box", {width: 2.5, height: 2, depth: 1}, scene);
-  theMiddle2Wall2.position.y = 7.5;
-  theMiddle2Wall2.position.x = x + 16.25;
-  theMiddle2Wall2.position.z = z - 15.5;
-  theMiddle2Wall2.material = new StandardMaterial('texture1', scene);
-  theMiddle2Wall2.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theMiddle2Wall2.physicsImpostor = new PhysicsImpostor(theMiddle2Wall2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theMiddle2Wall2.checkCollisions = true;
+  let centralPlatformBarrier = MeshBuilder.CreateCylinder("cylinder", {diameter: 5, height: 6, tessellation: 8}, scene);
+  centralPlatformBarrier.position.y = 9.5;
+  centralPlatformBarrier.position.x = x;
+  centralPlatformBarrier.position.z = z;
+  centralPlatformBarrier.material = new StandardMaterial('texture1', scene);
+  centralPlatformBarrier.material.diffuseTexture = returnLiquidTexture("acid_purple", scene);
+  centralPlatformBarrier.material.alpha = 0.8;
+  centralPlatformBarrier.physicsImpostor = new PhysicsImpostor(centralPlatformBarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  centralPlatformBarrier.checkCollisions = true;
+  centralPlatformBarrier.name = "centralPlatformBarrierOb4";
 
-  let theMiddle2Wall3 = MeshBuilder.CreateBox("box", {width: 1, height: 2, depth: 9.5}, scene);
-  theMiddle2Wall3.position.y = 7.5;
-  theMiddle2Wall3.position.x = x + 15.5;
-  theMiddle2Wall3.position.z = z - 20.75;
-  theMiddle2Wall3.material = new StandardMaterial('texture1', scene);
-  theMiddle2Wall3.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theMiddle2Wall3.physicsImpostor = new PhysicsImpostor(theMiddle2Wall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theMiddle2Wall3.checkCollisions = true;
+  let miniPlatform1 = MeshBuilder.CreateBox("box", {width: 5, height: 1, depth: 5, faceUV: genCubeFaceUV([1, 0.2, 1, 0.2, 0.2, 1, 0.2, 1, 1, 1, 1, 1])}, scene);
+  miniPlatform1.position.y = 6;
+  miniPlatform1.position.x = x;
+  miniPlatform1.position.z = z + 20;
+  miniPlatform1.material = new StandardMaterial('texture1', scene);
+  miniPlatform1.material.diffuseTexture = returnCrystalTexture(color1, scene);
+  miniPlatform1.physicsImpostor = new PhysicsImpostor(miniPlatform1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  miniPlatform1.checkCollisions = true;
 
-  let theMiddle2 = Mesh.MergeMeshes([theMiddle2Base, theMiddle2Wall1, theMiddle2Wall2, theMiddle2Wall3], true, true, undefined, false, true);
+  let miniPlatform2 = MeshBuilder.CreateBox("box", {width: 5, height: 1, depth: 5, faceUV: genCubeFaceUV([1, 0.2, 1, 0.2, 0.2, 1, 0.2, 1, 1, 1, 1, 1])}, scene);
+  miniPlatform2.position.y = 6;
+  miniPlatform2.position.x = x;
+  miniPlatform2.position.z = z - 20;
+  miniPlatform2.material = new StandardMaterial('texture1', scene);
+  miniPlatform2.material.diffuseTexture = returnCrystalTexture(color1, scene);
+  miniPlatform2.physicsImpostor = new PhysicsImpostor(miniPlatform2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  miniPlatform2.checkCollisions = true;
 
-  let theExitBase = MeshBuilder.CreateBox("box", {width: 10, height: 1, depth: 10}, scene);
-  theExitBase.position.y = 6;
-  theExitBase.position.x = x - 20;
-  theExitBase.position.z = z - 20;
-  theExitBase.material = new StandardMaterial('texture1', scene);
-  theExitBase.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theExitBase.physicsImpostor = new PhysicsImpostor(theExitBase, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theExitBase.checkCollisions = true;
+  let miniPlatform3 = MeshBuilder.CreateBox("box", {width: 5, height: 1, depth: 5, faceUV: genCubeFaceUV([1, 0.2, 1, 0.2, 0.2, 1, 0.2, 1, 1, 1, 1, 1])}, scene);
+  miniPlatform3.position.y = 6;
+  miniPlatform3.position.x = x + 20;
+  miniPlatform3.position.z = z;
+  miniPlatform3.material = new StandardMaterial('texture1', scene);
+  miniPlatform3.material.diffuseTexture = returnCrystalTexture(color1, scene);
+  miniPlatform3.physicsImpostor = new PhysicsImpostor(miniPlatform3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  miniPlatform3.checkCollisions = true;
 
-  let theExitWall1 = MeshBuilder.CreateBox("box", {width: 2.5, height: 2, depth: 1}, scene);
-  theExitWall1.position.y = 7.5;
-  theExitWall1.position.x = x - 23.75;
-  theExitWall1.position.z = z - 15.5;
-  theExitWall1.material = new StandardMaterial('texture1', scene);
-  theExitWall1.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theExitWall1.physicsImpostor = new PhysicsImpostor(theExitWall1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theExitWall1.checkCollisions = true;
+  let miniPlatform4 = MeshBuilder.CreateBox("box", {width: 5, height: 1, depth: 5, faceUV: genCubeFaceUV([1, 0.2, 1, 0.2, 0.2, 1, 0.2, 1, 1, 1, 1, 1])}, scene);
+  miniPlatform4.position.y = 6;
+  miniPlatform4.position.x = x - 20;
+  miniPlatform4.position.z = z;
+  miniPlatform4.material = new StandardMaterial('texture1', scene);
+  miniPlatform4.material.diffuseTexture = returnCrystalTexture(color1, scene);
+  miniPlatform4.physicsImpostor = new PhysicsImpostor(miniPlatform4, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  miniPlatform4.checkCollisions = true;
 
-  let theExitWall2 = MeshBuilder.CreateBox("box", {width: 2.5, height: 2, depth: 1}, scene);
-  theExitWall2.position.y = 7.5;
-  theExitWall2.position.x = x - 16.25;
-  theExitWall2.position.z = z - 15.5;
-  theExitWall2.material = new StandardMaterial('texture1', scene);
-  theExitWall2.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theExitWall2.physicsImpostor = new PhysicsImpostor(theExitWall2, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theExitWall2.checkCollisions = true;
+  function generateBridge(x, z, width, depth, name, color, faceUV) {
+    let bridge = MeshBuilder.CreateBox("box", {width: width, height: 1, depth: depth, faceUV: faceUV}, scene);
+    bridge.position.y = -1000;
+    bridge.position.x = x;
+    bridge.position.z = z;
+    bridge.material = new StandardMaterial('texture1', scene);
+    bridge.material.diffuseTexture = returnCrystalTexture(color, scene);
+    bridge.material.alpha = 0.8;
+    bridge.physicsImpostor = new PhysicsImpostor(bridge, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+    bridge.checkCollisions = true;
+    bridge.name = name;
+  }
+  generateBridge((x - 20), (z + 8.75), 5, 12.5, "bridge1_Ob4", color3, genCubeFaceUV([1, 0.2, 1, 0.2, 0.2, 2.5, 0.2, 2.5, 2.5, 1, 2.5, 1]));
+  generateBridge((x - 20), (z - 8.75), 5, 12.5, "bridge2_Ob4", color3, genCubeFaceUV([1, 0.2, 1, 0.2, 0.2, 2.5, 0.2, 2.5, 2.5, 1, 2.5, 1]));
+  generateBridge((x + 20), (z + 8.75), 5, 12.5, "bridge3_Ob4", color3, genCubeFaceUV([1, 0.2, 1, 0.2, 0.2, 2.5, 0.2, 2.5, 2.5, 1, 2.5, 1]));
+  generateBridge((x + 20), (z - 8.75), 5, 12.5, "bridge4_Ob4", color3, genCubeFaceUV([1, 0.2, 1, 0.2, 0.2, 2.5, 0.2, 2.5, 2.5, 1, 2.5, 1]));
 
-  let theExitWall3 = MeshBuilder.CreateBox("box", {width: 1, height: 2, depth: 9.5}, scene);
-  theExitWall3.position.y = 7.5;
-  theExitWall3.position.x = x - 15.5;
-  theExitWall3.position.z = z - 20.75;
-  theExitWall3.material = new StandardMaterial('texture1', scene);
-  theExitWall3.material.diffuseTexture = returnCrystalTexture(color1, scene);
-  theExitWall3.physicsImpostor = new PhysicsImpostor(theExitWall3, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  theExitWall3.checkCollisions = true
+  generateBridge((x - 8.75), (z + 20), 12.5, 5, "bridge5_Ob4", color3, genCubeFaceUV([2.5, 0.2, 2.5, 0.2, 0.2, 1, 0.2, 1, 1, 2.5, 1, 2.5]));
+  generateBridge((x - 8.75), (z - 20), 12.5, 5, "bridge6_Ob4", color3, genCubeFaceUV([2.5, 0.2, 2.5, 0.2, 0.2, 1, 0.2, 1, 1, 2.5, 1, 2.5]));
+  generateBridge((x + 8.75), (z + 20), 12.5, 5, "bridge7_Ob4", color3, genCubeFaceUV([2.5, 0.2, 2.5, 0.2, 0.2, 1, 0.2, 1, 1, 2.5, 1, 2.5]));
+  generateBridge((x + 8.75), (z - 20), 12.5, 5, "bridge8_Ob4", color3, genCubeFaceUV([2.5, 0.2, 2.5, 0.2, 0.2, 1, 0.2, 1, 1, 2.5, 1, 2.5]));
 
-  let greenBridge = MeshBuilder.CreateBox("box", {width: 30, height: 1, depth: 5}, scene);
-  greenBridge.position.y = 6;
-  greenBridge.position.x = x;
-  greenBridge.position.z = z;
-  greenBridge.material = new StandardMaterial('texture1', scene);
-  greenBridge.material.diffuseTexture = returnCrystalTexture(color2, scene);
-  greenBridge.physicsImpostor = new PhysicsImpostor(greenBridge, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  greenBridge.checkCollisions = true;
-  greenBridge.name = "greenBridge";
+  generateBridge((x - 11.25), z, 12.5, 5, "bridge9_Ob4", color4, genCubeFaceUV([2.5, 0.2, 2.5, 0.2, 0.2, 1, 0.2, 1, 1, 2.5, 1, 2.5]));
+  generateBridge((x + 11.25), z, 12.5, 5, "bridge10_Ob4", color4, genCubeFaceUV([2.5, 0.2, 2.5, 0.2, 0.2, 1, 0.2, 1, 1, 2.5, 1, 2.5]));
+  generateBridge(x, (z + 11.25), 5, 12.5, "bridge11_Ob4", color4, genCubeFaceUV([1, 0.2, 1, 0.2, 0.2, 2.5, 0.2, 2.5, 2.5, 1, 2.5, 1]));
+  generateBridge(x, (z - 11.25), 5, 12.5, "bridge12_Ob4", color4, genCubeFaceUV([1, 0.2, 1, 0.2, 0.2, 2.5, 0.2, 2.5, 2.5, 1, 2.5, 1]));
 
-  let blueBridge = MeshBuilder.CreateBox("box", {width: 5, height: 1, depth: 30}, scene);
-  blueBridge.position.y = 6;
-  blueBridge.position.x = x + 20;
-  blueBridge.position.z = z;
-  blueBridge.material = new StandardMaterial('texture1', scene);
-  blueBridge.material.diffuseTexture = returnCrystalTexture(color3, scene);
-  blueBridge.physicsImpostor = new PhysicsImpostor(greenBridge, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-  blueBridge.checkCollisions = true;
-  blueBridge.name = "blueBridge";
+  function generateButton(x, z, barrier_name, button_name, holder_texture, button_texture) {
+    let buttonHolder = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1])}, scene);
+    buttonHolder.position.y = 7.5;
+    buttonHolder.position.x = x;
+    buttonHolder.position.z = z;
+    buttonHolder.material = new StandardMaterial('texture1', scene);
+    buttonHolder.material.diffuseTexture = returnMetalTexture(holder_texture, scene);
+    buttonHolder.physicsImpostor = new PhysicsImpostor(buttonHolder, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+    buttonHolder.checkCollisions = true;
 
-  let particleSystem = new ParticleSystem("particles", 3000, scene);
-  particleSystem.particleTexture = new Texture("./imgs/circle.png", scene);
-  particleSystem.emitter = teleportPad;
+    let buttonBarrier = MeshBuilder.CreateBox("box", {width: 2, height: 10, depth: 2}, scene);
+    buttonBarrier.position.y = 11;
+    buttonBarrier.position.x = x;
+    buttonBarrier.position.z = z;
+    buttonBarrier.material = new StandardMaterial('texture1', scene);
+    buttonBarrier.material.alpha = 0;
+    buttonBarrier.name = barrier_name;
 
-  particleSystem.addColorGradient(0, new Color4(0.01, 0.04, 0.45));
-  particleSystem.addColorGradient(1, new Color4(0.33, 0.04, 0.33));
+    let pushButton = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([0.5, 0.5, 2, 0.25, 0.5, 0.5])}, scene);
+    pushButton.position.y = 9.25;
+    pushButton.position.x = x;
+    pushButton.position.z = z;
+    pushButton.material = new StandardMaterial('texture1', scene);
+    pushButton.material.diffuseTexture = returnCrystalTexture(button_texture, scene);
+    pushButton.name = button_name;
+  }
+  generateButton(x, z, "buttonOb4Central", "pushButtonOb4Central", "metal_huntergreen", "gem_teal");
 
-  particleSystem.minSize = 0.1;
-  particleSystem.maxSize = 0.5;
+  generateButton((x + 17), (z + 24), "buttonOb4Top1", "pushButtonOb4Top1", "iron", "gem_darkred");
+  generateButton((x + 24), (z + 17), "buttonOb4Top2", "pushButtonOb4Top2", "iron", "gem_darkred");
+  generateButton((x + 17), (z - 24), "buttonOb4Top3", "pushButtonOb4Top3", "iron", "gem_darkred");
+  generateButton((x + 24), (z - 17), "buttonOb4Top4", "pushButtonOb4Top4", "iron", "gem_darkred");
+  generateButton((x - 17), (z + 24), "buttonOb4Top5", "pushButtonOb4Top5", "iron", "gem_darkred");
+  generateButton((x - 24), (z + 17), "buttonOb4Top6", "pushButtonOb4Top6", "iron", "gem_darkred");
+  generateButton((x - 17), (z - 24), "buttonOb4Top7", "pushButtonOb4Top7", "iron", "gem_darkred");
+  generateButton((x - 24), (z - 17), "buttonOb4Top8", "pushButtonOb4Top8", "iron", "gem_darkred");
 
-  particleSystem.minLifeTime = 0.3;
-  particleSystem.maxLifeTime = 1.5;
-
-  particleSystem.emitRate = 3000;
-
-  particleSystem.createSphereEmitter(2);
-
-  particleSystem.minEmitPower = 1;
-  particleSystem.maxEmitPower = 3;
-  particleSystem.updateSpeed = 0.005;
-
-  particleSystem.start();
+  generateButton(x, (z + 20), "buttonOb4TopMini1", "pushButtonOb4TopMini1", "iron", "gem_darkred");
+  generateButton(x, (z - 20), "buttonOb4TopMini2", "pushButtonOb4TopMini2", "iron", "gem_darkred");
+  generateButton((x + 20), z, "buttonOb4TopMini3", "pushButtonOb4TopMini3", "iron", "gem_darkred");
+  generateButton((x - 20), z, "buttonOb4TopMini4", "pushButtonOb4TopMini4", "iron", "gem_darkred");
 }
 
 export {moveBridges};

@@ -12,9 +12,9 @@ import {generateSpear} from "../objects/generateSpear.js";
 import {distinguishTwoArrays} from "../../utilities/distinguishTwoArrays.js";
 import {degrees} from "../../utilities/math.js";
 import {generateCarryingCrystal} from "../objects/generateCarryingCrystal.js";
-import {returnMetalTexture, returnCrystalTexture} from "../textures.js";
+import {returnMetalTexture, returnCrystalTexture, genCylinderFaceUV} from "../textures.js";
 
-function carryCrystals(x, z, scene, global_objects, item_id, camera) {
+function carryCrystals(x, z, scene, global_objects, item_id, camera, global_language) {
   let global_pedestalcrystal_data = {};
 
   let colors_base = [
@@ -33,7 +33,7 @@ function carryCrystals(x, z, scene, global_objects, item_id, camera) {
   let crystal_colors = two_arrays.new_final_array;
 
   for (let i = 0, length = degrees.length; i < length; i++) {
-    let pedestal = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 3, diameter: 5, height: 3, tessellation: 8}, scene);
+    let pedestal = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 3, diameterBottom: 5, height: 3, tessellation: 8, faceUV: genCylinderFaceUV([1.5, 1.5, 6, 1.5, 1.5, 1.5])}, scene);
     pedestal.position.y = 1.5;
     pedestal.position.x = (17.5 * Math.cos(degrees[i])) + x;
     pedestal.position.z = (17.5 * Math.sin(degrees[i])) + z;
@@ -52,10 +52,10 @@ function carryCrystals(x, z, scene, global_objects, item_id, camera) {
     full_pedestal.physicsImpostor = new PhysicsImpostor(barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
     full_pedestal.checkCollisions = true;
 
-    let colorfulShard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+    let colorfulShard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
     colorfulShard1.position.y = 8;
 
-    let colorfulShard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+    let colorfulShard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
     colorfulShard2.position.y = 4;
 
     let colorfulCrystal = Mesh.MergeMeshes([colorfulShard1, colorfulShard2], true, true, undefined, false, true);
@@ -78,7 +78,7 @@ function carryCrystals(x, z, scene, global_objects, item_id, camera) {
     });
   }
 
-  let bench = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 3, diameter: 5, height: 3, tessellation: 8}, scene);
+  let bench =  MeshBuilder.CreateCylinder("cylinder", {diameterTop: 3, diameter: 5, height: 3, tessellation: 8, faceUV: genCylinderFaceUV([1.5, 1.5, 6, 1.5, 1.5, 1.5])}, scene);
   bench.position.y = 1.5;
   bench.material = new StandardMaterial('texture1', scene);
   bench.material.diffuseTexture = returnMetalTexture("iron_rusty", scene);
@@ -95,10 +95,10 @@ function carryCrystals(x, z, scene, global_objects, item_id, camera) {
   workBench.physicsImpostor = new PhysicsImpostor(benchBarrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   workBench.checkCollisions = true;
 
-  let workBenchShard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let workBenchShard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   workBenchShard1.position.y = 8;
 
-  let workBenchShard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let workBenchShard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   workBenchShard2.position.y = 4;
 
   let workBenchCrystal = Mesh.MergeMeshes([workBenchShard1, workBenchShard2], true, true, undefined, false, true);

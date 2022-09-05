@@ -10,11 +10,11 @@ import {Texture} from "@babylonjs/core/Materials/Textures";
 import {ParticleSystem} from "@babylonjs/core/Particles";
 import {arrayShuffler} from "../../utilities/shuffler.js";
 import {returnMetalTexture, returnCrystalTexture, returnFloorTexture, returnWallTexture,
-  returnStoneTexture, returnWoodTexture} from "../textures.js";
+  returnStoneTexture, returnWoodTexture, genCylinderFaceUV, genCubeFaceUV} from "../textures.js";
 import {cloneAndShuffleSoundMachineColors} from "../sound_machines_colors.js";
 import {generatePole} from "../objects/generatePole.js";
 
-function crystalTemple(x, z, scene, global_objects, item_id, camera) {
+function crystalTemple(x, z, scene, global_objects, item_id, camera, global_language) {
   cloneAndShuffleSoundMachineColors();
 
   let sound_machines = [
@@ -35,7 +35,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
   ];
   crystal_colors = arrayShuffler(crystal_colors);
 
-  let teleporterVisualPad = MeshBuilder.CreateBox("box", {width: 5, height: 0.2, depth: 5}, scene);
+  let teleporterVisualPad = MeshBuilder.CreateBox("box", {width: 5, height: 0.2, depth: 5, wrap: true, faceUV: genCubeFaceUV([2.5, 0.1, 2.5, 0.1, 2.5, 0.1, 2.5, 0.1, 2.5, 2.5, 2.5, 2.5])}, scene);
   teleporterVisualPad.position.y = 0.1;
   teleporterVisualPad.position.x = x;
   teleporterVisualPad.position.z = z;
@@ -55,7 +55,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
   global_objects.push({id: teleportPad.uniqueId, type: "teleporter18", exit_pos: {x: 990, z: 999, y: 4}});
 
   let particleSystem = new ParticleSystem("particles", 3000, scene);
-  particleSystem.particleTexture = new Texture("./imgs/circle.png", scene);
+  particleSystem.particleTexture = new Texture("./imgs/circle_light.png", scene);
   particleSystem.emitter = teleportPad;
 
   particleSystem.addColorGradient(0, new Color4(0.01, 0.04, 0.45));
@@ -119,6 +119,8 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
           wall.position.z = (((z * units) - (((z * units) * 2))) + 30) + 1000;
           wall.material = new StandardMaterial('texture1', scene);
           wall.material.diffuseTexture = returnWallTexture("stone_blocks_temple", scene);
+          wall.material.diffuseTexture.uScale = 2;
+          wall.material.diffuseTexture.vScale = 2;
           wall.physicsImpostor = new PhysicsImpostor(wall, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
           wall.checkCollisions = true;
           walls.push(wall);
@@ -129,7 +131,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
 
   let walls_final = Mesh.MergeMeshes(walls, true, true, undefined, false, true);
 
-  let exitTeleporterVisualPad = MeshBuilder.CreateBox("box", {width: 5, height: 0.2, depth: 5}, scene);
+  let exitTeleporterVisualPad = MeshBuilder.CreateBox("box", {width: 5, height: 0.2, depth: 5, wrap: true, faceUV: genCubeFaceUV([2.5, 0.1, 2.5, 0.1, 2.5, 0.1, 2.5, 0.1, 2.5, 2.5, 2.5, 2.5])}, scene);
   exitTeleporterVisualPad.position.y = 0.1;
   exitTeleporterVisualPad.position.x = 980;
   exitTeleporterVisualPad.position.z = 1000;
@@ -147,7 +149,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
   global_objects.push({id: exitTeleportPad.uniqueId, type: "teleporter18", exit_pos: {x: x, z: (z - 12), y: 4}});
 
   let particleSystem2 = new ParticleSystem("particles", 3000, scene);
-  particleSystem2.particleTexture = new Texture("./imgs/circle.png", scene);
+  particleSystem2.particleTexture = new Texture("./imgs/circle_light.png", scene);
   particleSystem2.emitter = exitTeleportPad;
 
   particleSystem2.addColorGradient(0, new Color4(0.01, 0.04, 0.45));
@@ -169,7 +171,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
 
   particleSystem2.start();
 
-  let buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
+  let buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1])}, scene);
   buttonHolder1.position.y = 1.5;
   buttonHolder1.position.x = 1020;
   buttonHolder1.position.z = 1000;
@@ -186,7 +188,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
   buttonBarrier1.material.alpha = 0;
   buttonBarrier1.name = "button1p18a";
 
-  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
+  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([0.5, 0.5, 2, 0.25, 0.5, 0.5])}, scene);
   pushButton1.position.y = 3.25;
   pushButton1.position.x = 1020;
   pushButton1.position.z = 1000;
@@ -231,13 +233,13 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
   pillarCentral.material.diffuseTexture.uScale = 5;
   pillarCentral.material.diffuseTexture.vScale = 5;
 
-  let pillarTop = MeshBuilder.CreateCylinder("cylinder", {diameter: 6, height: 1, tessellation: 20}, scene);
+  let pillarTop = MeshBuilder.CreateCylinder("cylinder", {diameter: 6, height: 1, tessellation: 20, faceUV: genCylinderFaceUV([2, 2, 8, 0.4, 2, 2])}, scene);
   pillarTop.position.y = 9.5;
   pillarTop.material = new StandardMaterial('texture1', scene);
   pillarTop.material.diffuseColor = new Color3(0.77, 0.72, 0.72);
   pillarTop.material.diffuseTexture = returnStoneTexture("stone_tealdark", scene);
 
-  let pillarBottom = MeshBuilder.CreateCylinder("cylinder", {diameter: 6, height: 1, tessellation: 20}, scene);
+  let pillarBottom = MeshBuilder.CreateCylinder("cylinder", {diameter: 6, height: 1, tessellation: 20, faceUV: genCylinderFaceUV([2, 2, 8, 0.4, 2, 2])}, scene);
   pillarBottom.position.y = 0.5;
   pillarBottom.material = new StandardMaterial('texture1', scene);
   pillarBottom.material.diffuseColor = new Color3(0.77, 0.72, 0.72);
@@ -277,7 +279,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
   createPillar(1015, 985);
 
   function createSoundMachine(x, z, rotate, mach_name) {
-    let post = MeshBuilder.CreateBox("box", {width: 0.5, height: 5, depth: 0.5}, scene);
+    let post = MeshBuilder.CreateBox("box", {width: 0.5, height: 5, depth: 0.5, wrap: true, faceUV: genCubeFaceUV([0.25, 2.5, 0.25, 2.5, 0.25, 2.5, 0.25, 2.5, 0.25, 0.25, 0.25, 0.25])}, scene);
     post.position.y = 2.5;
     post.material = new StandardMaterial('texture1', scene);
     post.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
@@ -310,7 +312,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
     top.material = new StandardMaterial('texture1', scene);
     top.material.diffuseColor = new Color3(0, 0, 0);
 
-    let base = MeshBuilder.CreateCylinder("cylinder", {diameter: 2, height: 0.5, tessellation: 8}, scene);
+    let base = MeshBuilder.CreateCylinder("cylinder", {diameter: 2, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([1, 1, 4, 0.4, 1, 1])}, scene);
     base.position.y = 0.25;
     base.material = new StandardMaterial('texture1', scene);
     base.material.diffuseColor = new Color3(0.61, 0.61, 0.61);
@@ -359,7 +361,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
   generatePole(1003, 0, 1000, "bulb5Ob18", new Color3(0.55, 0.48, 0.48), scene);
   generatePole(1005, 0, 1000, "bulb6Ob18", new Color3(0.55, 0.48, 0.48), scene);
 
-  let polesBase = MeshBuilder.CreateBox("box", {width: 12, height: 0.5, depth: 0.5}, scene);
+  let polesBase = MeshBuilder.CreateBox("box", {width: 12, height: 0.5, depth: 0.5, wrap: true, faceUV: genCubeFaceUV([6, 0.25, 6, 0.25, 0.25, 0.25, 0.25, 0.25, 6, 0.25, 6, 0.25])}, scene);
   polesBase.position.y = 0.25;
   polesBase.position.x = 1000;
   polesBase.position.z = 1000;
@@ -376,7 +378,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
   polesBarrier.physicsImpostor = new PhysicsImpostor(polesBarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   polesBarrier.checkCollisions = true;
 
-  let wire1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 30, tessellation: 8}, scene);
+  let wire1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 30, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 30, 0.1, 0.1])}, scene);
   wire1.position.y = 0.05;
   wire1.position.x = 1000;
   wire1.position.z = 990;
@@ -384,7 +386,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
   wire1.material = new StandardMaterial('texture1', scene);
   wire1.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
-  let wire2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 30, tessellation: 8}, scene);
+  let wire2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 30, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 30, 0.1, 0.1])}, scene);
   wire2.position.y = 0.05;
   wire2.position.x = 1000;
   wire2.position.z = 1010;
@@ -392,7 +394,7 @@ function crystalTemple(x, z, scene, global_objects, item_id, camera) {
   wire2.material = new StandardMaterial('texture1', scene);
   wire2.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
-  let wire3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 20, tessellation: 8}, scene);
+  let wire3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 20, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 30, 0.1, 0.1])}, scene);
   wire3.position.y = 0.05;
   wire3.position.x = 1000;
   wire3.position.z = 1000;

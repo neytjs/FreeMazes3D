@@ -7,15 +7,16 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {puzzleColors, buttonColors, cloneAndShufflePuzzleColors, buttonColorOrganizer} from "../bulb_button_colors.js";
-import {returnMetalTexture, returnCrystalTexture, returnStoneTexture} from "../textures.js";
+import {returnMetalTexture, returnCrystalTexture, returnStoneTexture,
+  genCubeFaceUV, genCylinderFaceUV} from "../textures.js";
 import {generatePole} from "../objects/generatePole.js";
 
-function timedButtons(x, z, scene, global_objects, item_id, camera) {
+function timedButtons(x, z, scene, global_objects, item_id, camera, global_language) {
   cloneAndShufflePuzzleColors();
   buttonColorOrganizer(puzzleColors);
 
   function generateButton(x, z, barrier_name, button_name, button_color, holder_color, color_name, button_texture) {
-    let buttonHolder = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
+    let buttonHolder = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1])}, scene);
     buttonHolder.position.y = 1.5;
     buttonHolder.position.x = x;
     buttonHolder.position.z = z;
@@ -32,7 +33,7 @@ function timedButtons(x, z, scene, global_objects, item_id, camera) {
     buttonBarrier.material.alpha = 0;
     buttonBarrier.name = barrier_name;
 
-    let pushButton = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
+    let pushButton = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([0.5, 0.5, 2, 0.25, 0.5, 0.5])}, scene);
     pushButton.position.y = 3.25;
     pushButton.position.x = x;
     pushButton.position.z = z;
@@ -50,7 +51,7 @@ function timedButtons(x, z, scene, global_objects, item_id, camera) {
   generateButton((x - 20), (z - 20), "button4p16", "pushButton4p16", buttonColors[2].button_code, buttonColors[2].holder_code, buttonColors[2].color_name, buttonColors[2].button_texture);
   generateButton((x + 20), (z + 20), "button5p16", "pushButton5p16", buttonColors[3].button_code, buttonColors[3].holder_code, buttonColors[3].color_name, buttonColors[3].button_texture);
 
-  let wire1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 40, tessellation: 8}, scene);
+  let wire1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 40, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 40, 0.1, 0.1])}, scene);
   wire1.position.y = 0.05;
   wire1.position.x = x + 20;
   wire1.position.z = z;
@@ -59,7 +60,7 @@ function timedButtons(x, z, scene, global_objects, item_id, camera) {
   wire1.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
   global_objects.push({id: wire1.uniqueId, obstacle16_id: item_id, type: "structure", name: ""});
 
-  let wire2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 40, tessellation: 8}, scene);
+  let wire2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 40, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 40, 0.1, 0.1])}, scene);
   wire2.position.y = 0.05;
   wire2.position.x = x - 20;
   wire2.position.z = z;
@@ -67,7 +68,7 @@ function timedButtons(x, z, scene, global_objects, item_id, camera) {
   wire2.material = new StandardMaterial('texture1', scene);
   wire2.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
-  let wire3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 40, tessellation: 8}, scene);
+  let wire3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 40, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 40, 0.1, 0.1])}, scene);
   wire3.position.y = 0.05;
   wire3.position.x = x;
   wire3.position.z = z;
@@ -75,51 +76,49 @@ function timedButtons(x, z, scene, global_objects, item_id, camera) {
   wire3.material = new StandardMaterial('texture1', scene);
   wire3.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
-  let connectBox1 = MeshBuilder.CreateBox("box", {width: 0.5, height: 0.3, depth: 0.5}, scene);
+  let connectBox1 = MeshBuilder.CreateBox("box", {width: 0.5, height: 0.3, depth: 0.5, wrap: true, faceUV: genCubeFaceUV([0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.5, 0.5, 0.5])}, scene);
   connectBox1.position.y = 0.15;
   connectBox1.position.x = x + 20;
   connectBox1.position.z = z;
   connectBox1.material = new StandardMaterial('texture1', scene);
   connectBox1.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-  let connectBox2 = MeshBuilder.CreateBox("box", {width: 0.5, height: 0.3, depth: 0.5}, scene);
+  let connectBox2 = MeshBuilder.CreateBox("box", {width: 0.5, height: 0.3, depth: 0.5, wrap: true, faceUV: genCubeFaceUV([0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.5, 0.5, 0.5])}, scene);
   connectBox2.position.y = 0.15;
   connectBox2.position.x = x - 20;
   connectBox2.position.z = z;
   connectBox2.material = new StandardMaterial('texture1', scene);
   connectBox2.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-  let controlBase = MeshBuilder.CreateBox("box", {width: 10, height: 0.2, depth: 10, wrap: true}, scene);
+  let controlBase = MeshBuilder.CreateBox("box", {width: 10, height: 0.2, depth: 10, wrap: true, faceUV: genCubeFaceUV([5, 0.1, 5, 0.1, 5, 0.1, 5, 0.1, 5, 5, 5, 5])}, scene);
   controlBase.position.y = 0.1;
   controlBase.position.x = x;
   controlBase.position.z = z;
   controlBase.material = new StandardMaterial('texture1', scene);
   controlBase.material.diffuseTexture = returnMetalTexture("iron_rusty", scene);
-  controlBase.material.diffuseTexture.uScale = 2;
-  controlBase.material.diffuseTexture.vScale = 2;
 
-  let controlBase1 = MeshBuilder.CreateBox("box", {width: 4, height: 0.2, depth: 4}, scene);
+  let controlBase1 = MeshBuilder.CreateBox("box", {width: 4, height: 0.2, depth: 4, wrap: true, faceUV: genCubeFaceUV([2, 0.1, 2, 0.1, 2, 0.1, 2, 0.1, 2, 2, 2, 2])}, scene);
   controlBase1.position.y = 0.1;
   controlBase1.position.x = x - 20;
   controlBase1.position.z = z + 20;
   controlBase1.material = new StandardMaterial('texture1', scene);
   controlBase1.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-  let controlBase2 = MeshBuilder.CreateBox("box", {width: 4, height: 0.2, depth: 4}, scene);
+  let controlBase2 = MeshBuilder.CreateBox("box", {width: 4, height: 0.2, depth: 4, wrap: true, faceUV: genCubeFaceUV([2, 0.1, 2, 0.1, 2, 0.1, 2, 0.1, 2, 2, 2, 2])}, scene);
   controlBase2.position.y = 0.1;
   controlBase2.position.x = x + 20;
   controlBase2.position.z = z - 20;
   controlBase2.material = new StandardMaterial('texture1', scene);
   controlBase2.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-  let controlBase3 = MeshBuilder.CreateBox("box", {width: 4, height: 0.2, depth: 4}, scene);
+  let controlBase3 = MeshBuilder.CreateBox("box", {width: 4, height: 0.2, depth: 4, wrap: true, faceUV: genCubeFaceUV([2, 0.1, 2, 0.1, 2, 0.1, 2, 0.1, 2, 2, 2, 2])}, scene);
   controlBase3.position.y = 0.1;
   controlBase3.position.x = x - 20;
   controlBase3.position.z = z - 20;
   controlBase3.material = new StandardMaterial('texture1', scene);
   controlBase3.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-  let controlBase4 = MeshBuilder.CreateBox("box", {width: 4, height: 0.2, depth: 4}, scene);
+  let controlBase4 = MeshBuilder.CreateBox("box", {width: 4, height: 0.2, depth: 4, wrap: true, faceUV: genCubeFaceUV([2, 0.1, 2, 0.1, 2, 0.1, 2, 0.1, 2, 2, 2, 2])}, scene);
   controlBase4.position.y = 0.1;
   controlBase4.position.x = x + 20;
   controlBase4.position.z = z + 20;
@@ -135,14 +134,14 @@ function timedButtons(x, z, scene, global_objects, item_id, camera) {
   generatePole((x - 0.75), 0, (z - 4.5), "", puzzleColors[2].color_code, scene);
   generatePole((x - 2.25), 0, (z - 4.5), "", puzzleColors[3].color_code, scene);
 
-  let polesBase1 = MeshBuilder.CreateBox("box", {width: 6, height: 0.5, depth: 0.5}, scene);
+  let polesBase1 = MeshBuilder.CreateBox("box", {width: 6, height: 0.5, depth: 0.5, wrap: true, faceUV: genCubeFaceUV([3, 0.25, 3, 0.25, 0.25, 0.25, 0.25, 0.25, 3, 0.25, 3, 0.25])}, scene);
   polesBase1.position.y = 0.25;
   polesBase1.position.x = x;
   polesBase1.position.z = z + 4.5;
   polesBase1.material = new StandardMaterial('texture1', scene);
   polesBase1.material.diffuseTexture = returnStoneTexture("stone_pink", scene);
 
-  let polesBase2 = MeshBuilder.CreateBox("box", {width: 6, height: 0.5, depth: 0.5}, scene);
+  let polesBase2 = MeshBuilder.CreateBox("box", {width: 6, height: 0.5, depth: 0.5, wrap: true, faceUV: genCubeFaceUV([3, 0.25, 3, 0.25, 0.25, 0.25, 0.25, 0.25, 3, 0.25, 3, 0.25])}, scene);
   polesBase2.position.y = 0.25;
   polesBase2.position.x = x;
   polesBase2.position.z = z - 4.5;

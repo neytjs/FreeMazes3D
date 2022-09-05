@@ -10,9 +10,10 @@ import {Texture} from "@babylonjs/core/Materials/Textures";
 import {ParticleSystem} from "@babylonjs/core/Particles";
 import {arrayShuffler} from "../../utilities/shuffler.js";
 import {generateCarryingCrystal} from "../objects/generateCarryingCrystal.js";
-import {returnMetalTexture, returnCrystalTexture, returnLiquidTexture} from "../textures.js";
+import {returnMetalTexture, returnCrystalTexture, returnLiquidTexture,
+  genCylinderFaceUV} from "../textures.js";
 
-function crystalShards(x, z, scene, global_objects, item_id, camera) {
+function crystalShards(x, z, scene, global_objects, item_id, camera, global_language) {
   generateCarryingCrystal(scene, "carryingCrystalOb19");
 
   let crystal_colors = [
@@ -110,7 +111,7 @@ function crystalShards(x, z, scene, global_objects, item_id, camera) {
   global_objects.push({id: teleportPad1.uniqueId, type: "teleporter19", exit_pos: {x: 20, z: -1, y: -246}});
 
   let particleSystem = new ParticleSystem("particles", 3000, scene);
-  particleSystem.particleTexture = new Texture("./imgs/circle.png", scene);
+  particleSystem.particleTexture = new Texture("./imgs/circle_light.png", scene);
   particleSystem.emitter = teleportPad1;
 
   particleSystem.addColorGradient(0, new Color4(0.01, 0.04, 0.45));
@@ -380,7 +381,7 @@ function crystalShards(x, z, scene, global_objects, item_id, camera) {
   global_objects.push({id: exitTeleporter1.uniqueId, type: "teleporter19", exit_pos: {x: x, z: (z - 12), y: 4}});
 
   let particleSystem2 = new ParticleSystem("particles", 3000, scene);
-  particleSystem2.particleTexture = new Texture("./imgs/circle.png", scene);
+  particleSystem2.particleTexture = new Texture("./imgs/circle_light.png", scene);
   particleSystem2.emitter = exitTeleporter1;
 
   particleSystem2.addColorGradient(0, new Color4(0.01, 0.04, 0.45));
@@ -402,12 +403,12 @@ function crystalShards(x, z, scene, global_objects, item_id, camera) {
 
   particleSystem2.start();
 
-  let power1Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let power1Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   power1Shard1.position.y = 6;
   power1Shard1.material = new StandardMaterial('texture1', scene);
   power1Shard1.material.diffuseTexture = returnCrystalTexture(crystal_colors[0].color_texture, scene);
 
-  let power1Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let power1Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   power1Shard2.position.y = 2;
   power1Shard2.material = new StandardMaterial('texture1', scene);
   power1Shard2.material.diffuseTexture = returnCrystalTexture(crystal_colors[0].color_texture, scene);
@@ -423,12 +424,12 @@ function crystalShards(x, z, scene, global_objects, item_id, camera) {
   powerCrystal1.name = crystal_colors[0].color_name+"_CrystalOb19";
   global_objects.push({type: "powerCrystalOb19", color_name: crystal_colors[0].color_name, color_code: crystal_colors[0].color_code});
 
-  let power2Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let power2Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   power2Shard1.position.y = 6;
   power2Shard1.material = new StandardMaterial('texture1', scene);
   power2Shard1.material.diffuseTexture = returnCrystalTexture(crystal_colors[1].color_texture, scene);
 
-  let power2Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let power2Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   power2Shard2.position.y = 2;
   power2Shard2.material = new StandardMaterial('texture1', scene);
   power2Shard2.material.diffuseTexture = returnCrystalTexture(crystal_colors[1].color_texture, scene);
@@ -444,12 +445,12 @@ function crystalShards(x, z, scene, global_objects, item_id, camera) {
   powerCrystal2.name = crystal_colors[1].color_name+"_CrystalOb19";
   global_objects.push({type: "powerCrystalOb19", color_name: crystal_colors[1].color_name, color_code: crystal_colors[1].color_code});
 
-  let power3Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let power3Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   power3Shard1.position.y = 6;
   power3Shard1.material = new StandardMaterial('texture1', scene);
   power3Shard1.material.diffuseTexture = returnCrystalTexture(crystal_colors[2].color_texture, scene);
 
-  let power3Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let power3Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   power3Shard2.position.y = 2;
   power3Shard2.material = new StandardMaterial('texture1', scene);
   power3Shard2.material.diffuseTexture = returnCrystalTexture(crystal_colors[2].color_texture, scene);
@@ -465,12 +466,12 @@ function crystalShards(x, z, scene, global_objects, item_id, camera) {
   powerCrystal3.name = crystal_colors[2].color_name+"_CrystalOb19";
   global_objects.push({type: "powerCrystalOb19", color_name: crystal_colors[2].color_name, color_code: crystal_colors[2].color_code});
 
-  let power4Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let power4Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   power4Shard1.position.y = 6;
   power4Shard1.material = new StandardMaterial('texture1', scene);
   power4Shard1.material.diffuseTexture = returnCrystalTexture(crystal_colors[3].color_texture, scene);
 
-  let power4Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let power4Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   power4Shard2.position.y = 2;
   power4Shard2.material = new StandardMaterial('texture1', scene);
   power4Shard2.material.diffuseTexture = returnCrystalTexture(crystal_colors[3].color_texture, scene);
@@ -542,7 +543,7 @@ function crystalShards(x, z, scene, global_objects, item_id, camera) {
   });
 
   function generatePowerDevice(x, y, z, rotate, name) {
-    let powerDeviceHolder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 0.5, tessellation: 8}, scene);
+    let powerDeviceHolder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([1, 1, 4, 0.2, 1, 1])}, scene);
     powerDeviceHolder.position.y = 0.25;
     powerDeviceHolder.material = new StandardMaterial('texture1', scene);
     powerDeviceHolder.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
@@ -563,12 +564,11 @@ function crystalShards(x, z, scene, global_objects, item_id, camera) {
 
     let color = name.slice(0, name.lastIndexOf('_'));
     if (color === "red" || color === "orange" || color === "yellow" || color === "green") {
-      let beam = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 98, tessellation: 8}, scene);
+      let beam = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 97.95, tessellation: 8}, scene);
       beam.position.y = -250.5;
       beam.position.x = x;
       beam.position.z = z;
       beam.material = new StandardMaterial('texture1', scene);
-      beam.material.diffuseTexture = returnLiquidTexture("acid_"+color, scene);
       beam.material.alpha = 0;
       beam.material.alphaMode = 1;
       beam.name = color+"Beam";
@@ -576,10 +576,10 @@ function crystalShards(x, z, scene, global_objects, item_id, camera) {
   }
 
   function generatePowerCrystal(x, y, z, rotate, name, static_texture) {
-    let shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+    let shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
     shard1.position.y = 6;
 
-    let shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+    let shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
     shard2.position.y = 2;
     shard2.material = new StandardMaterial('texture1', scene);
 

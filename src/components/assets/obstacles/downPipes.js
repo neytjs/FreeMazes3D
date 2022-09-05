@@ -7,9 +7,9 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {arrayShuffler} from "../../utilities/shuffler.js";
-import {returnMetalTexture, returnCrystalTexture} from "../textures.js";
+import {returnMetalTexture, returnCrystalTexture, genCylinderFaceUV} from "../textures.js";
 
-function downPipes(x, z, scene, global_objects, item_id, camera) {
+function downPipes(x, z, scene, global_objects, item_id, camera, global_language) {
   let pipeTextures = [
     "gem_purple",
     "gem_blue",
@@ -21,15 +21,15 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipeTextures = arrayShuffler(pipeTextures);
 
   let plateColors = [
-    {color_name: "pink", inv_name: "Pink", texture: "gem_hotpink", color_code: new Color3(0.99, 0.1, 0.54)},
-    {color_name: "blue", inv_name: "Blue", texture: "gem_skyblue", color_code: new Color3(0, 0.79, 0.99)},
-    {color_name: "red", inv_name: "Red", texture: "gem_darkred", color_code: new Color3(0.59, 0.13, 0.13)},
-    {color_name: "purple", inv_name: "Purple", texture: "gem_verydarkpurple", color_code: new Color3(0.25, 0.05, 0.41)}
+    {color_name: "pink", inv_name: global_language.text.items.puzzles.balls.pink_ball, texture: "gem_hotpink", color_code: new Color3(0.99, 0.1, 0.54)},
+    {color_name: "blue", inv_name: global_language.text.items.puzzles.balls.blue_ball, texture: "gem_skyblue", color_code: new Color3(0, 0.79, 0.99)},
+    {color_name: "red", inv_name: global_language.text.items.puzzles.balls.red_ball, texture: "gem_darkred", color_code: new Color3(0.59, 0.13, 0.13)},
+    {color_name: "purple", inv_name: global_language.text.items.puzzles.balls.purple_ball, texture: "gem_verydarkpurple", color_code: new Color3(0.25, 0.05, 0.41)}
   ];
   plateColors = arrayShuffler(plateColors);
   let ballColors = arrayShuffler(plateColors);
 
-  let pipe1base = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe1base = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe1base.position.y = 1.5;
   pipe1base.material = new StandardMaterial('texture1', scene);
   pipe1base.material.diffuseTexture = returnCrystalTexture(pipeTextures[0], scene);
@@ -38,8 +38,10 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe1joint.position.y = 3;
   pipe1joint.material = new StandardMaterial('texture1', scene);
   pipe1joint.material.diffuseTexture = returnCrystalTexture(pipeTextures[0], scene);
+  pipe1joint.material.diffuseTexture.uScale = 2.5;
+  pipe1joint.material.diffuseTexture.vScale = 2.5;
 
-  let pipe1arm = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe1arm = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe1arm.position.y = 3;
   pipe1arm.position.x = 1.5;
   pipe1arm.rotation.z = 1.57;
@@ -52,6 +54,8 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe1rim.rotation.z = 1.57;
   pipe1rim.material = new StandardMaterial('texture1', scene);
   pipe1rim.material.diffuseTexture = returnCrystalTexture(pipeTextures[0], scene);
+  pipe1rim.material.diffuseTexture.uScale = 4;
+  pipe1rim.material.diffuseTexture.vScale = 1;
 
   let pipe1hole = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.01, tessellation: 20}, scene);
   pipe1hole.position.y = 3;
@@ -73,7 +77,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe1entrance.checkCollisions = true;
   pipe1entrance.name = "pipe1entrance";
 
-  let pipe2base_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe2base_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe2base_exit.position.y = 1.5;
   pipe2base_exit.material = new StandardMaterial('texture1', scene);
   pipe2base_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[1], scene);
@@ -82,8 +86,10 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe2joint_exit.position.y = 3;
   pipe2joint_exit.material = new StandardMaterial('texture1', scene);
   pipe2joint_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[1], scene);
+  pipe2joint_exit.material.diffuseTexture.uScale = 2.5;
+  pipe2joint_exit.material.diffuseTexture.vScale = 2.5;
 
-  let pipe2arm_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe2arm_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe2arm_exit.position.y = 3;
   pipe2arm_exit.position.x = 1.5;
   pipe2arm_exit.rotation.z = 1.57;
@@ -96,6 +102,8 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe2rim_exit.rotation.z = 1.57;
   pipe2rim_exit.material = new StandardMaterial('texture1', scene);
   pipe2rim_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[1], scene);
+  pipe2rim_exit.material.diffuseTexture.uScale = 4;
+  pipe2rim_exit.material.diffuseTexture.vScale = 1;
 
   let pipe2hole_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.01, tessellation: 20}, scene);
   pipe2hole_exit.position.y = 3;
@@ -120,12 +128,12 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe2exit.checkCollisions = true;
   pipe2exit.name = "pipe2exit";
 
-  let plate2holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 20}, scene);
+  let plate2holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 12, faceUV: genCylinderFaceUV([1, 1, 3, 0.1, 1, 1])}, scene);
   plate2holder.position.y = 2;
   plate2holder.material = new StandardMaterial('texture1', scene);
   plate2holder.material.diffuseTexture = returnCrystalTexture(plateColors[1].texture, scene);
 
-  let plate2support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 20}, scene);
+  let plate2support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1, 0.25, 0.25])}, scene);
   plate2support.position.y = 1;
   plate2support.material = new StandardMaterial('texture1', scene);
   plate2support.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
@@ -142,7 +150,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   hiddenBall2.material = new StandardMaterial('texture1', scene);
   hiddenBall2.name = "hiddenBall2";
 
-  let pipe2base = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe2base = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe2base.position.y = 1.5;
   pipe2base.material = new StandardMaterial('texture1', scene);
   pipe2base.material.diffuseTexture = returnCrystalTexture(pipeTextures[1], scene);
@@ -151,8 +159,10 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe2joint.position.y = 3;
   pipe2joint.material = new StandardMaterial('texture1', scene);
   pipe2joint.material.diffuseTexture = returnCrystalTexture(pipeTextures[1], scene);
+  pipe2joint.material.diffuseTexture.uScale = 2.5;
+  pipe2joint.material.diffuseTexture.vScale = 2.5;
 
-  let pipe2arm = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe2arm = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe2arm.position.y = 3;
   pipe2arm.position.x = 1.5;
   pipe2arm.rotation.z = 1.57;
@@ -165,6 +175,8 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe2rim.rotation.z = 1.57;
   pipe2rim.material = new StandardMaterial('texture1', scene);
   pipe2rim.material.diffuseTexture = returnCrystalTexture(pipeTextures[1], scene);
+  pipe2rim.material.diffuseTexture.uScale = 4;
+  pipe2rim.material.diffuseTexture.vScale = 1;
 
   let pipe2hole = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.01, tessellation: 20}, scene);
   pipe2hole.position.y = 3;
@@ -186,7 +198,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe2entrance.checkCollisions = true;
   pipe2entrance.name = "pipe2entrance";
 
-  let pipe3base_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe3base_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe3base_exit.position.y = 1.5;
   pipe3base_exit.material = new StandardMaterial('texture1', scene);
   pipe3base_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[2], scene);
@@ -195,8 +207,10 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe3joint_exit.position.y = 3;
   pipe3joint_exit.material = new StandardMaterial('texture1', scene);
   pipe3joint_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[2], scene);
+  pipe3joint_exit.material.diffuseTexture.uScale = 2.5;
+  pipe3joint_exit.material.diffuseTexture.vScale = 2.5;
 
-  let pipe3arm_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe3arm_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe3arm_exit.position.y = 3;
   pipe3arm_exit.position.x = 1.5;
   pipe3arm_exit.rotation.z = 1.57;
@@ -209,6 +223,8 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe3rim_exit.rotation.z = 1.57;
   pipe3rim_exit.material = new StandardMaterial('texture1', scene);
   pipe3rim_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[2], scene);
+  pipe3rim_exit.material.diffuseTexture.uScale = 4;
+  pipe3rim_exit.material.diffuseTexture.vScale = 1;
 
   let pipe3hole_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.01, tessellation: 20}, scene);
   pipe3hole_exit.position.y = 3;
@@ -233,12 +249,12 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe3exit.checkCollisions = true;
   pipe3exit.name = "pipe3exit";
 
-  let plate3holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 20}, scene);
+  let plate3holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 12, faceUV: genCylinderFaceUV([1, 1, 3, 0.1, 1, 1])}, scene);
   plate3holder.position.y = 2;
   plate3holder.material = new StandardMaterial('texture1', scene);
   plate3holder.material.diffuseTexture = returnCrystalTexture(plateColors[2].texture, scene);
 
-  let plate3support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 20}, scene);
+  let plate3support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1, 0.25, 0.25])}, scene);
   plate3support.position.y = 1;
   plate3support.material = new StandardMaterial('texture1', scene);
   plate3support.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
@@ -255,7 +271,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   hiddenBall3.material = new StandardMaterial('texture1', scene);
   hiddenBall3.name = "hiddenBall3";
 
-  let pipe3base = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe3base = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe3base.position.y = 1.5;
   pipe3base.material = new StandardMaterial('texture1', scene);
   pipe3base.material.diffuseTexture = returnCrystalTexture(pipeTextures[2], scene);
@@ -264,8 +280,10 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe3joint.position.y = 3;
   pipe3joint.material = new StandardMaterial('texture1', scene);
   pipe3joint.material.diffuseTexture = returnCrystalTexture(pipeTextures[2], scene);
+  pipe3joint.material.diffuseTexture.uScale = 2.5;
+  pipe3joint.material.diffuseTexture.vScale = 2.5;
 
-  let pipe3arm = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe3arm = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe3arm.position.y = 3;
   pipe3arm.position.x = 1.5;
   pipe3arm.rotation.z = 1.57;
@@ -278,6 +296,8 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe3rim.rotation.z = 1.57;
   pipe3rim.material = new StandardMaterial('texture1', scene);
   pipe3rim.material.diffuseTexture = returnCrystalTexture(pipeTextures[2], scene);
+  pipe3rim.material.diffuseTexture.uScale = 4;
+  pipe3rim.material.diffuseTexture.vScale = 1;
 
   let pipe3hole = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.01, tessellation: 20}, scene);
   pipe3hole.position.y = 3;
@@ -299,7 +319,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe3entrance.checkCollisions = true;
   pipe3entrance.name = "pipe3entrance";
 
-  let pipe4base_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe4base_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe4base_exit.position.y = 1.5;
   pipe4base_exit.material = new StandardMaterial('texture1', scene);
   pipe4base_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[3], scene);
@@ -308,8 +328,10 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe4joint_exit.position.y = 3;
   pipe4joint_exit.material = new StandardMaterial('texture1', scene);
   pipe4joint_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[3], scene);
+  pipe4joint_exit.material.diffuseTexture.uScale = 2.5;
+  pipe4joint_exit.material.diffuseTexture.vScale = 2.5;
 
-  let pipe4arm_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe4arm_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe4arm_exit.position.y = 3;
   pipe4arm_exit.position.x = 1.5;
   pipe4arm_exit.rotation.z = 1.57;
@@ -322,6 +344,8 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe4rim_exit.rotation.z = 1.57;
   pipe4rim_exit.material = new StandardMaterial('texture1', scene);
   pipe4rim_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[3], scene);
+  pipe4rim_exit.material.diffuseTexture.uScale = 4;
+  pipe4rim_exit.material.diffuseTexture.vScale = 1;
 
   let pipe4hole_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.01, tessellation: 20}, scene);
   pipe4hole_exit.position.y = 3;
@@ -346,12 +370,12 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe4exit.checkCollisions = true;
   pipe4exit.name = "pipe4exit";
 
-  let plate4holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 20}, scene);
+  let plate4holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 12, faceUV: genCylinderFaceUV([1, 1, 3, 0.1, 1, 1])}, scene);
   plate4holder.position.y = 2;
   plate4holder.material = new StandardMaterial('texture1', scene);
   plate4holder.material.diffuseTexture = returnCrystalTexture(plateColors[3].texture, scene);
 
-  let plate4support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 20}, scene);
+  let plate4support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1, 0.25, 0.25])}, scene);
   plate4support.position.y = 1;
   plate4support.material = new StandardMaterial('texture1', scene);
   plate4support.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
@@ -368,7 +392,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   hiddenBall4.material = new StandardMaterial('texture1', scene);
   hiddenBall4.name = "hiddenBall4";
 
-  let pipe4base = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe4base = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe4base.position.y = 1.5;
   pipe4base.material = new StandardMaterial('texture1', scene);
   pipe4base.material.diffuseTexture = returnCrystalTexture(pipeTextures[3], scene);
@@ -377,8 +401,10 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe4joint.position.y = 3;
   pipe4joint.material = new StandardMaterial('texture1', scene);
   pipe4joint.material.diffuseTexture = returnCrystalTexture(pipeTextures[3], scene);
+  pipe4joint.material.diffuseTexture.uScale = 2.5;
+  pipe4joint.material.diffuseTexture.vScale = 2.5;
 
-  let pipe4arm = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe4arm = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe4arm.position.y = 3;
   pipe4arm.position.x = 1.5;
   pipe4arm.rotation.z = 1.57;
@@ -391,6 +417,8 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe4rim.rotation.z = 1.57;
   pipe4rim.material = new StandardMaterial('texture1', scene);
   pipe4rim.material.diffuseTexture = returnCrystalTexture(pipeTextures[3], scene);
+  pipe4rim.material.diffuseTexture.uScale = 4;
+  pipe4rim.material.diffuseTexture.vScale = 1;
 
   let pipe4hole = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.01, tessellation: 20}, scene);
   pipe4hole.position.y = 3;
@@ -412,7 +440,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe4entrance.checkCollisions = true;
   pipe4entrance.name = "pipe4entrance";
 
-  let pipe1base_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe1base_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe1base_exit.position.y = 1.5;
   pipe1base_exit.material = new StandardMaterial('texture1', scene);
   pipe1base_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[0], scene);
@@ -421,8 +449,10 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe1joint_exit.position.y = 3;
   pipe1joint_exit.material = new StandardMaterial('texture1', scene);
   pipe1joint_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[0], scene);
+  pipe1joint_exit.material.diffuseTexture.uScale = 2.5;
+  pipe1joint_exit.material.diffuseTexture.vScale = 2.5;
 
-  let pipe1arm_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12}, scene);
+  let pipe1arm_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   pipe1arm_exit.position.y = 3;
   pipe1arm_exit.position.x = 1.5;
   pipe1arm_exit.rotation.z = 1.57;
@@ -435,6 +465,8 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe1rim_exit.rotation.z = 1.57;
   pipe1rim_exit.material = new StandardMaterial('texture1', scene);
   pipe1rim_exit.material.diffuseTexture = returnCrystalTexture(pipeTextures[0], scene);
+  pipe1rim_exit.material.diffuseTexture.uScale = 4;
+  pipe1rim_exit.material.diffuseTexture.vScale = 1;
 
   let pipe1hole_exit = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.01, tessellation: 20}, scene);
   pipe1hole_exit.position.y = 3;
@@ -459,12 +491,12 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   pipe1exit.checkCollisions = true;
   pipe1exit.name = "pipe1exit";
 
-  let plate1holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 20}, scene);
+  let plate1holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 12, faceUV: genCylinderFaceUV([1, 1, 3, 0.1, 1, 1])}, scene);
   plate1holder.position.y = 2;
   plate1holder.material = new StandardMaterial('texture1', scene);
   plate1holder.material.diffuseTexture = returnCrystalTexture(plateColors[0].texture, scene);
 
-  let plate1support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 20}, scene);
+  let plate1support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1, 0.25, 0.25])}, scene);
   plate1support.position.y = 1;
   plate1support.material = new StandardMaterial('texture1', scene);
   plate1support.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
@@ -497,7 +529,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   ball1.physicsImpostor = new PhysicsImpostor(ball1Barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   ball1.checkCollisions = true;
   ball1.name = "ball1";
-  global_objects.push({id: ball1.uniqueId, obstacle_id: item_id, type: "ball_Ob9", name: (ballColors[0].color_name + "_ball"), inventory: (ballColors[0].inv_name + " Ball"), img: (ballColors[0].color_name + "_ball"), texture: ballColors[0].texture, color_name: ballColors[0].color_name, color_code: ballColors[0].color_code});
+  global_objects.push({id: ball1.uniqueId, obstacle_id: item_id, type: "ball_Ob9", name: (ballColors[0].color_name + "_ball"), inventory: (ballColors[0].inv_name), img: (ballColors[0].color_name + "_ball"), texture: ballColors[0].texture, color_name: ballColors[0].color_name, color_code: ballColors[0].color_code});
 
   let ball2sphere = Mesh.CreateSphere("sphere", 8, 1, scene);
   ball2sphere.position.y = 3.5;
@@ -515,7 +547,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   ball2.physicsImpostor = new PhysicsImpostor(ball2Barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   ball2.checkCollisions = true;
   ball2.name = "ball2";
-  global_objects.push({id: ball2.uniqueId, obstacle_id: item_id, type: "ball_Ob9", name: (ballColors[1].color_name + "_ball"), inventory: (ballColors[1].inv_name + " Ball"), img: (ballColors[1].color_name + "_ball"), texture: ballColors[1].texture, color_name: ballColors[1].color_name, color_code: ballColors[1].color_code});
+  global_objects.push({id: ball2.uniqueId, obstacle_id: item_id, type: "ball_Ob9", name: (ballColors[1].color_name + "_ball"), inventory: (ballColors[1].inv_name), img: (ballColors[1].color_name + "_ball"), texture: ballColors[1].texture, color_name: ballColors[1].color_name, color_code: ballColors[1].color_code});
 
   let ball3sphere = Mesh.CreateSphere("sphere", 8, 1, scene);
   ball3sphere.position.y = 3.5;
@@ -533,7 +565,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   ball3.physicsImpostor = new PhysicsImpostor(ball3Barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   ball3.checkCollisions = true;
   ball3.name = "ball3";
-  global_objects.push({id: ball3.uniqueId, obstacle_id: item_id, type: "ball_Ob9", name: (ballColors[2].color_name + "_ball"), inventory: (ballColors[2].inv_name + " Ball"), img: (ballColors[2].color_name + "_ball"), texture: ballColors[2].texture, color_name: ballColors[2].color_name, color_code: ballColors[2].color_code});
+  global_objects.push({id: ball3.uniqueId, obstacle_id: item_id, type: "ball_Ob9", name: (ballColors[2].color_name + "_ball"), inventory: (ballColors[2].inv_name), img: (ballColors[2].color_name + "_ball"), texture: ballColors[2].texture, color_name: ballColors[2].color_name, color_code: ballColors[2].color_code});
 
   let ball4sphere = Mesh.CreateSphere("sphere", 8, 1, scene);
   ball4sphere.position.y = 3.5;
@@ -551,7 +583,7 @@ function downPipes(x, z, scene, global_objects, item_id, camera) {
   ball4.physicsImpostor = new PhysicsImpostor(ball4Barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   ball4.checkCollisions = true;
   ball4.name = "ball4";
-  global_objects.push({id: ball4.uniqueId, obstacle_id: item_id, type: "ball_Ob9", name: (ballColors[3].color_name + "_ball"), inventory: (ballColors[3].inv_name + " Ball"), img: (ballColors[3].color_name + "_ball"), texture: ballColors[3].texture, color_name: ballColors[3].color_name, color_code: ballColors[3].color_code});
+  global_objects.push({id: ball4.uniqueId, obstacle_id: item_id, type: "ball_Ob9", name: (ballColors[3].color_name + "_ball"), inventory: (ballColors[3].inv_name), img: (ballColors[3].color_name + "_ball"), texture: ballColors[3].texture, color_name: ballColors[3].color_name, color_code: ballColors[3].color_code});
 
   let axis = new Vector3(0, 6, 0);
   let angle = 0.05;

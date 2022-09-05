@@ -8,11 +8,13 @@ import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 import {Sound} from "@babylonjs/core/Audio";
-import {generateSpear} from "../objects/generateSpear.js";
 import {arrayShuffler} from "../../utilities/shuffler.js";
-import {returnMetalTexture, returnCrystalTexture} from "../textures.js";
+import {generateSpear} from "../objects/generateSpear.js";
+import {generateGrave} from "../objects/generateGrave.js";
+import {returnMetalTexture, returnCrystalTexture, genCylinderFaceUV,
+  genCubeFaceUV} from "../textures.js";
 
-function ghostButton(x, z, scene, global_objects, item_id, camera) {
+function ghostButton(x, z, scene, global_objects, item_id, camera, global_language) {
 // generate the spear
   generateSpear("item", "ghost", scene, x, z);
   generateSpear("holding", "ghost", scene, x, z);
@@ -28,7 +30,7 @@ function ghostButton(x, z, scene, global_objects, item_id, camera) {
   let texture2 = ghost_textures[1];
   let texture3 = ghost_textures[2];
 
-  let buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
+  let buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1])}, scene);
   buttonHolder1.position.y = 1.5;
   buttonHolder1.position.x = x;
   buttonHolder1.position.z = z;
@@ -46,7 +48,7 @@ function ghostButton(x, z, scene, global_objects, item_id, camera) {
   buttonBarrier1.name = "button1p5a";
   global_objects.push({id: buttonBarrier1.uniqueId, obstacle5_id: item_id, type: "structure", name: ""}); // just for obstacle5_id
 
-  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
+  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([0.5, 0.5, 2, 0.25, 0.5, 0.5])}, scene);
   pushButton1.position.y = 3.25;
   pushButton1.position.x = x;
   pushButton1.position.z = z;
@@ -63,17 +65,15 @@ function ghostButton(x, z, scene, global_objects, item_id, camera) {
   ghostBarrier.physicsImpostor = new PhysicsImpostor(ghostBarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   ghostBarrier.checkCollisions = true;
 
-  let ghostBarrierSound = new Sound("ghostBarrierSound", "./sound/atmoseerie04.wav", scene, null, { loop: true, autoplay: true, volume: 1, maxDistance: 50 });
+  let ghostBarrierSound = new Sound("ghostBarrierSound", "./sound/atmoseerie04.mp3", scene, null, { loop: true, autoplay: true, volume: 1, maxDistance: 50 });
   ghostBarrierSound.attachToMesh(ghostBarrier);
 
-  let ghost1Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let ghost1Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   ghost1Shard1.position.y = 5;
   ghost1Shard1.material = new StandardMaterial('texture1', scene);
   ghost1Shard1.material.diffuseTexture = returnCrystalTexture(texture1, scene);
-  ghost1Shard1.material.diffuseTexture.uScale = 3;
-  ghost1Shard1.material.diffuseTexture.vScale = 3;
 
-  let ghost1Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let ghost1Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   ghost1Shard2.position.y = 1;
   ghost1Shard2.material = new StandardMaterial('texture1', scene);
   ghost1Shard2.material.diffuseTexture = returnCrystalTexture(texture1, scene);
@@ -85,19 +85,18 @@ function ghostButton(x, z, scene, global_objects, item_id, camera) {
 
   let ghostCrystal1 = Mesh.MergeMeshes([ghost1Shard1, ghost1Shard2, ghostCrystal1Barrier], true, true, undefined, false, true);
   ghostCrystal1.position.x = x - 15;
-  ghostCrystal1.position.z = z - 20;
+  ghostCrystal1.position.z = z - 15;
+  ghostCrystal1.position.y = 0.5;
   ghostCrystal1.physicsImpostor = new PhysicsImpostor(ghostCrystal1Barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   ghostCrystal1.checkCollisions = true;
   ghostCrystal1.name = "ghost1crystal";
 
-  let ghost2Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let ghost2Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   ghost2Shard1.position.y = 5;
   ghost2Shard1.material = new StandardMaterial('texture1', scene);
   ghost2Shard1.material.diffuseTexture = returnCrystalTexture(texture2, scene);
-  ghost2Shard1.material.diffuseTexture.uScale = 3;
-  ghost2Shard1.material.diffuseTexture.vScale = 3;
 
-  let ghost2Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let ghost2Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   ghost2Shard2.position.y = 1;
   ghost2Shard2.material = new StandardMaterial('texture1', scene);
   ghost2Shard2.material.diffuseTexture = returnCrystalTexture(texture2, scene);
@@ -109,19 +108,18 @@ function ghostButton(x, z, scene, global_objects, item_id, camera) {
 
   let ghostCrystal2 = Mesh.MergeMeshes([ghost2Shard1, ghost2Shard2, ghostCrystal2Barrier], true, true, undefined, false, true);
   ghostCrystal2.position.x = x;
-  ghostCrystal2.position.z = z - 20;
+  ghostCrystal2.position.z = z - 15;
+  ghostCrystal2.position.y = 0.5;
   ghostCrystal2.physicsImpostor = new PhysicsImpostor(ghostCrystal2Barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   ghostCrystal2.checkCollisions = true;
   ghostCrystal2.name = "ghost2crystal";
 
-  let ghost3Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let ghost3Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   ghost3Shard1.position.y = 5;
   ghost3Shard1.material = new StandardMaterial('texture1', scene);
   ghost3Shard1.material.diffuseTexture = returnCrystalTexture(texture3, scene);
-  ghost3Shard1.material.diffuseTexture.uScale = 3;
-  ghost3Shard1.material.diffuseTexture.vScale = 3;
 
-  let ghost3Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let ghost3Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   ghost3Shard2.position.y = 1;
   ghost3Shard2.material = new StandardMaterial('texture1', scene);
   ghost3Shard2.material.diffuseTexture = returnCrystalTexture(texture3, scene);
@@ -133,7 +131,8 @@ function ghostButton(x, z, scene, global_objects, item_id, camera) {
 
   let ghostCrystal3 = Mesh.MergeMeshes([ghost3Shard1, ghost3Shard2, ghostCrystal3Barrier], true, true, undefined, false, true);
   ghostCrystal3.position.x = x + 15;
-  ghostCrystal3.position.z = z - 20;
+  ghostCrystal3.position.z = z - 15;
+  ghostCrystal3.position.y = 0.5;
   ghostCrystal3.physicsImpostor = new PhysicsImpostor(ghostCrystal3Barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   ghostCrystal3.checkCollisions = true;
   ghostCrystal3.name = "ghost3crystal";
@@ -145,6 +144,10 @@ function ghostButton(x, z, scene, global_objects, item_id, camera) {
     ghostCrystal2.rotate(axis, angle, 1);
     ghostCrystal3.rotate(axis, angle, 1);
   });
+
+  generateGrave(scene, x + 15, z - 12, -8);
+  generateGrave(scene, x, z - 12, -8);
+  generateGrave(scene, x - 15, z - 12, -8);
 
   let ghostOrbLarge1 = Mesh.CreateSphere("ghost1", 16, 2, scene);
   ghostOrbLarge1.material = new StandardMaterial('texture1', scene);

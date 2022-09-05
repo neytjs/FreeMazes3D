@@ -9,15 +9,16 @@ import {StandardMaterial} from "@babylonjs/core/Materials";
 import {sphere_colors, pole_colors, cloneAndShuffleColors, cloneAndShufflePoleColors} from "../sphere_pole_colors.js";
 import {generateNavMesh, sendAgent, createCrowd} from "../sphere_pole_crowd.js";
 import {degrees} from "../../utilities/math.js";
-import {returnMetalTexture, returnCrystalTexture, returnWoodTexture} from "../textures.js";
+import {returnMetalTexture, returnCrystalTexture, returnWoodTexture,
+  genCylinderFaceUV, genCubeFaceUV} from "../textures.js";
 
-function sphereAgents(x, z, scene, global_objects, item_id, camera) {
+function sphereAgents(x, z, scene, global_objects, item_id, camera, global_language) {
   if (sphere_colors.length === 0) {
     cloneAndShuffleColors();
     cloneAndShufflePoleColors();
   }
 
-  var buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
+  var buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1])}, scene);
   buttonHolder1.position.y = 1.5;
   buttonHolder1.position.x = x - 20;
   buttonHolder1.position.z = z - 20;
@@ -35,7 +36,7 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
   buttonBarrier1.name = "button1p3";
   global_objects.push({id: buttonBarrier1.uniqueId, obstacle3_id: item_id, type: "structure", name: ""});
 
-  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
+  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([0.5, 0.5, 2, 0.25, 0.5, 0.5])}, scene);
   pushButton1.position.y = 3.25;
   pushButton1.position.x = x - 20;
   pushButton1.position.z = z - 20;
@@ -67,7 +68,7 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
   wire2.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
   for (let i = 0, length = degrees.length; i < length; i++) {
-    let pole = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3.5, tessellation: 8}, scene);
+    let pole = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3.5, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.75, 0.25, 0.25])}, scene);
     pole.position.y = 1.75;
     pole.position.x = (17.5 * Math.cos(degrees[i])) + x;
     pole.position.z = (17.5 * Math.sin(degrees[i])) + z;
@@ -82,7 +83,10 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
     bulb.material = new StandardMaterial('texture1', scene);
     for (let j = 0, jlength = sphere_colors.length; j < jlength; j++) {
       if (pole_colors[i].color_name === sphere_colors[j].color_name) {
+        bulb.material.diffuseColor = sphere_colors[j].color_code;
+        bulb.material.specularColor = sphere_colors[j].color_code;
         bulb.material.emissiveColor = sphere_colors[j].color_code;
+        bulb.material.ambientColor = sphere_colors[j].color_code;
         break;
       }
     }
@@ -99,14 +103,12 @@ function sphereAgents(x, z, scene, global_objects, item_id, camera) {
     poleBarrier.checkCollisions = true;
   }
 
-  let bigPlatform = MeshBuilder.CreateCylinder("cylinder", {diameter: 35, height: 2, tessellation: 20, wrap: true}, scene);
+  let bigPlatform = MeshBuilder.CreateCylinder("cylinder", {diameter: 35, height: 2, tessellation: 20, faceUV: genCylinderFaceUV([0, 0, 20, 1, 10, 10])}, scene);
   bigPlatform.position.y = 1;
   bigPlatform.position.x = x;
   bigPlatform.position.z = z;
   bigPlatform.material = new StandardMaterial('texture1', scene);
   bigPlatform.material.diffuseTexture = returnWoodTexture("wood_lightbrown", scene);
-  bigPlatform.material.diffuseTexture.uScale = 10;
-  bigPlatform.material.diffuseTexture.vScale = 10;
   bigPlatform.physicsImpostor = new PhysicsImpostor(bigPlatform, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   bigPlatform.checkCollisions = true;
   bigPlatform.name = "bigPlatform";

@@ -10,10 +10,11 @@ import {Sound} from "@babylonjs/core/Audio";
 import {map, length, width, pieces, createEmptyMap, createMap, setMapSize} from "../../generators/maze_generator.js";
 import {PiecesData} from "../pieces_data.js";
 import {arrayShuffler} from "../../utilities/shuffler.js";
+import {generateBucket} from "../objects/generateBucket.js";
 import {returnWallTexture, returnFloorTexture, returnStoneTexture, returnCrystalTexture,
-  returnLiquidTexture, returnWoodTexture} from "../textures.js";
+  returnLiquidTexture, returnWoodTexture, genCubeFaceUV, genCylinderFaceUV} from "../textures.js";
 
-function hauntedCrypt(x, z, scene, global_objects, item_id, camera) {
+function hauntedCrypt(x, z, scene, global_objects, item_id, camera, global_language) {
   setMapSize("small")
   createEmptyMap(length, width);
   createMap();
@@ -51,53 +52,17 @@ function hauntedCrypt(x, z, scene, global_objects, item_id, camera) {
     }
   }
 
-  function generateBucket(x, z) {
-    let waterBucket = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 1, tessellation: 20}, scene);
-    waterBucket.position.y = 3;
-    waterBucket.material = new StandardMaterial('texture1', scene);
-    waterBucket.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
-
-    var waterBucketRim = MeshBuilder.CreateTorus("torus", {diameter: 1, thickness: 0.1});
-    waterBucketRim.position.y = 3.5;
-    waterBucketRim.material = new StandardMaterial('texture1', scene);
-    waterBucketRim.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
-
-    let waterBucketTop = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.95, height: 0.025, tessellation: 20}, scene);
-    waterBucketTop.position.y = 3.5;
-    waterBucketTop.material = new StandardMaterial('texture1', scene);
-    waterBucketTop.material.diffuseTexture = returnLiquidTexture("water", scene);
-
-    let waterBucketBarrier = MeshBuilder.CreateBox("box", {width: 2, height: 10, depth: 2}, scene);
-    waterBucketBarrier.position.y = 5;
-    waterBucketBarrier.material = new StandardMaterial('texture1', scene);
-    waterBucketBarrier.material.alpha = 0;
-
-    let bucket = Mesh.MergeMeshes([waterBucket, waterBucketRim, waterBucketTop, waterBucketBarrier], true, true, undefined, false, true);
-    bucket.position.x = x;
-    bucket.position.z = z;
-    bucket.position.y = -150;
-    bucket.physicsImpostor = new PhysicsImpostor(waterBucketBarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-    bucket.checkCollisions = true;
-    bucket.name = "HolyWater";
-    global_objects.push({id: bucket.uniqueId, type: "water_Ob14", name: "holy_water", inventory: ("Holy Water"), img: "holy_water"});
-
-    let axis = new Vector3(0, 6, 0);
-    let angle = 0.03;
-    scene.registerAfterRender(function () {
-      bucket.rotate(axis, angle, 1);
-    });
-  }
-  generateBucket((start_y * 35) + 5, -((start_x * 35) + 5));
-  generateBucket((start_y * 35) + 5, -((start_x * 35) + 15));
-  generateBucket((start_y * 35) + 5, -((start_x * 35) + 25));
+  generateBucket(scene, (start_y * 35) + 5, -((start_x * 35) + 5), -150, global_objects, "water_Ob14", "holy_water", global_language.text.items.puzzles.holy_water);
+  generateBucket(scene, (start_y * 35) + 5, -((start_x * 35) + 15), -150, global_objects, "water_Ob14", "holy_water", global_language.text.items.puzzles.holy_water);
+  generateBucket(scene, (start_y * 35) + 5, -((start_x * 35) + 25), -150, global_objects, "water_Ob14", "holy_water", global_language.text.items.puzzles.holy_water);
 
   function generateSarcophagus(x, z, num) {
-    let sarcophagus1 = MeshBuilder.CreateBox("box", {width: 4, height: 3, depth: 8}, scene);
+    let sarcophagus1 = MeshBuilder.CreateBox("box", {width: 4, height: 3, depth: 8, faceUV: genCubeFaceUV([1.2, 1.6, 1.2, 1.6, 1.6, 3.2, 1.6, 3.2, 3.2, 1.6, 3.2, 1.6])}, scene);
     sarcophagus1.position.y = 1.5;
     sarcophagus1.material = new StandardMaterial('texture1', scene);
     sarcophagus1.material.diffuseTexture = returnStoneTexture("stone_pink", scene);
 
-    let sarcophagus2 = MeshBuilder.CreateBox("box", {width: 4.5, height: 1, depth: 8.5}, scene);
+    let sarcophagus2 = MeshBuilder.CreateBox("box", {width: 4.5, height: 1, depth: 8.5, faceUV: genCubeFaceUV([1.8, 0.4, 1.8, 0.4, 0.4, 3.4, 0.4, 3.4, 3.4, 1.8, 3.4, 1.8])}, scene);
     sarcophagus2.position.y = 2.7;
     sarcophagus2.material = new StandardMaterial('texture1', scene);
     sarcophagus2.material.diffuseTexture = returnStoneTexture("stone_tomb", scene);
@@ -120,7 +85,7 @@ function hauntedCrypt(x, z, scene, global_objects, item_id, camera) {
     ghostBarrier.name = "ghost" + num + "Barrier";
 
     let name = "ghost" + num + "BarrierSound";
-    let ghostBarrierSound = new Sound(name, "./sound/atmoseerie04.wav", scene, null, { loop: true, autoplay: true, volume: 1, maxDistance: 50 });
+    let ghostBarrierSound = new Sound(name, "./sound/atmoseerie04.mp3", scene, null, { loop: true, autoplay: true, volume: 1, maxDistance: 50 });
     ghostBarrierSound.attachToMesh(ghostBarrier);
   }
   let x1 = (lever1_y * 35) + 15;
@@ -328,6 +293,8 @@ function hauntedCrypt(x, z, scene, global_objects, item_id, camera) {
                     wall.position.z = ((z * units) - (((z * units) * 2) + (i * 35)));
                     wall.material = new StandardMaterial('texture1', scene);
                     wall.material.diffuseTexture = returnWallTexture("stone_blocks_tomb", scene);
+                    wall.material.diffuseTexture.uScale = 1;
+                    wall.material.diffuseTexture.vScale = 3;
                     wall.physicsImpostor = new PhysicsImpostor(wall, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
                     wall.checkCollisions = true;
                     meshes.push(wall);
@@ -345,25 +312,22 @@ function hauntedCrypt(x, z, scene, global_objects, item_id, camera) {
 
   createUndergroundMaze();
 
-  let crypt = MeshBuilder.CreateBox("box", {width: 20, height: 10, depth: 12}, scene);
+  let crypt = MeshBuilder.CreateBox("box", {width: 20, height: 10, depth: 12, faceUV: genCubeFaceUV([10, 5, 10, 5, 5, 6, 5, 6, 6, 10, 6, 10])}, scene);
   crypt.position.y = 5;
   crypt.position.z = z;
   crypt.position.x = x;
   crypt.material = new StandardMaterial('texture1', scene);
   crypt.material.diffuseTexture = returnStoneTexture("stone_dark", scene);
-  crypt.material.diffuseTexture.uScale = 15;
-  crypt.material.diffuseTexture.vScale = 15;
   crypt.physicsImpostor = new PhysicsImpostor(crypt, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   crypt.checkCollisions = true;
   global_objects.push({id: crypt.uniqueId, obstacle14_id: item_id, type: "structure", name: ""});
 
-  let cryptRoof = MeshBuilder.CreateBox("box", {width: 22, height: 1, depth: 18, wrap: true}, scene);
+  let cryptRoof = MeshBuilder.CreateBox("box", {width: 22, height: 1, depth: 18, faceUV: genCubeFaceUV([8.8, 0.4, 8.8, 0.4, 0.4, 7.2, 0.4, 7.2, 7.2, 8.8, 7.2, 8.8])}, scene);
   cryptRoof.position.y = 10;
   cryptRoof.position.z = z + 2;
   cryptRoof.position.x = x;
   cryptRoof.material = new StandardMaterial('texture1', scene);
   cryptRoof.material.diffuseTexture = returnStoneTexture("stone_verydark", scene);
-  crypt.material.diffuseTexture.uScale = 15;
 
   let pillar1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 2.5, height: 10, tessellation: 20}, scene);
   pillar1.position.y = 5;
@@ -374,14 +338,14 @@ function hauntedCrypt(x, z, scene, global_objects, item_id, camera) {
   pillar1.material.diffuseTexture.uScale = 5;
   pillar1.material.diffuseTexture.vScale = 5;
 
-  let pillar1top = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 1, tessellation: 20}, scene);
+  let pillar1top = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 1, tessellation: 20, faceUV: genCylinderFaceUV([2, 2, 8, 0.4, 2, 2])}, scene);
   pillar1top.position.y = 9;
   pillar1top.position.z = z + 8.5;
   pillar1top.position.x = x + 7;
   pillar1top.material = new StandardMaterial('texture1', scene);
   pillar1top.material.diffuseTexture = returnStoneTexture("stone_green", scene);
 
-  let pillar1bottom = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 1, tessellation: 20}, scene);
+  let pillar1bottom = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 1, tessellation: 20, faceUV: genCylinderFaceUV([2, 2, 8, 0.4, 2, 2])}, scene);
   pillar1bottom.position.y = 0.5;
   pillar1bottom.position.z = z + 8.5;
   pillar1bottom.position.x = x + 7;
@@ -406,14 +370,14 @@ function hauntedCrypt(x, z, scene, global_objects, item_id, camera) {
   pillar2.material.diffuseTexture.uScale = 5;
   pillar2.material.diffuseTexture.vScale = 5;
 
-  let pillar2top = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 1, tessellation: 20}, scene);
+  let pillar2top = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 1, tessellation: 20, faceUV: genCylinderFaceUV([2, 2, 8, 0.4, 2, 2])}, scene);
   pillar2top.position.y = 9;
   pillar2top.position.z = z + 8.5;
   pillar2top.position.x = x - 7;
   pillar2top.material = new StandardMaterial('texture1', scene);
   pillar2top.material.diffuseTexture = returnStoneTexture("stone_green", scene);
 
-  let pillar2bottom = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 1, tessellation: 20}, scene);
+  let pillar2bottom = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.5, height: 1, tessellation: 20, faceUV: genCylinderFaceUV([2, 2, 8, 0.4, 2, 2])}, scene);
   pillar2bottom.position.y = 0.5;
   pillar2bottom.position.z = z + 8.5;
   pillar2bottom.position.x = x - 7;
@@ -429,36 +393,30 @@ function hauntedCrypt(x, z, scene, global_objects, item_id, camera) {
   pillar2Barrier.physicsImpostor = new PhysicsImpostor(pillar2Barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pillar2Barrier.checkCollisions = true;
 
-  let cryptEntrance2 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  let cryptEntrance2 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1, faceUV: genCubeFaceUV([0.4, 2.6, 0.4, 2.6, 2.6, 0.4, 2.6, 0.4, 0.4, 0.4, 0.4, 0.4])}, scene);
   cryptEntrance2.position.y = 3.25;
   cryptEntrance2.position.z = z + 6;
   cryptEntrance2.position.x = x + 2.5;
   cryptEntrance2.material = new StandardMaterial('texture1', scene);
   cryptEntrance2.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
-  cryptEntrance2.material.diffuseTexture.uScale = 3;
-  cryptEntrance2.material.diffuseTexture.vScale = 3;
   cryptEntrance2.physicsImpostor = new PhysicsImpostor(cryptEntrance2, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   cryptEntrance2.checkCollisions = true;
 
-  let cryptEntrance3 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  let cryptEntrance3 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1, faceUV: genCubeFaceUV([0.4, 2.6, 0.4, 2.6, 2.6, 0.4, 2.6, 0.4, 0.4, 0.4, 0.4, 0.4])}, scene);
   cryptEntrance3.position.y = 3.25;
   cryptEntrance3.position.z = z + 6;
   cryptEntrance3.position.x = x - 2.5;
   cryptEntrance3.material = new StandardMaterial('texture1', scene);
   cryptEntrance3.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
-  cryptEntrance3.material.diffuseTexture.uScale = 3;
-  cryptEntrance3.material.diffuseTexture.vScale = 3;
   cryptEntrance3.physicsImpostor = new PhysicsImpostor(cryptEntrance3, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   cryptEntrance3.checkCollisions = true;
 
-  let cryptEntrance4 = MeshBuilder.CreateBox("box", {width: 7, height: 1, depth: 1}, scene);
+  let cryptEntrance4 = MeshBuilder.CreateBox("box", {width: 7, height: 1, depth: 1, faceUV: genCubeFaceUV([2.8, 0.4, 2.8, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 2.8, 0.4, 2.8])}, scene);
   cryptEntrance4.position.y = 7;
   cryptEntrance4.position.z = z + 6;
   cryptEntrance4.position.x = x;
   cryptEntrance4.material = new StandardMaterial('texture1', scene);
   cryptEntrance4.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
-  cryptEntrance4.material.diffuseTexture.uScale = 3;
-  cryptEntrance4.material.diffuseTexture.vScale = 3;
 
   let cryptTheEntrance = MeshBuilder.CreateBox("cryptEntrance", {width: 5, height: 7, depth: 0.25}, scene);
   cryptTheEntrance.position.y = 3.5;
@@ -470,36 +428,30 @@ function hauntedCrypt(x, z, scene, global_objects, item_id, camera) {
   cryptTheEntrance.checkCollisions = true;
   global_objects.push({id: cryptTheEntrance.uniqueId, type: "cryptEntrance", exit_pos: {x: 15, z: -5, y: -146}});
 
-  let cryptExit1 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  let cryptExit1 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1, faceUV: genCubeFaceUV([0.4, 2.6, 0.4, 2.6, 2.6, 0.4, 2.6, 0.4, 0.4, 0.4, 0.4, 0.4])}, scene);
   cryptExit1.position.y = -146.75;
   cryptExit1.position.z = -2.5;
   cryptExit1.position.x = 17.5;
   cryptExit1.material = new StandardMaterial('texture1', scene);
   cryptExit1.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
-  cryptExit1.material.diffuseTexture.uScale = 3;
-  cryptExit1.material.diffuseTexture.vScale = 3;
   cryptExit1.physicsImpostor = new PhysicsImpostor(cryptExit1, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   cryptExit1.checkCollisions = true;
 
-  let cryptExit2 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  let cryptExit2 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1, faceUV: genCubeFaceUV([0.4, 2.6, 0.4, 2.6, 2.6, 0.4, 2.6, 0.4, 0.4, 0.4, 0.4, 0.4])}, scene);
   cryptExit2.position.y = -146.75;
   cryptExit2.position.z = -2.5;
   cryptExit2.position.x = 12.5;
   cryptExit2.material = new StandardMaterial('texture1', scene);
   cryptExit2.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
-  cryptExit2.material.diffuseTexture.uScale = 3;
-  cryptExit2.material.diffuseTexture.vScale = 3;
   cryptExit2.physicsImpostor = new PhysicsImpostor(cryptExit2, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   cryptExit2.checkCollisions = true;
 
-  let cryptExit3 = MeshBuilder.CreateBox("box", {width: 7, height: 1, depth: 1}, scene);
+  let cryptExit3 = MeshBuilder.CreateBox("box", {width: 7, height: 1, depth: 1, faceUV: genCubeFaceUV([2.8, 0.4, 2.8, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 2.8, 0.4, 2.8])}, scene);
   cryptExit3.position.y = -143;
   cryptExit3.position.z = -2.5;
   cryptExit3.position.x = 15;
   cryptExit3.material = new StandardMaterial('texture1', scene);
   cryptExit3.material.diffuseTexture = returnStoneTexture("stone_pyramidverydark", scene);
-  cryptExit3.material.diffuseTexture.uScale = 3;
-  cryptExit3.material.diffuseTexture.vScale = 3;
 
   let cryptTheExit = MeshBuilder.CreateBox("cryptExit", {width: 5, height: 7, depth: 0.25}, scene);
   cryptTheExit.position.y = -146.5;

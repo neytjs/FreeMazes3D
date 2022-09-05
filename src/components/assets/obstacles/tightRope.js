@@ -10,10 +10,12 @@ import {Texture} from "@babylonjs/core/Materials/Textures";
 import {ParticleSystem} from "@babylonjs/core/Particles";
 import {Sound} from "@babylonjs/core/Audio";
 import {arrayShuffler} from "../../utilities/shuffler.js";
+import {generateGrave} from "../objects/generateGrave.js";
 import {returnMetalTexture, returnCrystalTexture, returnFloorTexture,
-  returnWoodTexture, returnStoneTexture, returnLiquidTexture, returnTreeTexture} from "../textures.js";
+  returnWoodTexture, returnStoneTexture, returnLiquidTexture,
+  returnTreeTexture, genCubeFaceUV, genCylinderFaceUV} from "../textures.js";
 
-function tightRope(x, z, scene, global_objects, item_id, camera) {
+function tightRope(x, z, scene, global_objects, item_id, camera, global_language) {
   let acidColors = [
     { acid_color: "acid_orange", bubble_color: new Color3(0.94, 0.32, 0.13) },
     { acid_color: "acid_green", bubble_color: new Color3(0.27, 0.97, 0.1) },
@@ -21,7 +23,7 @@ function tightRope(x, z, scene, global_objects, item_id, camera) {
   ];
   acidColors = arrayShuffler(acidColors);
 
-  let buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
+  let buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2, faceUV: genCubeFaceUV([1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1])}, scene);
   buttonHolder1.position.y = 7.5;
   buttonHolder1.position.x = x + 20;
   buttonHolder1.position.z = z + 20;
@@ -38,7 +40,7 @@ function tightRope(x, z, scene, global_objects, item_id, camera) {
   buttonBarrier1.material.alpha = 0;
   buttonBarrier1.name = "button1p10";
 
-  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
+  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([0.5, 0.5, 2, 0.25, 0.5, 0.5])}, scene);
   pushButton1.position.y = 9.25;
   pushButton1.position.x = x + 20;
   pushButton1.position.z = z + 20;
@@ -46,7 +48,7 @@ function tightRope(x, z, scene, global_objects, item_id, camera) {
   pushButton1.material.diffuseTexture = returnCrystalTexture("gem_darkred", scene);
   pushButton1.name = "pushButton1p10";
 
-  let theExitBase1 = MeshBuilder.CreateBox("box", {width: 10, height: 6.5, depth: 10}, scene);
+  let theExitBase1 = MeshBuilder.CreateBox("box", {width: 10, height: 6.5, depth: 10, wrap: true}, scene);
   theExitBase1.position.y = 3.25;
   theExitBase1.position.x = x + 20;
   theExitBase1.position.z = z + 20;
@@ -58,7 +60,7 @@ function tightRope(x, z, scene, global_objects, item_id, camera) {
   theExitBase1.checkCollisions = true;
   global_objects.push({id: theExitBase1.uniqueId, obstacle10_id: item_id, type: "structure", name: ""});
 
-  let theStartBase1 = MeshBuilder.CreateBox("box", {width: 10, height: 6.5, depth: 10}, scene);
+  let theStartBase1 = MeshBuilder.CreateBox("box", {width: 10, height: 6.5, depth: 10, wrap: true}, scene);
   theStartBase1.position.y = 3.25;
   theStartBase1.position.x = x - 20;
   theStartBase1.position.z = z - 20;
@@ -69,46 +71,46 @@ function tightRope(x, z, scene, global_objects, item_id, camera) {
   theStartBase1.physicsImpostor = new PhysicsImpostor(theStartBase1, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   theStartBase1.checkCollisions = true;
 
-  let rail1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 6.5, tessellation: 12}, scene);
+  let rail1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 6.5, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 3.75, 0.25, 0.25])}, scene);
   rail1.position.y = 3.25;
   rail1.material = new StandardMaterial('texture1', scene);
   rail1.material.diffuseTexture = returnMetalTexture("iron_rusty", scene);
 
-  let rail2 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 6.5, tessellation: 12}, scene);
+  let rail2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 6.5, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 3.75, 0.25, 0.25])}, scene);
   rail2.position.y = 3.25;
   rail2.position.x = -2;
   rail2.material = new StandardMaterial('texture1', scene);
   rail2.material.diffuseTexture = returnMetalTexture("iron_rusty", scene);
 
-  let rung1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 3, tessellation: 12}, scene);
+  let rung1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.5, 0.25, 0.25])}, scene);
   rung1.position.y = 0.25;
   rung1.position.x = -1;
   rung1.rotation.z = Math.PI / 2;
   rung1.material = new StandardMaterial('texture1', scene);
   rung1.material.diffuseTexture = returnMetalTexture("iron_rusty", scene);
 
-  let rung2 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 3, tessellation: 12}, scene);
+  let rung2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.5, 0.25, 0.25])}, scene);
   rung2.position.y = 1.75;
   rung2.position.x = -1;
   rung2.rotation.z = Math.PI / 2;
   rung2.material = new StandardMaterial('texture1', scene);
   rung2.material.diffuseTexture = returnMetalTexture("iron_rusty", scene);
 
-  let rung3 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 3, tessellation: 12}, scene);
+  let rung3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.5, 0.25, 0.25])}, scene);
   rung3.position.y = 3.25;
   rung3.position.x = -1;
   rung3.rotation.z = Math.PI / 2;
   rung3.material = new StandardMaterial('texture1', scene);
   rung3.material.diffuseTexture = returnMetalTexture("iron_rusty", scene);
 
-  let rung4 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 3, tessellation: 12}, scene);
+  let rung4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.5, 0.25, 0.25])}, scene);
   rung4.position.y = 4.75;
   rung4.position.x = -1;
   rung4.rotation.z = Math.PI / 2;
   rung4.material = new StandardMaterial('texture1', scene);
   rung4.material.diffuseTexture = returnMetalTexture("iron_rusty", scene);
 
-  let rung5 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0.5, diameterBottom: 0.5, height: 3, tessellation: 12}, scene);
+  let rung5 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3, tessellation: 12, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.5, 0.25, 0.25])}, scene);
   rung5.position.y = 6.25;
   rung5.position.x = -1;
   rung5.rotation.z = Math.PI / 2;
@@ -128,7 +130,7 @@ function tightRope(x, z, scene, global_objects, item_id, camera) {
   ladder.checkCollisions = true;
   global_objects.push({id: ladder.uniqueId, type: "ladder", exit_pos: {x: (x - 19), z: (z - 15.75), y: 10.5}});
 
-  let tightRope = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 42.5, tessellation: 8}, scene);
+  let tightRope = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 42.5, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 21.25, 0.1, 0.1])}, scene);
   tightRope.position.y = 6;
   tightRope.rotation.x = Math.PI / 2;
   tightRope.material = new StandardMaterial('texture1', scene);
@@ -146,37 +148,29 @@ function tightRope(x, z, scene, global_objects, item_id, camera) {
   rope.physicsImpostor = new PhysicsImpostor(tightRopeBarrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   rope.checkCollisions = true;
 
-  let pitWall1 = MeshBuilder.CreateBox("box", {width: 1, height: 3, depth: 32}, scene);
+  let pitWall1 = MeshBuilder.CreateBox("box", {width: 1, height: 3, depth: 32, faceUV: genCubeFaceUV([0.4, 1.2, 0.4, 1.2, 1.2, 12.8, 1.2, 12.8, 12.8, 0.4, 12.8, 0.4])}, scene);
   pitWall1.position.y = 1.5;
   pitWall1.position.x = -7;
   pitWall1.material = new StandardMaterial('texture1', scene);
   pitWall1.material.diffuseTexture = returnStoneTexture("stone", scene);
-  pitWall1.material.diffuseTexture.uScale = 4;
-  pitWall1.material.diffuseTexture.vScale = 4;
 
-  let pitWall2 = MeshBuilder.CreateBox("box", {width: 1, height: 3, depth: 32}, scene);
+  let pitWall2 = MeshBuilder.CreateBox("box", {width: 1, height: 3, depth: 32, faceUV: genCubeFaceUV([0.4, 1.2, 0.4, 1.2, 1.2, 12.8, 1.2, 12.8, 12.8, 0.4, 12.8, 0.4])}, scene);
   pitWall2.position.y = 1.5;
   pitWall2.position.x = 7;
   pitWall2.material = new StandardMaterial('texture1', scene);
   pitWall2.material.diffuseTexture = returnStoneTexture("stone", scene);
-  pitWall2.material.diffuseTexture.uScale = 4;
-  pitWall2.material.diffuseTexture.vScale = 4;
 
-  let pitWall3 = MeshBuilder.CreateBox("box", {width: 13, height: 3, depth: 1}, scene);
+  let pitWall3 = MeshBuilder.CreateBox("box", {width: 13, height: 3, depth: 1, faceUV: genCubeFaceUV([5.2, 1.2, 5.2, 1.2, 1.2, 0.4, 1.2, 0.4, 0.4, 5.2, 0.4, 5.2])}, scene);
   pitWall3.position.y = 1.5;
   pitWall3.position.z = -15.5;
   pitWall3.material = new StandardMaterial('texture1', scene);
   pitWall3.material.diffuseTexture = returnStoneTexture("stone", scene);
-  pitWall3.material.diffuseTexture.uScale = 2;
-  pitWall3.material.diffuseTexture.vScale = 2;
 
-  let pitWall4 = MeshBuilder.CreateBox("box", {width: 13, height: 3, depth: 1}, scene);
+  let pitWall4 = MeshBuilder.CreateBox("box", {width: 13, height: 3, depth: 1, faceUV: genCubeFaceUV([5.2, 1.2, 5.2, 1.2, 1.2, 0.4, 1.2, 0.4, 0.4, 5.2, 0.4, 5.2])}, scene);
   pitWall4.position.y = 1.5;
   pitWall4.position.z = 15.5;
   pitWall4.material = new StandardMaterial('texture1', scene);
   pitWall4.material.diffuseTexture = returnStoneTexture("stone", scene);
-  pitWall4.material.diffuseTexture.uScale = 2;
-  pitWall4.material.diffuseTexture.vScale = 2;
 
   let pitAcid = MeshBuilder.CreateBox("box", {width: 13, height: 2, depth: 30}, scene);
   pitAcid.position.y = 1;
@@ -236,76 +230,25 @@ function tightRope(x, z, scene, global_objects, item_id, camera) {
   bubble3Particles.addColorGradient(0, acidColors[0].bubble_color);
   bubble3Particles.start();
 
-  let acidDeath = MeshBuilder.CreateBox("box", {width: 13, height: 0.25, depth: 30}, scene);
-  acidDeath.position.y = 2;
+  let acidDeath = MeshBuilder.CreateBox("box", {width: 13, height: 1, depth: 30}, scene);
+  acidDeath.position.y = 1.8;
   acidDeath.position.x = x;
   acidDeath.position.z = z;
   acidDeath.rotation.y = 0.785;
   acidDeath.material = new StandardMaterial('texture1', scene);
-  acidDeath.material.alpha = 0;
+  acidDeath.material.diffuseColor = acidColors[0].bubble_color;
+  acidDeath.material.specularColor = acidColors[0].bubble_color;
+  acidDeath.material.emissiveColor = acidColors[0].bubble_color;
+  acidDeath.material.ambientColor = acidColors[0].bubble_color;
+  acidDeath.material.alpha = 0.05;
   acidDeath.physicsImpostor = new PhysicsImpostor(acidDeath, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   acidDeath.checkCollisions = true;
   global_objects.push({id: acidDeath.uniqueId, type: "acid", exit_pos: {x: (x - 20), z: (z + 16), y: 4}});
 
-  let acidDeathSound = new Sound("acidDeathSound", "./sound/LavaLoop.wav", scene, null, { loop: true, autoplay: true, volume: 0.75, maxDistance: 50 });
+  let acidDeathSound = new Sound("acidDeathSound", "./sound/LavaLoop.mp3", scene, null, { loop: true, autoplay: true, volume: 0.75, maxDistance: 50 });
   acidDeathSound.attachToMesh(acidDeath);
 
-  let tombstone1 = MeshBuilder.CreateBox("box", {width: 3, height: 3, depth: 1}, scene);
-  tombstone1.position.y = 1.5;
-  tombstone1.material = new StandardMaterial('texture1', scene);
-  tombstone1.material.diffuseTexture = returnStoneTexture("stone_dark", scene);
-
-  let tombstone2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.9, tessellation: 20}, scene);
-  tombstone2.position.y = 2.7;
-  tombstone2.rotation.x = 1.57;
-  tombstone2.material = new StandardMaterial('texture1', scene);
-  tombstone2.material.diffuseTexture = returnStoneTexture("stone_dark", scene);
-
-  let tombstoneBarrier = MeshBuilder.CreateBox("box", {width: 3, height: 3, depth: 1}, scene);
-  tombstoneBarrier.position.y = 1.5;
-  tombstoneBarrier.material = new StandardMaterial('texture1', scene);
-  tombstoneBarrier.material.alpha = 0;
-
-  let grave = Mesh.MergeMeshes([tombstone1, tombstone2, tombstoneBarrier], true, true, undefined, false, true);
-  grave.position.x = x - 20;
-  grave.position.z = z + 20;
-  grave.physicsImpostor = new PhysicsImpostor(tombstoneBarrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
-  grave.checkCollisions = true;
-
-  let board1 = MeshBuilder.CreateBox("box", {width: 0.25, height: 0.8, depth: 11.75}, scene);
-  board1.position.y = 0.4;
-  board1.position.x = x - 23;
-  board1.position.z = z + 16;
-  board1.material = new StandardMaterial('texture1', scene);
-  board1.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
-
-  let board2 = MeshBuilder.CreateBox("box", {width: 0.25, height: 0.8, depth: 11.75}, scene);
-  board2.position.y = 0.4;
-  board2.position.x = x - 17;
-  board2.position.z = z + 16;
-  board2.material = new StandardMaterial('texture1', scene);
-  board2.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
-
-  let board3 = MeshBuilder.CreateBox("box", {width: 6.25, height: 0.8, depth: 0.25}, scene);
-  board3.position.y = 0.4;
-  board3.position.x = x - 20;
-  board3.position.z = z + 10;
-  board3.material = new StandardMaterial('texture1', scene);
-  board3.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
-
-  let board4 = MeshBuilder.CreateBox("box", {width: 6.25, height: 0.8, depth: 0.25}, scene);
-  board4.position.y = 0.4;
-  board4.position.x = x - 20;
-  board4.position.z = z + 22;
-  board4.material = new StandardMaterial('texture1', scene);
-  board4.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
-
-  let dirt = MeshBuilder.CreateBox("box", {width: 6, height: 0.1, depth: 12}, scene);
-  dirt.position.y = 0.4;
-  dirt.position.x = x - 20;
-  dirt.position.z = z + 16;
-  dirt.material = new StandardMaterial('texture1', scene);
-  dirt.material.diffuseTexture = returnFloorTexture("soil", scene);
+  generateGrave(scene, x - 20, z + 20, 0);
 }
 
 export {tightRope};

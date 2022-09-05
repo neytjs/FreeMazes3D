@@ -11,13 +11,13 @@ import {PiecesData} from "../pieces_data.js";
 import {plateColors, mazePos, cloneAndShuffleColors, cloneAndShuffleMapPos} from "../pyramid_data.js";
 import {generateMagicPowder} from "../objects/generateMagicPowder.js";
 import {returnMetalTexture, returnWallTexture, returnFloorTexture, returnStoneTexture,
-  returnCrystalTexture} from "../textures.js";
+  returnCrystalTexture, genCubeFaceUV, genCylinderFaceUV} from "../textures.js";
 
-function powderPyramid(x, z, scene, global_objects, item_id, camera) {
+function powderPyramid(x, z, scene, global_objects, item_id, camera, global_language) {
   setMapSize("medium")
   createEmptyMap(length, width);
   createMap();
-  cloneAndShuffleColors();
+  cloneAndShuffleColors(global_language);
   cloneAndShuffleMapPos();
 
   let start_x = 0;
@@ -53,7 +53,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   }
 
 // lever 1
-  let buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
+  let buttonHolder1 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1])}, scene);
   buttonHolder1.position.y = -98.5;
   buttonHolder1.position.x = (lever1_y * 35) + 15;
   buttonHolder1.position.z = -((lever1_x * 35) + 15);
@@ -70,7 +70,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   buttonBarrier1.material.alpha = 0;
   buttonBarrier1.name = "button1p13";
 
-  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
+  let pushButton1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([0.5, 0.5, 2, 0.25, 0.5, 0.5])}, scene);
   pushButton1.position.y = -96.75;
   pushButton1.position.x = (lever1_y * 35) + 15;
   pushButton1.position.z = -((lever1_x * 35) + 15);
@@ -78,7 +78,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pushButton1.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
   pushButton1.name = "pushButton1p13";
 
-  let buttonHolder2 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
+  let buttonHolder2 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1])}, scene);
   buttonHolder2.position.y = -98.5;
   buttonHolder2.position.x = (lever2_y * 35) + 15;
   buttonHolder2.position.z = -((lever2_x * 35) + 15);
@@ -95,7 +95,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   buttonBarrier2.material.alpha = 0;
   buttonBarrier2.name = "button2p13";
 
-  let pushButton2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
+  let pushButton2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([0.5, 0.5, 2, 0.25, 0.5, 0.5])}, scene);
   pushButton2.position.y = -96.75;
   pushButton2.position.x = (lever2_y * 35) + 15;
   pushButton2.position.z = -((lever2_x * 35) + 15);
@@ -103,7 +103,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pushButton2.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
   pushButton2.name = "pushButton2p13";
 
-  let buttonHolder3 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2}, scene);
+  let buttonHolder3 = MeshBuilder.CreateBox("box", {width: 2, height: 3, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1])}, scene);
   buttonHolder3.position.y = -98.5;
   buttonHolder3.position.x = (lever3_y * 35) + 15;
   buttonHolder3.position.z = -((lever3_x * 35) + 15);
@@ -120,7 +120,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   buttonBarrier3.material.alpha = 0;
   buttonBarrier3.name = "button3p13";
 
-  let pushButton3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8}, scene);
+  let pushButton3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 1, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([0.5, 0.5, 2, 0.25, 0.5, 0.5])}, scene);
   pushButton3.position.y = -96.75;
   pushButton3.position.x = (lever3_y * 35) + 15;
   pushButton3.position.z = -((lever3_x * 35) + 15);
@@ -128,12 +128,12 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pushButton3.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
   pushButton3.name = "pushButton3p13";
 
-  let plate1holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 20}, scene);
+  let plate1holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 12, faceUV: genCylinderFaceUV([1, 1, 3, 0.1, 1, 1])}, scene);
   plate1holder.position.y = 2;
   plate1holder.material = new StandardMaterial('texture1', scene);
   plate1holder.material.diffuseTexture = returnMetalTexture(plateColors[0].plate_texture, scene);
 
-  let plate1support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 20}, scene);
+  let plate1support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1, 0.25, 0.25])}, scene);
   plate1support.position.y = 1;
   plate1support.material = new StandardMaterial('texture1', scene);
   plate1support.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
@@ -169,12 +169,12 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   powder1Hidden.material.alpha = 0;
   powder1Hidden.name = plateColors[0].color_name + "HiddenPowderOb13";
 
-  let plate2holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 20}, scene);
+  let plate2holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 12, faceUV: genCylinderFaceUV([1, 1, 3, 0.1, 1, 1])}, scene);
   plate2holder.position.y = 2;
   plate2holder.material = new StandardMaterial('texture1', scene);
   plate2holder.material.diffuseTexture = returnMetalTexture(plateColors[1].plate_texture, scene);
 
-  let plate2support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 20}, scene);
+  let plate2support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1, 0.25, 0.25])}, scene);
   plate2support.position.y = 1;
   plate2support.material = new StandardMaterial('texture1', scene);
   plate2support.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
@@ -210,12 +210,12 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   powder2Hidden.material.alpha = 0;
   powder2Hidden.name = plateColors[1].color_name + "HiddenPowderOb13";
 
-  let plate3holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 20}, scene);
+  let plate3holder = MeshBuilder.CreateCylinder("cylinder", {diameter: 3, height: 0.1, tessellation: 12, faceUV: genCylinderFaceUV([1, 1, 3, 0.1, 1, 1])}, scene);
   plate3holder.position.y = 2;
   plate3holder.material = new StandardMaterial('texture1', scene);
   plate3holder.material.diffuseTexture = returnMetalTexture(plateColors[2].plate_texture, scene);
 
-  let plate3support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 20}, scene);
+  let plate3support = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1, 0.25, 0.25])}, scene);
   plate3support.position.y = 1;
   plate3support.material = new StandardMaterial('texture1', scene);
   plate3support.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
@@ -251,21 +251,21 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   powder3Hidden.material.alpha = 0;
   powder3Hidden.name = plateColors[2].color_name + "HiddenPowderOb13";
 
-  let spawnPoint1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.2, tessellation: 20}, scene);
+  let spawnPoint1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.2, tessellation: 20, faceUV: genCylinderFaceUV([2, 2, 4, 0.2, 2, 2])}, scene);
   spawnPoint1.position.y = -100;
   spawnPoint1.position.x = (lever1_y * 35) + 5;
   spawnPoint1.position.z = -((lever1_x * 35) + 5);
   spawnPoint1.material = new StandardMaterial('texture1', scene);
   spawnPoint1.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
 
-  let spawnPoint2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.2, tessellation: 20}, scene);
+  let spawnPoint2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.2, tessellation: 20, faceUV: genCylinderFaceUV([2, 2, 4, 0.2, 2, 2])}, scene);
   spawnPoint2.position.y = -100;
   spawnPoint2.position.x = (lever2_y * 35) + 5;
   spawnPoint2.position.z = -((lever2_x * 35) + 5);
   spawnPoint2.material = new StandardMaterial('texture1', scene);
   spawnPoint2.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
 
-  let spawnPoint3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.2, tessellation: 20}, scene);
+  let spawnPoint3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.2, tessellation: 20, faceUV: genCylinderFaceUV([2, 2, 4, 0.2, 2, 2])}, scene);
   spawnPoint3.position.y = -100;
   spawnPoint3.position.x = (lever3_y * 35) + 5;
   spawnPoint3.position.z = -((lever3_x * 35) + 5);
@@ -325,6 +325,8 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
                     wall.position.z = ((z * units) - (((z * units) * 2) + (i * 35)));
                     wall.material = new StandardMaterial('texture1', scene);
                     wall.material.diffuseTexture = returnWallTexture("stone_blocks_pyramid", scene);
+                    wall.material.diffuseTexture.uScale = 1;
+                    wall.material.diffuseTexture.vScale = 3;
                     wall.physicsImpostor = new PhysicsImpostor(wall, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
                     wall.checkCollisions = true;
                     meshes.push(wall);
@@ -362,20 +364,18 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidBarrier.checkCollisions = true;
   global_objects.push({id: pyramidBarrier.uniqueId, obstacle13_id: item_id, type: "structure", name: ""});
 
-  let obelisk1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameterBottom: 2, height: 2, tessellation: 4}, scene);
+  let obelisk1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameterBottom: 2, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([2, 2, 4, 1, 0, 0])}, scene);
   obelisk1.position.y = 8;
   obelisk1.rotation.y = 0.785;
   obelisk1.material = new StandardMaterial('texture1', scene);
   obelisk1.material.diffuseTexture = returnStoneTexture("stone_pyramid", scene);
 
-  let obelisk2 = MeshBuilder.CreateBox("box", {width: 1.42, height: 7, depth: 1.42}, scene);
+  let obelisk2 = MeshBuilder.CreateBox("box", {width: 1.42, height: 7, depth: 1.42, faceUV: genCubeFaceUV([0.568, 2.8, 0.568, 2.8, 2.8, 0.568, 2.8, 0.568, 0.568, 0.568, 0.568, 0.568])}, scene);
   obelisk2.position.y = 3.5;
   obelisk2.material = new StandardMaterial('texture1', scene);
   obelisk2.material.diffuseTexture = returnStoneTexture("stone_pyramid", scene);
-  obelisk2.material.diffuseTexture.uScale = 3;
-  obelisk2.material.diffuseTexture.vScale = 3;
 
-  let obelisk3 = MeshBuilder.CreateBox("box", {width: 3, height: 0.5, depth: 3}, scene);
+  let obelisk3 = MeshBuilder.CreateBox("box", {width: 3, height: 0.5, depth: 3, faceUV: genCubeFaceUV([1.2, 0.2, 1.2, 0.2, 0.2, 1.2, 0.2, 1.2, 1.2, 1.2, 1.2, 1.2])}, scene);
   obelisk3.position.y = 0.25;
   obelisk3.material = new StandardMaterial('texture1', scene);
   obelisk3.material.diffuseTexture = returnStoneTexture("stone_pyramiddark", scene);
@@ -402,7 +402,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidEntrance1.physicsImpostor = new PhysicsImpostor(pyramidEntrance1, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidEntrance1.checkCollisions = true;
 
-  let pyramidEntrance2 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  let pyramidEntrance2 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1, faceUV: genCubeFaceUV([0.4, 2.6, 0.4, 2.6, 2.6, 0.4, 2.6, 0.4, 0.4, 0.4, 0.4, 0.4])}, scene);
   pyramidEntrance2.position.y = 3.25;
   pyramidEntrance2.position.z = z + 16;
   pyramidEntrance2.position.x = x + 2.5;
@@ -413,7 +413,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidEntrance2.physicsImpostor = new PhysicsImpostor(pyramidEntrance2, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidEntrance2.checkCollisions = true;
 
-  let pyramidEntrance3 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  let pyramidEntrance3 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1, faceUV: genCubeFaceUV([0.4, 2.6, 0.4, 2.6, 2.6, 0.4, 2.6, 0.4, 0.4, 0.4, 0.4, 0.4])}, scene);
   pyramidEntrance3.position.y = 3.25;
   pyramidEntrance3.position.z = z + 16;
   pyramidEntrance3.position.x = x - 2.5;
@@ -424,7 +424,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidEntrance3.physicsImpostor = new PhysicsImpostor(pyramidEntrance3, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidEntrance3.checkCollisions = true;
 
-  let pyramidEntrance4 = MeshBuilder.CreateBox("box", {width: 7, height: 1, depth: 1}, scene);
+  let pyramidEntrance4 = MeshBuilder.CreateBox("box", {width: 7, height: 1, depth: 1, faceUV: genCubeFaceUV([2.8, 0.4, 2.8, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 2.8, 0.4, 2.8])}, scene);
   pyramidEntrance4.position.y = 7;
   pyramidEntrance4.position.z = z + 16;
   pyramidEntrance4.position.x = x;
@@ -443,7 +443,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidTheEntrance.checkCollisions = true;
   global_objects.push({id: pyramidTheEntrance.uniqueId, type: "pyramidEntrance", exit_pos: {x: 15, z: -5, y: -96}});
 
-  let pyramidExit1 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  let pyramidExit1 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1, faceUV: genCubeFaceUV([0.4, 2.6, 0.4, 2.6, 2.6, 0.4, 2.6, 0.4, 0.4, 0.4, 0.4, 0.4])}, scene);
   pyramidExit1.position.y = -96.75;
   pyramidExit1.position.z = -2.5;
   pyramidExit1.position.x = 17.5;
@@ -454,7 +454,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidExit1.physicsImpostor = new PhysicsImpostor(pyramidExit1, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidExit1.checkCollisions = true;
 
-  let pyramidExit2 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1}, scene);
+  let pyramidExit2 = MeshBuilder.CreateBox("box", {width: 1, height: 6.5, depth: 1, faceUV: genCubeFaceUV([0.4, 2.6, 0.4, 2.6, 2.6, 0.4, 2.6, 0.4, 0.4, 0.4, 0.4, 0.4])}, scene);
   pyramidExit2.position.y = -96.75;
   pyramidExit2.position.z = -2.5;
   pyramidExit2.position.x = 12.5;
@@ -465,7 +465,7 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidExit2.physicsImpostor = new PhysicsImpostor(pyramidExit2, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
   pyramidExit2.checkCollisions = true;
 
-  let pyramidExit3 = MeshBuilder.CreateBox("box", {width: 7, height: 1, depth: 1}, scene);
+  let pyramidExit3 = MeshBuilder.CreateBox("box", {width: 7, height: 1, depth: 1, faceUV: genCubeFaceUV([2.8, 0.4, 2.8, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 2.8, 0.4, 2.8])}, scene);
   pyramidExit3.position.y = -93;
   pyramidExit3.position.z = -2.5;
   pyramidExit3.position.x = 15;
@@ -484,9 +484,9 @@ function powderPyramid(x, z, scene, global_objects, item_id, camera) {
   pyramidTheExit.checkCollisions = true;
   global_objects.push({id: pyramidTheExit.uniqueId, type: "pyramidExit", exit_pos: {x: x, z: (z + 18), y: 4}});
 
-  generateMagicPowder(0, global_objects, scene);
-  generateMagicPowder(1, global_objects, scene);
-  generateMagicPowder(2, global_objects, scene);
+  generateMagicPowder(0, global_objects, scene, global_language);
+  generateMagicPowder(1, global_objects, scene, global_language);
+  generateMagicPowder(2, global_objects, scene, global_language);
 }
 
 export {powderPyramid};

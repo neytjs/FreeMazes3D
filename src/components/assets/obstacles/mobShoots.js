@@ -12,9 +12,9 @@ import {TransformNode} from "@babylonjs/core/Meshes";
 import {generateNavMesh, sendAgent, createCrowd, generateMob} from "../mob_crowd.js";
 import {arrayShuffler} from "../../utilities/shuffler.js";
 import {degrees} from "../../utilities/math.js";
-import {returnMetalTexture, returnCrystalTexture} from "../textures.js";
+import {returnMetalTexture, returnCrystalTexture, genCylinderFaceUV} from "../textures.js";
 
-function mobShoots(x, z, scene, global_objects, item_id, camera) {
+function mobShoots(x, z, scene, global_objects, item_id, camera, global_language) {
   let eye1 = Mesh.CreateSphere("sphere", 20, 2, scene);
   eye1.position.y = 4;
   eye1.material = new StandardMaterial('texture1', scene);
@@ -37,6 +37,8 @@ function mobShoots(x, z, scene, global_objects, item_id, camera) {
   machine1.rotation.x = 1.57;
   machine1.material = new StandardMaterial('texture1', scene);
   machine1.material.diffuseTexture = returnMetalTexture("iron_medium", scene);
+  machine1.material.diffuseTexture.uScale = 3;
+  machine1.material.diffuseTexture.vScale = 1;
 
   let machine2 = Mesh.CreateSphere("sphere", 20, 2, scene);
   machine2.position.y = 4;
@@ -79,11 +81,8 @@ function mobShoots(x, z, scene, global_objects, item_id, camera) {
   let mob = Mesh.MergeMeshes([eye1, eye2, eye3, machine1, machine2, machine3, machine4, machine5, machine6, machine7], true, true, undefined, false, true);
   mob.name = "mobOb12";
 
-  const pi = Math.PI;
-  const degrees = [(pi * 2), (pi * 5/3), (pi * 4/3), pi, (pi * 2/3), (pi / 3)]; // external file in game version, utilities/math.js
-
   for (let i = 0, length = degrees.length; i < length; i++) {
-    let pole = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3.5, tessellation: 8}, scene);
+    let pole = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 3.5, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 1.75, 0.25, 0.25])}, scene);
     pole.position.y = 1.75;
     pole.position.x = (17.5 * Math.cos(degrees[i])) + x;
     pole.position.z = (17.5 * Math.sin(degrees[i])) + z;
@@ -97,16 +96,16 @@ function mobShoots(x, z, scene, global_objects, item_id, camera) {
   top.position.z = z;
   top.material = new StandardMaterial('texture1', scene);
   top.material.diffuseTexture = returnMetalTexture("iron", scene);
+  top.material.diffuseTexture.uScale = 45;
+  top.material.diffuseTexture.vScale = 1;
   global_objects.push({id: top.uniqueId, obstacle12_id: item_id, type: "structure", name: ""});
 
-  let power1Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let power1Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   power1Shard1.position.y = 6;
   power1Shard1.material = new StandardMaterial('texture1', scene);
   power1Shard1.material.diffuseTexture = returnCrystalTexture("gem_blue", scene);
-  power1Shard1.material.diffuseTexture.uScale = 3;
-  power1Shard1.material.diffuseTexture.vScale = 3;
 
-  let power1Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let power1Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   power1Shard2.position.y = 2;
   power1Shard2.material = new StandardMaterial('texture1', scene);
   power1Shard2.material.diffuseTexture = returnCrystalTexture("gem_blue", scene);
@@ -123,14 +122,12 @@ function mobShoots(x, z, scene, global_objects, item_id, camera) {
   powerCrystal1.checkCollisions = true;
   powerCrystal1.name = "powerCrystal1Ob12";
 
-  let power2Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let power2Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   power2Shard1.position.y = 6;
   power2Shard1.material = new StandardMaterial('texture1', scene);
   power2Shard1.material.diffuseTexture = returnCrystalTexture("gem_blue", scene);
-  power2Shard1.material.diffuseTexture.uScale = 3;
-  power2Shard1.material.diffuseTexture.vScale = 3;
 
-  let power2Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let power2Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   power2Shard2.position.y = 2;
   power2Shard2.material = new StandardMaterial('texture1', scene);
   power2Shard2.material.diffuseTexture = returnCrystalTexture("gem_blue", scene);
@@ -147,14 +144,12 @@ function mobShoots(x, z, scene, global_objects, item_id, camera) {
   powerCrystal2.checkCollisions = true;
   powerCrystal2.name = "powerCrystal2Ob12";
 
-  let power3Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let power3Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   power3Shard1.position.y = 6;
   power3Shard1.material = new StandardMaterial('texture1', scene);
   power3Shard1.material.diffuseTexture = returnCrystalTexture("gem_blue", scene);
-  power3Shard1.material.diffuseTexture.uScale = 3;
-  power3Shard1.material.diffuseTexture.vScale = 3;
 
-  let power3Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let power3Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   power3Shard2.position.y = 2;
   power3Shard2.material = new StandardMaterial('texture1', scene);
   power3Shard2.material.diffuseTexture = returnCrystalTexture("gem_blue", scene);
@@ -171,14 +166,12 @@ function mobShoots(x, z, scene, global_objects, item_id, camera) {
   powerCrystal3.checkCollisions = true;
   powerCrystal3.name = "powerCrystal3Ob12";
 
-  let power4Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let power4Shard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   power4Shard1.position.y = 6;
   power4Shard1.material = new StandardMaterial('texture1', scene);
   power4Shard1.material.diffuseTexture = returnCrystalTexture("gem_blue", scene);
-  power4Shard1.material.diffuseTexture.uScale = 3;
-  power4Shard1.material.diffuseTexture.vScale = 3;
 
-  let power4Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let power4Shard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   power4Shard2.position.y = 2;
   power4Shard2.material = new StandardMaterial('texture1', scene);
   power4Shard2.material.diffuseTexture = returnCrystalTexture("gem_blue", scene);
@@ -204,35 +197,35 @@ function mobShoots(x, z, scene, global_objects, item_id, camera) {
     powerCrystal4.rotate(axis, angle, 1);
   });
 
-  let powerMachine1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8}, scene);
+  let powerMachine1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([1, 1, 4, 0.2, 1, 1])}, scene);
   powerMachine1.position.y = 0.25;
   powerMachine1.position.x = x - 20;
   powerMachine1.position.z = z + 20;
   powerMachine1.material = new StandardMaterial('texture1', scene);
   powerMachine1.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-  let powerMachine2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8}, scene);
+  let powerMachine2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([1, 1, 4, 0.2, 1, 1])}, scene);
   powerMachine2.position.y = 0.25;
   powerMachine2.position.x = x - 20;
   powerMachine2.position.z = z - 20;
   powerMachine2.material = new StandardMaterial('texture1', scene);
   powerMachine2.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-  let powerMachine3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8}, scene);
+  let powerMachine3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([1, 1, 4, 0.2, 1, 1])}, scene);
   powerMachine3.position.y = 0.25;
   powerMachine3.position.x = x + 20;
   powerMachine3.position.z = z - 20;
   powerMachine3.material = new StandardMaterial('texture1', scene);
   powerMachine3.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-  let powerMachine4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8}, scene);
+  let powerMachine4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 4, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([1, 1, 4, 0.2, 1, 1])}, scene);
   powerMachine4.position.y = 0.25;
   powerMachine4.position.x = x + 20;
   powerMachine4.position.z = z + 20;
   powerMachine4.material = new StandardMaterial('texture1', scene);
   powerMachine4.material.diffuseTexture = returnMetalTexture("iron", scene);
 
-  let wire1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 55, tessellation: 8}, scene);
+  let wire1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 55, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 55, 0.1, 0.1])}, scene);
   wire1.position.y = 0.05;
   wire1.position.x = x;
   wire1.position.z = z;
@@ -241,7 +234,7 @@ function mobShoots(x, z, scene, global_objects, item_id, camera) {
   wire1.material = new StandardMaterial('texture1', scene);
   wire1.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
-  let wire2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 55, tessellation: 8}, scene);
+  let wire2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 55, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 55, 0.1, 0.1])}, scene);
   wire2.position.y = 0.05;
   wire2.position.x = x;
   wire2.position.z = z;
@@ -250,14 +243,12 @@ function mobShoots(x, z, scene, global_objects, item_id, camera) {
   wire2.material = new StandardMaterial('texture1', scene);
   wire2.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
-  let bigPlatformMob = MeshBuilder.CreateCylinder("cylinder", {diameter: 35, height: 2, tessellation: 20}, scene);
+  let bigPlatformMob = MeshBuilder.CreateCylinder("cylinder", {diameter: 35, height: 2, tessellation: 20, faceUV: genCylinderFaceUV([0, 0, 20, 1, 10, 10])}, scene);
   bigPlatformMob.position.y = 1;
   bigPlatformMob.position.x = x;
   bigPlatformMob.position.z = z;
   bigPlatformMob.material = new StandardMaterial('texture1', scene);
   bigPlatformMob.material.diffuseTexture = returnMetalTexture("iron_blue", scene);
-  bigPlatformMob.material.diffuseTexture.uScale = 10;
-  bigPlatformMob.material.diffuseTexture.vScale = 10;
   bigPlatformMob.physicsImpostor = new PhysicsImpostor(bigPlatformMob, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   bigPlatformMob.checkCollisions = true;
   bigPlatformMob.name = "bigPlatformMob";
