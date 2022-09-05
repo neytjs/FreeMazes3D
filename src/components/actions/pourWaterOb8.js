@@ -2,7 +2,7 @@ import {Vector3} from "@babylonjs/core/Maths/math";
 import {GUI_Warning} from "../gui/gui_warning.js";
 import {playSound} from "../assets/playSound.js";
 
-function pourWaterOb8(solved, scene, camera, ob8, player) {
+function pourWaterOb8(solved, scene, camera, ob8, player, global_language) {
   if (player.holding === "wateringCan") {
     let genWateringCan = (status) => {
       if (status === "holding") {
@@ -36,7 +36,7 @@ function pourWaterOb8(solved, scene, camera, ob8, player) {
         ob8.pouring_sound.dispose(true, true);
         ob8.pouring_sound = null;
         genWateringCan("holding");
-        GUI_Warning("You are out of water.", 1500);
+        GUI_Warning(global_language.text.puzzles.ob8.warn, 1500, scene);
       } else if (ob8.water > 0) {
         ob8.water = ob8.water - 0.002;
         let barrier1_Ob8 = scene.getMeshByName("barrier1_Ob8");
@@ -45,28 +45,28 @@ function pourWaterOb8(solved, scene, camera, ob8, player) {
         let barrier4_Ob8 = scene.getMeshByName("barrier4_Ob8");
         let wateringCan = scene.getMeshByName("wateringCanpouring");
         if (barrier1_Ob8.intersectsMesh(wateringCan, false)) {
-            ob8.shrinking_name = "";
-            ob8.shrinking_pineTree = false;
-            ob8.growing_name = "pineTree";
-            ob8.growing = true;
+          ob8.shrinking_name = "";
+          ob8.shrinking_pineTree = false;
+          ob8.growing_name = "pineTree";
+          ob8.growing = true;
         }
         if (barrier2_Ob8.intersectsMesh(wateringCan, false)) {
-            ob8.shrinking_name = "";
-            ob8.shrinking_fruitTree = false;
-            ob8.growing_name = "fruitTree";
-            ob8.growing = true;
+          ob8.shrinking_name = "";
+          ob8.shrinking_fruitTree = false;
+          ob8.growing_name = "fruitTree";
+          ob8.growing = true;
         }
         if (barrier3_Ob8.intersectsMesh(wateringCan, false)) {
-            ob8.shrinking_name = "";
-            ob8.shrinking_cactus = false;
-            ob8.growing_name = "cactus";
-            ob8.growing = true;
+          ob8.shrinking_name = "";
+          ob8.shrinking_cactus = false;
+          ob8.growing_name = "cactus";
+          ob8.growing = true;
         }
         if (barrier4_Ob8.intersectsMesh(wateringCan, false)) {
-            ob8.shrinking_name = "";
-            ob8.shrinking_flower = false;
-            ob8.growing_name = "flower";
-            ob8.growing = true;
+          ob8.shrinking_name = "";
+          ob8.shrinking_flower = false;
+          ob8.growing_name = "flower";
+          ob8.growing = true;
         }
       }
     }

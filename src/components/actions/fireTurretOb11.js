@@ -13,7 +13,7 @@ import {playSound} from "../assets/playSound.js";
 import {GUI_Warning} from "../gui/gui_warning.js";
 import {GUI_Score} from "../gui/gui_score.js";
 
-function fireTurretOb11(ob11, scene, solved, score, forcefield_objects, obstacle_objects) {
+function fireTurretOb11(ob11, scene, solved, score, forcefield_objects, obstacle_objects, global_language) {
   if (solved.solvedP11 === false && ob11.firing === false) {
     ob11.firing = true;
 
@@ -23,15 +23,17 @@ function fireTurretOb11(ob11, scene, solved, score, forcefield_objects, obstacle
     shell1.position.x = -1;
     shell1.material = new StandardMaterial('texture1', scene);
     shell1.material.diffuseColor = new Color3(1, 0, 0);
+    shell1.material.specularColor = new Color3(1, 0, 0);
     shell1.material.emissiveColor = new Color3(1, 0, 0);
-    shell1.material.emissiveColor = new Color3(1, 0, 0);
+    shell1.material.ambientColor = new Color3(1, 0, 0);
 
     let shell2 = Mesh.CreateSphere("shell", 1, 0.6, scene);
     shell2.position.x = 1;
     shell2.material = new StandardMaterial('texture1', scene);
     shell2.material.diffuseColor = new Color3(1, 0, 0);
+    shell2.material.specularColor = new Color3(1, 0, 0);
     shell2.material.emissiveColor = new Color3(1, 0, 0);
-    shell2.material.emissiveColor = new Color3(1, 0, 0);
+    shell2.material.ambientColor = new Color3(1, 0, 0);
 
     let shellsBarrier = MeshBuilder.CreateBox("box", {width: 3, height: 1, depth: 1}, scene)
     shellsBarrier.material = new StandardMaterial('texture1', scene);
@@ -143,8 +145,8 @@ function fireTurretOb11(ob11, scene, solved, score, forcefield_objects, obstacle
                     setTimeout(() => {
                       playSound("save", 5000, scene);
                       barrier.dispose();
-                      GUI_Score(200, score);
-                      GUI_Warning("You have removed the barrier!", 1500);
+                      GUI_Score(200, score, global_language);
+                      GUI_Warning(global_language.text.global.success, 1500, scene);
                     }, 1000);
                   }
                 }

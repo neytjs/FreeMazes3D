@@ -3,7 +3,7 @@ import {GUI_InventoryDec} from "../gui/gui_inventory_dec.js";
 import {GUI_Warning} from "../gui/gui_warning.js";
 import {playSound} from "../assets/playSound.js";
 
-function openGate(hit, door_objects, inventory, inventory_tracker, scene) {
+function openGate(hit, door_objects, inventory, inventory_tracker, scene, global_language) {
   if (hit.pickedMesh.name === "door") {
     for (let i = 0, length = door_objects.length; i < length; i++) {
       if (hit.pickedMesh.uniqueId === door_objects[i].id) {
@@ -23,7 +23,7 @@ function openGate(hit, door_objects, inventory, inventory_tracker, scene) {
             GUI_InventoryDec(inventory, inventory_tracker);
             GUI_InventoryDisplay(inventory, inventory_tracker);
           } else {
-            GUI_Warning("You must select the correct key.", 1200);
+            GUI_Warning(global_language.text.global.gate, 1200, scene);
           }
         }
       }

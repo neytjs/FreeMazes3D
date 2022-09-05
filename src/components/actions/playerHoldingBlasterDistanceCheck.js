@@ -1,7 +1,7 @@
 import {Vector3} from "@babylonjs/core/Maths/math";
 import {playSound} from "../assets/playSound.js";
 
-function playerHoldingBlasterDistanceCheck(obstacle_objects, player, camera, scene, solved) {
+function playerHoldingBlasterDistanceCheck(player, camera, scene, solved) {
   if (player.holding !== "") {
     let distance = 50;
     if (player.holding === "blasterOb15") {

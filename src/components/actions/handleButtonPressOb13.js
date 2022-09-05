@@ -2,7 +2,7 @@ import {playSound} from "../assets/playSound.js";
 import {plateColors, mazePos} from "../assets/pyramid_data.js";
 import {GUI_Warning} from "../gui/gui_warning.js";
 
-function handleButtonPressOb13(buttons, ob13, obstacle_objects, scene) {
+function handleButtonPressOb13(buttons, ob13, obstacle_objects, scene, global_language) {
   if (buttons.pushingButton === "pushButton1p13") {
     ob13.pushButton1p13 = true;
     ob13.buttons_remaining = ob13.buttons_remaining - 1;
@@ -33,13 +33,13 @@ function handleButtonPressOb13(buttons, ob13, obstacle_objects, scene) {
   if (buttons.pushingButton === "pushButton1p13" || buttons.pushingButton === "pushButton2p13" || buttons.pushingButton === "pushButton3p13") {
     switch (ob13.buttons_remaining) {
       case 2:
-        GUI_Warning("Two buttons remaining.", 1500);
+        GUI_Warning(global_language.text.puzzles.ob13.remaining.alert1, 1500, scene);
       break;
       case 1:
-        GUI_Warning("One button remaining.", 1500);
+        GUI_Warning(global_language.text.puzzles.ob13.remaining.alert2, 1500, scene);
       break;
       case 0:
-        GUI_Warning("You have clicked all the buttons.", 1500);
+        GUI_Warning(global_language.text.puzzles.ob13.remaining.alert3, 1500, scene);
       break;
     }
   }

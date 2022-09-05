@@ -2,7 +2,7 @@ import {GUI_Warning} from "../gui/gui_warning.js";
 import {GUI_Score} from "../gui/gui_score.js";
 import {playSound} from "../assets/playSound.js";
 
-function growPlantOb8(scene, camera, ob8, solved, obstacle_objects, forcefield_objects, score, player) {
+function growPlantOb8(scene, camera, ob8, solved, obstacle_objects, forcefield_objects, score, player, global_language) {
   if (ob8.growing) {
   // first test to make sure if it is shrinking and if so stop it
     if (ob8.shrinking) {
@@ -51,8 +51,8 @@ function growPlantOb8(scene, camera, ob8, solved, obstacle_objects, forcefield_o
                 setTimeout(() => {
                   playSound("save", 5000, scene);
                   barrier.dispose();
-                  GUI_Score(200, score);
-                  GUI_Warning("You have removed the barrier!", 1500);
+                  GUI_Score(200, score, global_language);
+                  GUI_Warning(global_language.text.global.success, 1500, scene);
                 }, 1500);
               }
             }

@@ -4,7 +4,7 @@ import {GUI_Warning} from "../gui/gui_warning.js";
 import {GUI_Score} from "../gui/gui_score.js";
 import {playSound} from "../assets/playSound.js";
 
-function removeBarrierOb17(solved, scene, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score) {
+function removeBarrierOb17(solved, scene, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score, global_language) {
   solved.solvedP17 = true;
   let red_potion = scene.getMeshByName("red_potionOb17");
   red_potion.position.y = -1000;
@@ -42,8 +42,8 @@ function removeBarrierOb17(solved, scene, obstacle_objects, forcefield_objects, 
           setTimeout(() => {
             playSound("save", 5000, scene);
             barrier.dispose();
-            GUI_Score(100, score);
-            GUI_Warning("You have removed the barrier!", 1500);
+            GUI_Score(100, score, global_language);
+            GUI_Warning(global_language.text.global.success, 1500, scene);
           }, 1500);
         }
       }

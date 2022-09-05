@@ -1,5 +1,6 @@
 import {ParticleSystem} from "@babylonjs/core/Particles";
 import {Vector3} from "@babylonjs/core/Maths/math";
+import {Sound} from "@babylonjs/core/Audio";
 import {GUI_InventoryDisplay} from "../gui/gui_inventory_display.js";
 import {GUI_InventoryDec} from "../gui/gui_inventory_dec.js";
 import {playSound} from "../assets/playSound.js";
@@ -19,6 +20,12 @@ function pickUpCrystalOb19(hit_name, ob19, solved, scene, camera, player) {
           playSound("negative", 3000, scene);
           let beam = scene.getMeshByName(ob19.holding+"Beam");
           beam.material.alpha = 0;
+        }
+        let dSound = scene.getSoundByName(crystal_color+"_crystalOb19"+"Sound");
+        if (dSound) {
+          dSound.detachFromMesh(crystal_mesh);
+          dSound.dispose(true, true);
+          dSound = null;
         }
         player.holding = ob19[hit_name]+"_CrystalOb19";
         let carryingCrystal = scene.getMeshByName("carryingCrystalOb19");

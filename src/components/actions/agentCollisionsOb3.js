@@ -4,7 +4,7 @@ import {GUI_Warning} from "../gui/gui_warning.js";
 import {GUI_Score} from "../gui/gui_score.js";
 import {playSound} from "../assets/playSound.js";
 
-function agentCollisionsOb3(solved, ob3, obstacle_objects, forcefield_objects, scene, score) {
+function agentCollisionsOb3(solved, ob3, obstacle_objects, forcefield_objects, scene, score, global_language) {
   if (agent_object.color) {
     let sphere = scene.getMeshByName("agentSphere");
     let pole = scene.getMeshByName(agent_object.color + "Pole");
@@ -31,8 +31,8 @@ function agentCollisionsOb3(solved, ob3, obstacle_objects, forcefield_objects, s
                 setTimeout(() => {
                   playSound("save", 5000, scene);
                   barrier.dispose();
-                  GUI_Score(200, score);
-                  GUI_Warning("You have removed the barrier!", 1500);
+                  GUI_Score(100, score, global_language);
+                  GUI_Warning(global_language.text.global.success, 1500, scene);
                 }, 1500);
               }
             }

@@ -3,7 +3,7 @@ import {GUI_InventoryDec} from "../gui/gui_inventory_dec.js";
 import {GUI_Warning} from "../gui/gui_warning.js";
 import {playSound} from "../assets/playSound.js";
 
-function powerPortal(hit, portal_objects, inventory, inventory_tracker, exit_pos, scene) {
+function powerPortal(hit, portal_objects, inventory, inventory_tracker, exit_pos, scene, global_language) {
   if (hit.pickedMesh.name === "teleporter_unpowered_barrier") {
     let matches = 0;
     let index = 0;
@@ -30,12 +30,12 @@ function powerPortal(hit, portal_objects, inventory, inventory_tracker, exit_pos
         exitGem.position.y = 0;
         let exitSphere = scene.getMeshByName("exitSphere");
         exitSphere.position.y = 3.5;
-        GUI_Warning("You have powered the exit portal! Press again to exit.", 2000);
+        GUI_Warning(global_language.text.global.portal.powered, 2000, scene);
       } else {
-        GUI_Warning("You must select the portal gem.", 1200);
+        GUI_Warning(global_language.text.global.portal.select, 1200, scene);
       }
     } else {
-      GUI_Warning("You must find a special gem to power this portal.", 2000);
+      GUI_Warning(global_language.text.global.portal.find, 2000, scene);
     }
   }
 }

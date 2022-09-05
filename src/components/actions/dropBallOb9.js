@@ -5,8 +5,8 @@ import {GUI_InventoryDec} from "../gui/gui_inventory_dec.js";
 import {playSound} from "../assets/playSound.js";
 import {returnCrystalTexture} from "../assets/textures.js";
 
-function dropBallOb9(hit_name, ob9, solved, inventory, inventory_tracker, scene) {
-  if (solved.solvedP9 === false && inventory[inventory_tracker.current_item].hasOwnProperty("type")) {
+function dropBallOb9(hit_name, ob9, solved, inventory, inventory_tracker, scene, global_language) {
+  if (solved.solvedP9 === false && inventory.length > 1 && inventory[inventory_tracker.current_item].hasOwnProperty("type")) {
     if (hit_name === "pipe1entrance" || hit_name === "pipe2entrance" || hit_name === "pipe3entrance" || hit_name === "pipe4entrance") {
       if (ob9[hit_name] === false && inventory[inventory_tracker.current_item].type === "ball_Ob9") {
         playSound("Falling_Rock", 5500, scene);
@@ -24,7 +24,7 @@ function dropBallOb9(hit_name, ob9, solved, inventory, inventory_tracker, scene)
           ob9[hidden+"falling"] = true;
         }, 3200);
       } else if (ob9[hit_name] === true && inventory[inventory_tracker.current_item].type === "ball_Ob9") {
-        GUI_Warning("A mysterious force stops you.", 1500);
+        GUI_Warning(global_language.text.puzzles.ob9.warn, 1500, scene);
       }
     }
   }

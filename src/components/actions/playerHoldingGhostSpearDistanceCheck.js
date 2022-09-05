@@ -1,7 +1,7 @@
 import {Vector3} from "@babylonjs/core/Maths/math";
 import {playSound} from "../assets/playSound.js";
 
-function playerHoldingGhostSpearDistanceCheck(obstacle_objects, player, camera, scene, solved) {
+function playerHoldingGhostSpearDistanceCheck(player, camera, scene, solved) {
   if (player.holding !== "") {
     let distance = 50;
     if (player.holding === "ghostSpear") {

@@ -2,7 +2,7 @@ import {Vector3} from "@babylonjs/core/Maths/math";
 import {rotateMobOb12} from "./rotateMobOb12.js";
 import {getAgentPosition} from "../assets/mob_crowd.js";
 
-function movementTestOb12(solved, ob12, camera, scene, score, forcefield_objects, obstacle_objects) {
+function movementTestOb12(solved, ob12, camera, scene, score, forcefield_objects, obstacle_objects, global_language) {
   if (ob12.firing === false) {
     let mob = scene.getMeshByName("agentMob");
     if (mob) {
@@ -11,7 +11,7 @@ function movementTestOb12(solved, ob12, camera, scene, score, forcefield_objects
         let newx = camera.position.x - mob_pos.x;
         let newz = camera.position.z - mob_pos.z;
         let atan2 = Math.atan2(newx, newz);
-        rotateMobOb12(solved, scene, atan2, ob12, camera, score, forcefield_objects, obstacle_objects);
+        rotateMobOb12(solved, scene, atan2, ob12, camera, score, forcefield_objects, obstacle_objects, global_language);
       }
     }
   }

@@ -3,7 +3,7 @@ import {GUI_Score} from "../gui/gui_score.js";
 import {playSound} from "../assets/playSound.js";
 import {returnCrystalTexture} from "../assets/textures.js";
 
-function placeCrystalOb6(hit_name, obstacle_objects, forcefield_objects, scene, camera, solved, ob6, player, score) {
+function placeCrystalOb6(hit_name, obstacle_objects, forcefield_objects, scene, camera, solved, ob6, player, score, global_language) {
   if (player.holding !== "" && solved.solvedP6 === false && ob6.just_accessed === false) {
     if (hit_name === "red_Pedestal" || hit_name === "teal_Pedestal" || hit_name === "pink_Pedestal" || hit_name === "green_Pedestal" || hit_name === "blue_Pedestal" || hit_name === "purple_Pedestal" || hit_name === "grey_Pedestal") {
       let pedestal = hit_name.slice(0, hit_name.lastIndexOf('_'));
@@ -45,8 +45,8 @@ function placeCrystalOb6(hit_name, obstacle_objects, forcefield_objects, scene, 
                         carryingCrystal.dispose();
                         playSound("save", 5000, scene);
                         barrier.dispose();
-                        GUI_Score(200, score);
-                        GUI_Warning("You have removed the barrier!", 1500);
+                        GUI_Score(200, score, global_language);
+                        GUI_Warning(global_language.text.global.success, 1500, scene);
                       }
                     }
                   }

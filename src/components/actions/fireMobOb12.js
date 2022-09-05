@@ -14,7 +14,7 @@ import {getAgentPosition} from "../assets/mob_crowd.js";
 import {GUI_Warning} from "../gui/gui_warning.js";
 import {GUI_Score} from "../gui/gui_score.js";
 
-function fireMobOb12(ob12, scene, solved, camera, score, forcefield_objects, obstacle_objects) {
+function fireMobOb12(ob12, scene, solved, camera, score, forcefield_objects, obstacle_objects, global_language) {
   let mob_pos = getAgentPosition();
   if (Vector3.Distance(mob_pos, camera.position) < 20) {
     if (ob12.firing === false) {
@@ -25,8 +25,9 @@ function fireMobOb12(ob12, scene, solved, camera, score, forcefield_objects, obs
       let laser1 = Mesh.CreateSphere("shell", 1, 0.4, scene);
       laser1.material = new StandardMaterial('texture1', scene);
       laser1.material.diffuseColor = new Color3(0, 0.64, 1);
+      laser1.material.specularColor = new Color3(0, 0.64, 1);
       laser1.material.emissiveColor = new Color3(0, 0.64, 1);
-      laser1.material.emissiveColor = new Color3(0, 0.64, 1);
+      laser1.material.ambientColor = new Color3(0, 0.64, 1);
 
       let laserBarrier = MeshBuilder.CreateBox("box", {width: 1, height: 1, depth: 1}, scene);
       laserBarrier.material = new StandardMaterial('texture1', scene);
@@ -138,8 +139,8 @@ function fireMobOb12(ob12, scene, solved, camera, score, forcefield_objects, obs
                       setTimeout(() => {
                         playSound("save", 5000, scene);
                         barrier.dispose();
-                        GUI_Score(200, score);
-                        GUI_Warning("You have removed the barrier!", 1500);
+                        GUI_Score(200, score, global_language);
+                        GUI_Warning(global_language.text.global.success, 1500, scene);
                       }, 1000);
                     }
                   }

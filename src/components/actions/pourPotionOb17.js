@@ -8,7 +8,7 @@ import {resetPuzzleOb17} from "./resetPuzzleOb17.js";
 import {removeBarrierOb17} from "./removeBarrierOb17.js";
 import {returnLiquidTexture} from "../assets/textures.js";
 
-function pourPotionOb17(hit, scene, camera, solved, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score, ob17, player) {
+function pourPotionOb17(hit, scene, camera, solved, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score, ob17, player, global_language) {
   if (solved.solvedP17 === false && player.health >= 0) {
     if (hit.pickedMesh.name === "cauldronOb17") {
       let inv_item = inventory[inventory_tracker.current_item];
@@ -93,7 +93,7 @@ function pourPotionOb17(hit, scene, camera, solved, obstacle_objects, forcefield
         }
       // if they solved puzzle
         if (ob17.liquid_color === master_color[0]) {
-          removeBarrierOb17(solved, scene, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score);
+          removeBarrierOb17(solved, scene, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score, global_language);
         }
       }
     }

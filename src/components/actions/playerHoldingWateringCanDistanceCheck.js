@@ -1,7 +1,7 @@
 import {Vector3} from "@babylonjs/core/Maths/math";
 import {playSound} from "../assets/playSound.js";
 
-function playerHoldingWateringCanDistanceCheck(obstacle_objects, player, camera, scene, solved, ob8) {
+function playerHoldingWateringCanDistanceCheck(player, camera, scene, solved, ob8) {
   if (player.holding !== "") {
     let distance = 50;
     if (player.holding === "wateringCan") {

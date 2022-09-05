@@ -5,7 +5,7 @@ import {GUI_InventoryDec} from "../gui/gui_inventory_dec.js";
 import {playSound} from "../assets/playSound.js";
 import {sound_machines_colors} from "../assets/sound_machines_colors.js";
 
-function activateSoundMachineOb18(hit, solved, ob18, scene) {
+function activateSoundMachineOb18(hit, solved, ob18, scene, global_language) {
   if (solved.solvedP18 === false) {
     function solveCheck() {
       if (ob18.sounds.length >= 6) {
@@ -14,39 +14,75 @@ function activateSoundMachineOb18(hit, solved, ob18, scene) {
             if (ob18.sounds[0] === "smachine_six") {
               playSound("six", 1000, scene);
               let light1 = scene.getMeshByName("bulb1Ob18");
+              light1.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              light1.material.specularColor = new Color3(0.55, 0.48, 0.48);
               light1.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              light1.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               setTimeout(() => {
+                light1.material.diffuseColor = sound_machines_colors[5];
+                light1.material.specularColor = sound_machines_colors[5];
                 light1.material.emissiveColor = sound_machines_colors[5];
+                light1.material.ambientColor = sound_machines_colors[5];
                 if (ob18.sounds[1] === "smachine_five") {
                   playSound("five", 1000, scene);
                   let light2 = scene.getMeshByName("bulb2Ob18");
+                  light2.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+                  light2.material.specularColor = new Color3(0.55, 0.48, 0.48);
                   light2.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+                  light2.material.ambientColor = new Color3(0.55, 0.48, 0.48);
                   setTimeout(() => {
+                    light2.material.diffuseColor = sound_machines_colors[4];
+                    light2.material.specularColor = sound_machines_colors[4];
                     light2.material.emissiveColor = sound_machines_colors[4];
+                    light2.material.ambientColor = sound_machines_colors[4];
                     if (ob18.sounds[2] === "smachine_four") {
                       playSound("four", 1000, scene);
                       let light3 = scene.getMeshByName("bulb3Ob18");
+                      light3.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+                      light3.material.specularColor = new Color3(0.55, 0.48, 0.48);
                       light3.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+                      light3.material.ambientColor = new Color3(0.55, 0.48, 0.48);
                       setTimeout(() => {
+                        light3.material.diffuseColor = sound_machines_colors[3];
+                        light3.material.specularColor = sound_machines_colors[3];
                         light3.material.emissiveColor = sound_machines_colors[3];
+                        light3.material.ambientColor = sound_machines_colors[3];
                         if (ob18.sounds[3] === "smachine_three") {
                           playSound("three", 1000, scene);
                           let light4 = scene.getMeshByName("bulb4Ob18");
+                          light4.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+                          light4.material.specularColor = new Color3(0.55, 0.48, 0.48);
                           light4.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+                          light4.material.ambientColor = new Color3(0.55, 0.48, 0.48);
                           setTimeout(() => {
+                            light4.material.diffuseColor = sound_machines_colors[2];
+                            light4.material.specularColor = sound_machines_colors[2];
                             light4.material.emissiveColor = sound_machines_colors[2];
+                            light4.material.ambientColor = sound_machines_colors[2];
                             if (ob18.sounds[4] === "smachine_two") {
                               playSound("two", 1000, scene);
                               let light5 = scene.getMeshByName("bulb5Ob18");
+                              light5.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+                              light5.material.specularColor = new Color3(0.55, 0.48, 0.48);
                               light5.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+                              light5.material.ambientColor = new Color3(0.55, 0.48, 0.48);
                               setTimeout(() => {
+                                light5.material.diffuseColor = sound_machines_colors[1];
+                                light5.material.specularColor = sound_machines_colors[1];
                                 light5.material.emissiveColor = sound_machines_colors[1];
+                                light5.material.ambientColor = sound_machines_colors[1];
                                 if (ob18.sounds[5] === "smachine_one") {
                                   playSound("one", 1000, scene);
                                   let light6 = scene.getMeshByName("bulb6Ob18");
+                                  light6.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+                                  light6.material.specularColor = new Color3(0.55, 0.48, 0.48);
                                   light6.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+                                  light6.material.ambientColor = new Color3(0.55, 0.48, 0.48);
                                   setTimeout(() => {
+                                    light6.material.diffuseColor = sound_machines_colors[0];
+                                    light6.material.specularColor = sound_machines_colors[0];
                                     light6.material.emissiveColor = sound_machines_colors[0];
+                                    light6.material.ambientColor = sound_machines_colors[0];
                                     callback();
                                   }, 1000);
                                 } else {
@@ -97,31 +133,67 @@ function activateSoundMachineOb18(hit, solved, ob18, scene) {
               ob18.smachine_five = false;
               ob18.smachine_six = false;
               playSound("negative", 3000, scene);
-              GUI_Warning("You have failed. Try again.", 2500);
+              GUI_Warning(global_language.text.global.fail, 2500, scene);
               let machine_light1 = scene.getMeshByName("smachine_one_bulb");
+              machine_light1.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              machine_light1.material.specularColor = new Color3(0.55, 0.48, 0.48);
               machine_light1.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              machine_light1.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let machine_light2 = scene.getMeshByName("smachine_two_bulb");
+              machine_light2.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              machine_light2.material.specularColor = new Color3(0.55, 0.48, 0.48);
               machine_light2.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              machine_light2.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let machine_light3 = scene.getMeshByName("smachine_three_bulb");
+              machine_light3.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              machine_light3.material.specularColor = new Color3(0.55, 0.48, 0.48);
               machine_light3.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              machine_light3.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let machine_light4 = scene.getMeshByName("smachine_four_bulb");
+              machine_light4.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              machine_light4.material.specularColor = new Color3(0.55, 0.48, 0.48);
               machine_light4.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              machine_light4.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let machine_light5 = scene.getMeshByName("smachine_five_bulb");
+              machine_light5.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              machine_light5.material.specularColor = new Color3(0.55, 0.48, 0.48);
               machine_light5.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              machine_light5.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let machine_light6 = scene.getMeshByName("smachine_six_bulb");
+              machine_light6.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              machine_light6.material.specularColor = new Color3(0.55, 0.48, 0.48);
               machine_light6.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              machine_light6.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let light1 = scene.getMeshByName("bulb1Ob18");
+              light1.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              light1.material.specularColor = new Color3(0.55, 0.48, 0.48);
               light1.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              light1.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let light2 = scene.getMeshByName("bulb2Ob18");
+              light2.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              light2.material.specularColor = new Color3(0.55, 0.48, 0.48);
               light2.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              light2.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let light3 = scene.getMeshByName("bulb3Ob18");
+              light3.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              light3.material.specularColor = new Color3(0.55, 0.48, 0.48);
               light3.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              light3.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let light4 = scene.getMeshByName("bulb4Ob18");
+              light4.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              light4.material.specularColor = new Color3(0.55, 0.48, 0.48);
               light4.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              light4.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let light5 = scene.getMeshByName("bulb5Ob18");
+              light5.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              light5.material.specularColor = new Color3(0.55, 0.48, 0.48);
               light5.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              light5.material.ambientColor = new Color3(0.55, 0.48, 0.48);
               let light6 = scene.getMeshByName("bulb6Ob18");
+              light6.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+              light6.material.specularColor = new Color3(0.55, 0.48, 0.48);
               light6.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+              light6.material.ambientColor = new Color3(0.55, 0.48, 0.48);
             }, 1800);
           });
         }
@@ -152,9 +224,15 @@ function activateSoundMachineOb18(hit, solved, ob18, scene) {
         }
 
         let machine_light = scene.getMeshByName(sm_num+"_bulb");
+        machine_light.material.diffuseColor = mach_color;
+        machine_light.material.specularColor = mach_color;
         machine_light.material.emissiveColor = mach_color;
+        machine_light.material.ambientColor = mach_color;
         let light = scene.getMeshByName(light_name);
+        light.material.diffuseColor = mach_color;
+        light.material.specularColor = mach_color;
         light.material.emissiveColor = mach_color;
+        light.material.ambientColor = mach_color;
         ob18.sounds.push(sm_num);
       }
       solveCheck();

@@ -7,7 +7,7 @@ import {GUI_Warning} from "../gui/gui_warning.js";
 import {GUI_Score} from "../gui/gui_score.js";
 import {playSound} from "../assets/playSound.js";
 
-function placePowderOb13(hit, scene, solved, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score, ob13) {
+function placePowderOb13(hit, scene, solved, obstacle_objects, forcefield_objects, inventory, inventory_tracker, score, ob13, global_language) {
   if (solved.solvedP13 === false) {
     if (hit.pickedMesh.name === "greenPlate" || hit.pickedMesh.name === "redPlate" || hit.pickedMesh.name === "bluePlate") {
       let matches = 0;
@@ -18,7 +18,7 @@ function placePowderOb13(hit, scene, solved, obstacle_objects, forcefield_object
         let hiddenPowder = scene.getMeshByName("greenHiddenPowderOb13");
         hiddenPowder.material.alpha = 1;
         const particleSystem = new ParticleSystem("powderParticles", 2000);
-        particleSystem.particleTexture = new Texture("./imgs/circle.png");
+        particleSystem.particleTexture = new Texture("./imgs/circle_light.png");
         particleSystem.emitter = hidden;
         particleSystem.addColorGradient(0, new Color3(inventory[inventory_tracker.current_item].color_code.r, inventory[inventory_tracker.current_item].color_code.g, inventory[inventory_tracker.current_item].color_code.b));
         particleSystem.start();
@@ -30,7 +30,7 @@ function placePowderOb13(hit, scene, solved, obstacle_objects, forcefield_object
         let hiddenPowder = scene.getMeshByName("redHiddenPowderOb13");
         hiddenPowder.material.alpha = 1;
         const particleSystem = new ParticleSystem("powderParticles", 2000);
-        particleSystem.particleTexture = new Texture("./imgs/circle.png");
+        particleSystem.particleTexture = new Texture("./imgs/circle_light.png");
         particleSystem.emitter = hidden;
         particleSystem.addColorGradient(0, new Color3(inventory[inventory_tracker.current_item].color_code.r, inventory[inventory_tracker.current_item].color_code.g, inventory[inventory_tracker.current_item].color_code.b));
         particleSystem.start();
@@ -42,7 +42,7 @@ function placePowderOb13(hit, scene, solved, obstacle_objects, forcefield_object
         let hiddenPowder = scene.getMeshByName("blueHiddenPowderOb13");
         hiddenPowder.material.alpha = 1;
         const particleSystem = new ParticleSystem("powderParticles", 2000);
-        particleSystem.particleTexture = new Texture("./imgs/circle.png");
+        particleSystem.particleTexture = new Texture("./imgs/circle_light.png");
         particleSystem.emitter = hidden;
         particleSystem.addColorGradient(0, new Color3(inventory[inventory_tracker.current_item].color_code.r, inventory[inventory_tracker.current_item].color_code.g, inventory[inventory_tracker.current_item].color_code.b));
         particleSystem.start();
@@ -65,8 +65,8 @@ function placePowderOb13(hit, scene, solved, obstacle_objects, forcefield_object
                   setTimeout(() => {
                     playSound("save", 5000, scene);
                     barrier.dispose();
-                    GUI_Score(200, score);
-                    GUI_Warning("You have removed the barrier!", 1500);
+                    GUI_Score(200, score, global_language);
+                    GUI_Warning(global_language.text.global.success, 1500, scene);
                   }, 1500);
                 }
               }
@@ -75,7 +75,7 @@ function placePowderOb13(hit, scene, solved, obstacle_objects, forcefield_object
         }
       } else {
         if (inventory.length > 1) {
-          GUI_Warning("That does not go here.", 1500);
+          GUI_Warning(global_language.text.puzzles.ob13.warn2, 1500, scene);
         }
       }
     }

@@ -1,5 +1,3 @@
-import {GUI_Warning} from "../gui/gui_warning.js";
-import {playSound} from "../assets/playSound.js";
 import {puzzleColors} from "../assets/bulb_button_colors.js";
 import {setBallColorOb20} from "./setBallColorOb20.js";
 
