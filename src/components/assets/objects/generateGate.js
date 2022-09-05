@@ -6,52 +6,52 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {returnMetalTexture} from "../textures.js";
+import {returnMetalTexture, genCubeFaceUV, genCylinderFaceUV} from "../textures.js";
 
 function generateGate(x, z, scene, global_objects, item_id, special) {
-  let box = MeshBuilder.CreateBox("box", {width: 0.1, height: 9.9, depth: 1}, scene);
+  let box = MeshBuilder.CreateBox("box", {width: 0.1, height: 9.9, depth: 1, wrap: true, faceUV: genCubeFaceUV([0.05, 4.45, 0.05, 4.45, 0.5, 4.45, 0.5, 4.45, 0.05, 0.5, 0.05, 0.5])}, scene);
   box.position.y = 2;
   box.rotation.z = Math.PI / 2;
   box.rotation.x = Math.PI / 2;
 
-   let box1 = MeshBuilder.CreateBox("box", {width: 0.1, height: 9.9, depth: 1}, scene);
+   let box1 = MeshBuilder.CreateBox("box", {width: 0.1, height: 9.9, depth: 1, wrap: true, faceUV: genCubeFaceUV([0.05, 4.45, 0.05, 4.45, 0.5, 4.45, 0.5, 4.45, 0.05, 0.5, 0.05, 0.5])}, scene);
   box1.position.y = 8;
   box1.rotation.z = Math.PI / 2;
   box1.rotation.x = Math.PI / 2;
 
-  let cylinder = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8}, scene);
+  let cylinder = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 5, 0.25, 0.25])}, scene);
   cylinder.position.y = 5;
   cylinder.position.x = -4;
 
-  let cylinder1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8}, scene);
+  let cylinder1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 5, 0.25, 0.25])}, scene);
   cylinder1.position.y = 5;
   cylinder1.position.x = -3;
 
-  let cylinder2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8}, scene);
+  let cylinder2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 5, 0.25, 0.25])}, scene);
   cylinder2.position.y = 5;
   cylinder2.position.x = -2;
 
-  let cylinder3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8}, scene);
+  let cylinder3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 5, 0.25, 0.25])}, scene);
   cylinder3.position.y = 5;
   cylinder3.position.x = -1;
 
-  let cylinder4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8}, scene);
+  let cylinder4 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 5, 0.25, 0.25])}, scene);
   cylinder4.position.y = 5;
   cylinder4.position.x = 0;
 
-  let cylinder5 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8}, scene);
+  let cylinder5 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 5, 0.25, 0.25])}, scene);
   cylinder5.position.y = 5;
   cylinder5.position.x = 1;
 
-  let cylinder6 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8}, scene);
+  let cylinder6 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 5, 0.25, 0.25])}, scene);
   cylinder6.position.y = 5;
   cylinder6.position.x = 2;
 
-  let cylinder7 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8}, scene);
+  let cylinder7 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 5, 0.25, 0.25])}, scene);
   cylinder7.position.y = 5;
   cylinder7.position.x = 3;
 
-  let cylinder8 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8}, scene);
+  let cylinder8 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.25, 0.25, 1, 5, 0.25, 0.25])}, scene);
   cylinder8.position.y = 5;
   cylinder8.position.x = 4;
 

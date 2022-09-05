@@ -41,6 +41,8 @@ function generateTreasure(treasure_type, x, z, scene, global_objects, item_id, s
   torus.rotation.x = Math.PI / 2;
   torus.material = new StandardMaterial('texture1', scene);
   torus.material.diffuseTexture = returnMetalTexture(ring_texture, scene);
+  torus.material.diffuseTexture.uScale = 1.875;
+  torus.material.diffuseTexture.vScale = 1;
 
   let pyramid = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 0.4, height: 0.4, tessellation: 4}, scene);
   pyramid.position.y = 4.6;

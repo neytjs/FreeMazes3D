@@ -8,7 +8,8 @@ import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 import {ParticleSystem} from "@babylonjs/core/Particles";
-import {returnStoneTexture, returnCrystalTexture, returnWoodTexture} from "../textures.js";
+import {returnStoneTexture, returnCrystalTexture, returnWoodTexture,
+  genCylinderFaceUV} from "../textures.js";
 
 function generatePortal(portal_type, x, z, scene, global_objects, item_id, special) {
   let exit, powered;
@@ -28,26 +29,24 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
     break;
   }
 
-  let top = MeshBuilder.CreateCylinder("cylinder", {diameter: 7, height: 0.75, tessellation: 8}, scene);
+  let top = MeshBuilder.CreateCylinder("cylinder", {diameter: 7, height: 0.75, tessellation: 8, tessellation: 8, faceUV: genCylinderFaceUV([3.5, 3.5, 7, 0.35, 3.5, 3.5])}, scene);
   top.position.y = 7;
   top.material = new StandardMaterial('texture1', scene);
   top.material.diffuseTexture = returnWoodTexture("wood_darkbrown", scene);
   portal_pieces.push(top);
 
-  let bottom = MeshBuilder.CreateCylinder("cylinder", {diameter: 7, height: 0.5, tessellation: 8}, scene);
+  let bottom = MeshBuilder.CreateCylinder("cylinder", {diameter: 7, height: 0.5, tessellation: 8, faceUV: genCylinderFaceUV([3.5, 3.5, 7, 0.35, 3.5, 3.5])}, scene);
   bottom.position.y = 0.25;
   bottom.material = new StandardMaterial('texture1', scene);
   bottom.material.diffuseTexture = returnStoneTexture("stone_dark", scene);
   portal_pieces.push(bottom);
 
-  let column = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8}, scene);
+  let column = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8, faceUV: genCylinderFaceUV([0, 0, 1, 4, 0, 0])}, scene);
   column.position.y = 3.5;
   column.position.x = 2;
   column.position.z = 2;
   column.material = new StandardMaterial('texture1', scene);
   column.material.diffuseTexture = returnWoodTexture("wood_brown", scene);
-  column.material.diffuseTexture.uScale = 2;
-  column.material.diffuseTexture.vScale = 2;
   portal_pieces.push(column);
 
   let cbarrier = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.3, height: 7, tessellation: 8}, scene);
@@ -58,7 +57,7 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   cbarrier.physicsImpostor = new PhysicsImpostor(cbarrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   cbarrier.checkCollisions = true;
 
-  let column1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8}, scene);
+  let column1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8, faceUV: genCylinderFaceUV([0, 0, 1, 4, 0, 0])}, scene);
   column1.position.y = 3.5;
   column1.position.x = -2;
   column1.position.z = -2;
@@ -76,7 +75,7 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   c1barrier.physicsImpostor = new PhysicsImpostor(c1barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   c1barrier.checkCollisions = true;
 
-  let column2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8}, scene);
+  let column2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8, faceUV: genCylinderFaceUV([0, 0, 1, 4, 0, 0])}, scene);
   column2.position.y = 3.5;
   column2.position.x = -2;
   column2.position.z = 2;
@@ -94,7 +93,7 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
   c2barrier.physicsImpostor = new PhysicsImpostor(c2barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   c2barrier.checkCollisions = true;
 
-  let column3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8}, scene);
+  let column3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 7, tessellation: 8, faceUV: genCylinderFaceUV([0, 0, 1, 4, 0, 0])}, scene);
   column3.position.y = 3.5;
   column3.position.x = 2;
   column3.position.z = -2;
@@ -140,9 +139,9 @@ function generatePortal(portal_type, x, z, scene, global_objects, item_id, speci
     portal.name = "teleporter_powered";
     portal.position.y = -1000;
     teleporter.position.y = -1000;
-    var particleSystem = new ParticleSystem("particles", 3000, scene);
+    let particleSystem = new ParticleSystem("particles", 3000, scene);
 
-    particleSystem.particleTexture = new Texture("./imgs/circle.png", scene);
+    particleSystem.particleTexture = new Texture("./imgs/circle_light.png", scene);
 
     let pyramid = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 1, height: 1, tessellation: 4}, scene);
     pyramid.position.y = 4;

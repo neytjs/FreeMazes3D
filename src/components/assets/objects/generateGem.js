@@ -9,13 +9,13 @@ import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 import {returnCrystalTexture} from '../textures.js';
 
-function generateGem(gem_type, x, z, scene, global_objects, item_id, special) {
+function generateGem(gem_type, x, z, scene, global_objects, item_id, special, global_language) {
   let inventory = "";
   let img = "";
   let texture = "";
   switch (gem_type) {
     case "portal_gem":
-      inventory = "Portal Gem";
+      inventory = global_language.text.items.portal_gem;
       img = "portal_gem";
       texture = "gem_pink";
     break;

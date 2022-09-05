@@ -6,26 +6,39 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {returnMetalTexture, returnLiquidTexture} from "../textures.js";
+import {returnMetalTexture, returnLiquidTexture, genCylinderFaceUV} from "../textures.js";
 
-function generateWateringCan(status, scene, x, z, camera) {
+function generateWateringCan(status, scene, x, z, y, camera, name, can_type) {
+  let can_texture = "";
+  let nozzle_texture = "";
+  switch (can_type) {
+    case "garden":
+      can_texture = "metal_huntergreen";
+      nozzle_texture = "gold";
+    break;
+    case "hedge":
+      can_texture = "iron_tan";
+      nozzle_texture = "silver";
+    break;
+  }
+
   let pipe = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.3, height: 1.5, tessellation: 8}, scene);
   pipe.position.y = 2;
   pipe.position.z = 1.25;
   pipe.rotation.x = Math.PI / 3;
   pipe.material = new StandardMaterial('texture1', scene);
-  pipe.material.diffuseTexture = returnMetalTexture("metal_huntergreen", scene);
+  pipe.material.diffuseTexture = returnMetalTexture(can_texture, scene);
 
-  let nozzle = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 0.2, tessellation: 20}, scene);
+  let nozzle = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.75, height: 0.2, tessellation: 20, faceUV: genCylinderFaceUV([0.5, 0.5, 1, 0.25, 0.5, 0.5])}, scene);
   nozzle.position.y = 2.35;
   nozzle.position.z = 1.84;
   nozzle.rotation.x = Math.PI / 3;
   nozzle.material = new StandardMaterial('texture1', scene);
-  nozzle.material.diffuseTexture = returnMetalTexture("gold", scene);
+  nozzle.material.diffuseTexture = returnMetalTexture(nozzle_texture, scene);
 
   if (status === "holding") {
     let can = Mesh.MergeMeshes([pipe, nozzle], true, true, undefined, false, true);
-    can.name = "wateringCan";
+    can.name = name;
     can.position.y = -1000;
     can.rotation.x = 0.25;
   }
@@ -39,7 +52,7 @@ function generateWateringCan(status, scene, x, z, camera) {
     water.material.alpha = 0.5;
 
     let can = Mesh.MergeMeshes([pipe, nozzle, water], true, true, undefined, false, true);
-    can.name = "wateringCanpouring";
+    can.name = name + "pouring";
     can.position.y = -1000;
     can.rotation.x = 0.5;
   }
@@ -47,18 +60,22 @@ function generateWateringCan(status, scene, x, z, camera) {
     let tank = MeshBuilder.CreateCylinder("cylinder", {diameter: 1.5, height: 1.5, tessellation: 8}, scene);
     tank.position.y = 2;
     tank.material = new StandardMaterial('texture1', scene);
-    tank.material.diffuseTexture = returnMetalTexture("metal_huntergreen", scene);
+    tank.material.diffuseTexture = returnMetalTexture(can_texture, scene);
 
     let rim = MeshBuilder.CreateTorus("torus", {diameter: 1.5, thickness: 0.2}, scene);
     rim.position.y = 2.8;
     rim.material = new StandardMaterial('texture1', scene);
-    rim.material.diffuseTexture = returnMetalTexture("metal_huntergreen", scene);
+    rim.material.diffuseTexture = returnMetalTexture(can_texture, scene);
+    rim.material.diffuseTexture.uScale = 2;
+    rim.material.diffuseTexture.vScale = 1;
 
     let handle = MeshBuilder.CreateTorus("torus", {diameter: 1.75, thickness: 0.2}, scene);
     handle.position.y = 3;
     handle.rotation.x = Math.PI / 2;
     handle.material = new StandardMaterial('texture1', scene);
-    handle.material.diffuseTexture = returnMetalTexture("gold", scene);
+    handle.material.diffuseTexture = returnMetalTexture(nozzle_texture, scene);
+    handle.material.diffuseTexture.uScale = 2.5;
+    handle.material.diffuseTexture.vScale = 1;
 
     let top = MeshBuilder.CreateCylinder("cylinder", {diameter: 1.5, height: 0.01, tessellation: 20}, scene);
     top.position.y = 2.8;
@@ -74,9 +91,10 @@ function generateWateringCan(status, scene, x, z, camera) {
     let can = Mesh.MergeMeshes([tank, rim, pipe, nozzle, handle, top, barrier], true, true, undefined, false, true);
     can.position.x = x;
     can.position.z = z;
+    can.position.y = y;
     can.physicsImpostor = new PhysicsImpostor(barrier, PhysicsImpostor.CylinderImpostor, { mass: 0, restitution: 0.9 }, scene);
     can.checkCollisions = true;
-    can.name = "wateringCanitem";
+    can.name = name + "item";
 // make it rotate
     let axis = new Vector3(0, 6, 0);
     let angle = 0.05;

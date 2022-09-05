@@ -6,7 +6,7 @@ import {MeshBuilder} from "@babylonjs/core/Meshes";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
-import {returnMetalTexture, returnWoodTexture} from "../textures.js";
+import {returnMetalTexture, returnWoodTexture, genCylinderFaceUV} from "../textures.js";
 
 function generateSpear(status, spear_type, scene, x, z, camera) {
   let spear_name = "";
@@ -25,17 +25,17 @@ function generateSpear(status, spear_type, scene, x, z, camera) {
     break;
   }
 
-  let shaft = MeshBuilder.CreateCylinder("shaft", {diameterTop: 0.3, diameterBottom: 0.4, height: 8, tessellation: 12}, scene);
+  let shaft = MeshBuilder.CreateCylinder("shaft", {diameterTop: 0.3, diameterBottom: 0.4, height: 8, tessellation: 12, faceUV: genCylinderFaceUV([0.1, 0.1, 1, 4, 0.1, 0.1])}, scene);
   shaft.position.y = 4;
   shaft.material = new StandardMaterial('texture1', scene);
   shaft.material.diffuseTexture = returnWoodTexture(shaft_texture, scene);
 
-  let blade1 = MeshBuilder.CreateCylinder("blade", {diameterTop: 0, diameter: 1.5, height: 2.5, tessellation: 4}, scene);
+  let blade1 = MeshBuilder.CreateCylinder("blade", {diameterTop: 0, diameter: 1.5, height: 2.5, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 1.25, 0.75, 0, 0])}, scene);
   blade1.position.y = 9;
   blade1.material = new StandardMaterial('texture1', scene);
   blade1.material.diffuseTexture = returnMetalTexture(blade_texture, scene);
 
-  let blade2 = MeshBuilder.CreateCylinder("blade", {diameterBottom: 0, diameter: 1.5, height: 0.5, tessellation: 4}, scene);
+  let blade2 = MeshBuilder.CreateCylinder("blade", {diameterBottom: 0, diameter: 1.5, height: 0.5, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 0.75, 0.25, 0, 0])}, scene);
   blade2.position.y = 7.5;
   blade2.material = new StandardMaterial('texture1', scene);
   blade2.material.diffuseTexture = returnMetalTexture(blade_texture, scene);

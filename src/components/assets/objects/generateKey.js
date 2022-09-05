@@ -7,25 +7,25 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
-import {returnMetalTexture} from "../textures.js";
+import {returnMetalTexture, genCylinderFaceUV} from "../textures.js";
 
-function generateKey(key_type, x, z, scene, global_objects, item_id, special) {
+function generateKey(key_type, x, z, scene, global_objects, item_id, special, global_language) {
   let inventory = "";
   let img = "";
   let texture = {};
   switch (key_type) {
     case "copper":
-      inventory = "Copper Key";
+      inventory = global_language.text.items.keys.copper_key;
       img = "copper_key";
       texture = "copper";
     break;
     case "silver":
-      inventory = "Silver Key";
+      inventory = global_language.text.items.keys.silver_key;
       img = "silver_key";
       texture = "silver";
     break;
     case "gold":
-      inventory = "Gold Key";
+      inventory = global_language.text.items.keys.gold_key;
       img = "gold_key";
       texture = "gold";
     break;
@@ -36,21 +36,23 @@ function generateKey(key_type, x, z, scene, global_objects, item_id, special) {
   torus.rotation.x = Math.PI / 2;
   torus.material = new StandardMaterial('texture1', scene);
   torus.material.diffuseTexture = returnMetalTexture(texture, scene);
+  torus.material.diffuseTexture.uScale = 1.5;
+  torus.material.diffuseTexture.vScale = 1;
 
-  let cylinder = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8}, scene);
+  let cylinder = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 2, tessellation: 8, faceUV: genCylinderFaceUV([0, 0, 1, 3, 0, 0])}, scene);
   cylinder.position.y = 3.5;
   cylinder.position.x = 1.5;
   cylinder.rotation.z = Math.PI / 2;
   cylinder.material = new StandardMaterial('texture1', scene);
   cylinder.material.diffuseTexture = returnMetalTexture(texture, scene);
 
-  let cylinder1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 1, tessellation: 8}, scene);
+  let cylinder1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 1, tessellation: 8, faceUV: genCylinderFaceUV([0, 0, 1.5, 1, 0, 0])}, scene);
   cylinder1.position.y = 3;
   cylinder1.position.x = 2.25;
   cylinder1.material = new StandardMaterial('texture1', scene);
   cylinder1.material.diffuseTexture = returnMetalTexture(texture, scene);
 
-  let cylinder2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 0.75, tessellation: 8}, scene);
+  let cylinder2 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.5, height: 0.75, tessellation: 8, faceUV: genCylinderFaceUV([0, 0, 1.25, 1, 0, 0])}, scene);
   cylinder2.position.y = 3.1;
   cylinder2.position.x = 1.5;
   cylinder2.material = new StandardMaterial('texture1', scene);

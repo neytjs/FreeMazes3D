@@ -9,7 +9,7 @@ import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
 import {returnLiquidTexture, returnWoodTexture} from "../textures.js";
 
-function generateMagicPotion(x, z, color, global_objects, scene) {
+function generateMagicPotion(x, z, color, global_objects, scene, global_language) {
   let magicPotionBottom = Mesh.CreateSphere("sphere", 8, 1.3, scene);
   magicPotionBottom.position.y = 3;
   magicPotionBottom.material = new StandardMaterial('texture1', scene);
@@ -48,7 +48,7 @@ function generateMagicPotion(x, z, color, global_objects, scene) {
     id: potion.uniqueId,
     type: "potion_Ob17",
     name: (color.color_name + "_potion"),
-    inventory: (color.inv_name + " Magic Potion"),
+    inventory: (color.inv_name + global_language.text.items.puzzles.potions.magic),
     img: (color.color_name + "_potion"),
     color_name: color.color_name
   });

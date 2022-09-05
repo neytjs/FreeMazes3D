@@ -7,12 +7,13 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh";
 import "@babylonjs/core/Meshes/meshBuilder";
 import {StandardMaterial} from "@babylonjs/core/Materials";
 import {Texture} from "@babylonjs/core/Materials/Textures";
+import {genCylinderFaceUV} from "../textures.js";
 
 function generateCarryingCrystal(scene, name) {
-  let carryingCrystalShard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4}, scene);
+  let carryingCrystalShard1 = MeshBuilder.CreateCylinder("cylinder", {diameterTop: 0, diameter: 3, height: 6, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 4, 2, 0, 0])}, scene);
   carryingCrystalShard1.position.y = 8;
 
-  let carryingCrystalShard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4}, scene);
+  let carryingCrystalShard2 = MeshBuilder.CreateCylinder("cylinder", {diameterBottom: 0, diameter: 3, height: 2, tessellation: 4, faceUV: genCylinderFaceUV([0, 0, 3, 1, 0, 0])}, scene);
   carryingCrystalShard2.position.y = 4;
 
   let carryingCrystal = Mesh.MergeMeshes([carryingCrystalShard1, carryingCrystalShard2], true, true, undefined, false, true);
