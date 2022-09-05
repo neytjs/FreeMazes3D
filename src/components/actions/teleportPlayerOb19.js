@@ -4,7 +4,7 @@ import {GUI_Warning} from "../gui/gui_warning.js";
 import {playSound} from "../assets/playSound.js";
 import {movePlayer} from "./movePlayer.js";
 
-function teleportPlayerOb19(obstacle_objects, colMesh, camera, scene, player, ob19, pressedKeys) {
+function teleportPlayerOb19(obstacle_objects, colMesh, camera, scene, player, ob19, pressedKeys, global_language) {
   if (colMesh.uniqueId === obstacle_objects.id) {
     if (obstacle_objects.type === "teleporter19") {
       if (ob19.holding === "") {
@@ -39,7 +39,7 @@ function teleportPlayerOb19(obstacle_objects, colMesh, camera, scene, player, ob
         if (ob19.portal_warned === false) {
           ob19.portal_warned = true;
           playSound("MS_Realization", 3000, scene);
-          GUI_Warning("You can not use the portal while carrying a crystal.", 2500);
+          GUI_Warning(global_language.text.puzzles.ob19.warn, 2500, scene);
           setTimeout(() => {
             ob19.portal_warned = false;
           }, 3000);

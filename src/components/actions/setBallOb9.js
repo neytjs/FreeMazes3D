@@ -5,7 +5,7 @@ import {playSound} from "../assets/playSound.js";
 import {returnCrystalTexture} from "../assets/textures.js";
 
 function setBallOb9(hit_name, ob9, solved, inventory, inventory_tracker, scene) {
-  if (solved.solvedP9 === false && inventory[inventory_tracker.current_item].hasOwnProperty("type") && ob9.just_accessed === false) {
+  if (solved.solvedP9 === false && inventory.length > 1 && inventory[inventory_tracker.current_item].hasOwnProperty("type") && ob9.just_accessed === false) {
     if ((hit_name === "pipe1exit" && ob9.pipe1exit === false) || (hit_name === "pipe2exit" && ob9.pipe2exit === false) || (hit_name === "pipe3exit" && ob9.pipe3exit === false) || (hit_name === "pipe4exit" && ob9.pipe4exit === false)) {
       ob9.just_accessed = true;
       ob9[hit_name] = true;

@@ -14,7 +14,7 @@ import {playSound} from "../assets/playSound.js";
 import {returnCrystalTexture} from "../assets/textures.js";
 
 function shootBlasterOb15(scene, camera, player, ob15) {
-  if (ob15.shooting) {
+  if (player.shooting && player.holding === "blasterOb15") {
     playSound("tir", 1000, scene);
     let blast = scene.getMeshByName("blastOb15");
     blast.material.alpha = 1;
@@ -32,6 +32,7 @@ function shootBlasterOb15(scene, camera, player, ob15) {
     let startPos = camera.position;
     laser.position = new Vector3(startPos.x, startPos.y - 0.5, startPos.z);
     laser.material = new StandardMaterial('texture1', scene);
+    laser.material.diffuseColor = new Color3(1, 0, 0);
     laser.material.alpha = 0;
 
     let forward = new Vector3(0, 0, 1);
@@ -72,7 +73,16 @@ function shootBlasterOb15(scene, camera, player, ob15) {
           }, 1000);
 
           if (camera.position.y >= 6) {
-            if (hit.pickedMesh.name === "bullseye1" && ob15.bullseye1 === false) {
+            let bullseye1 = scene.getMeshByName("bullseye1");
+            let bullseye2 = scene.getMeshByName("bullseye2");
+            let bullseye3 = scene.getMeshByName("bullseye3");
+            let bullseye4 = scene.getMeshByName("bullseye4");
+            let hitB1 = ray.intersectsMeshes([bullseye1]);
+            let hitB2 = ray.intersectsMeshes([bullseye2]);
+            let hitB3 = ray.intersectsMeshes([bullseye3]);
+            let hitB4 = ray.intersectsMeshes([bullseye4]);
+
+            if (hitB1.length && ob15.bullseye1 === false) {
               let bullseye = scene.getMeshByName("bullseye1");
               bullseye.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
               ob15.bullseye1 = true;
@@ -80,7 +90,7 @@ function shootBlasterOb15(scene, camera, player, ob15) {
                 playSound("positive", 2000, scene);
               }, 500);
             }
-            if (hit.pickedMesh.name === "bullseye2" && ob15.bullseye2 === false) {
+            if (hitB2.length && ob15.bullseye2 === false) {
               let bullseye = scene.getMeshByName("bullseye2");
               bullseye.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
               ob15.bullseye2 = true;
@@ -88,7 +98,7 @@ function shootBlasterOb15(scene, camera, player, ob15) {
                 playSound("positive", 2000, scene);
               }, 500);
             }
-            if (hit.pickedMesh.name === "bullseye3" && ob15.bullseye3 === false) {
+            if (hitB3.length && ob15.bullseye3 === false) {
               let bullseye = scene.getMeshByName("bullseye3");
               bullseye.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
               ob15.bullseye3 = true;
@@ -96,7 +106,7 @@ function shootBlasterOb15(scene, camera, player, ob15) {
                 playSound("positive", 2000, scene);
               }, 500);
             }
-            if (hit.pickedMesh.name === "bullseye4" && ob15.bullseye4 === false) {
+            if (hitB4.length && ob15.bullseye4 === false) {
               let bullseye = scene.getMeshByName("bullseye4");
               bullseye.material.diffuseTexture = returnCrystalTexture("gem_red", scene);
               ob15.bullseye4 = true;
@@ -107,7 +117,7 @@ function shootBlasterOb15(scene, camera, player, ob15) {
           }
 
           let particleSystem = new ParticleSystem("gunSmoke", 2000);
-          particleSystem.particleTexture = new Texture("./imgs/circle.png");
+          particleSystem.particleTexture = new Texture("./imgs/circle_light.png");
           particleSystem.emitter = laser;
           particleSystem.addColorGradient(0, new Color3(0.64, 0.3, 0.02));
           particleSystem.manualEmitCount = 50;
@@ -146,7 +156,7 @@ function shootBlasterOb15(scene, camera, player, ob15) {
       }
     });
 
-    ob15.shooting = false;
+    player.shooting = false;
   }
 }
 
