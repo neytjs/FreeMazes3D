@@ -1,6 +1,6 @@
 import {fireTurretOb11} from "./fireTurretOb11.js";
 
-function rotateTurretOb11(solved, scene, atan2, ob11, score, forcefield_objects, obstacle_objects) {
+function rotateTurretOb11(solved, scene, atan2, ob11, score, forcefield_objects, obstacle_objects, global_language) {
   if (solved.solvedP11 === false) {
     const pi = Math.PI;
     const speed = 0.01;
@@ -68,7 +68,7 @@ function rotateTurretOb11(solved, scene, atan2, ob11, score, forcefield_objects,
     } else {
       ob11.turret_moving = false;
       ob11.rotation = turret.rotation.y;
-      fireTurretOb11(ob11, scene, solved, score, forcefield_objects, obstacle_objects);
+      fireTurretOb11(ob11, scene, solved, score, forcefield_objects, obstacle_objects, global_language);
     }
   }
 }

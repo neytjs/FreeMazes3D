@@ -1,14 +1,14 @@
-function returnKeyType(key_num) {
+function returnKeyType(key_num, global_language) {
   let key = "";
   switch (key_num) {
     case 1:
-      key = "copper";
+      key = global_language.text.global.key_types.copper;
     break;
     case 2:
-      key = "silver";
+      key = global_language.text.global.key_types.silver;
     break;
     case 3:
-      key = "gold";
+      key = global_language.text.global.key_types.gold;
     break;
   }
   return key;

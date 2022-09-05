@@ -1,6 +1,6 @@
 import {fireMobOb12} from "./fireMobOb12.js";
 
-function rotateMobOb12(solved, scene, atan2, ob12, camera, score, forcefield_objects, obstacle_objects) {
+function rotateMobOb12(solved, scene, atan2, ob12, camera, score, forcefield_objects, obstacle_objects, global_language) {
   const pi = Math.PI;
   const speed = 0.03;
   let mob = scene.getMeshByName("agentMob");
@@ -68,7 +68,7 @@ function rotateMobOb12(solved, scene, atan2, ob12, camera, score, forcefield_obj
     ob12.mob_moving = false;
     ob12.rotation = mob.rotation.y;
     if (solved.solvedP12 === false) {
-      fireMobOb12(ob12, scene, solved, camera, score, forcefield_objects, obstacle_objects);
+      fireMobOb12(ob12, scene, solved, camera, score, forcefield_objects, obstacle_objects, global_language);
     }
   }
 }

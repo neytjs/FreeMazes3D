@@ -5,7 +5,7 @@ import {GUI_Score} from "../gui/gui_score.js";
 import {playSound} from "../assets/playSound.js";
 import {x, z, masterColors} from "../assets/rolling_data.js";
 
-function rollingBallOb20(ob20, scene, solved, score, obstacle_objects, forcefield_objects) {
+function rollingBallOb20(ob20, scene, solved, score, obstacle_objects, forcefield_objects, global_language) {
   if (solved.solvedP20 === false && ob20.rollingBall === true) {
   // for first ball
     if (ob20.ball_phase === "ball1") {
@@ -105,7 +105,10 @@ function rollingBallOb20(ob20, scene, solved, score, obstacle_objects, forcefiel
           setTimeout(() => {
             playSound("misc_menu_4", 2000, scene);
             let bulb = scene.getMeshByName("bulb" + ob20.bulb_counter + "Ob20");
+            bulb.material.diffuseColor = ob20.bulb_color;
+            bulb.material.specularColor = ob20.bulb_color;
             bulb.material.emissiveColor = ob20.bulb_color;
+            bulb.material.ambientColor = ob20.bulb_color;
             setTimeout(() => {
               if (ob20.bulb_counter === 3) {
                 if (ob20.bulb_colors[0] === masterColors[0] && ob20.bulb_colors[1] === masterColors[1] && ob20.bulb_colors[2] === masterColors[2]) {
@@ -118,8 +121,8 @@ function rollingBallOb20(ob20, scene, solved, score, obstacle_objects, forcefiel
                           setTimeout(() => {
                             playSound("save", 5000, scene);
                             barrier.dispose();
-                            GUI_Score(200, score);
-                            GUI_Warning("You have removed the barrier!", 1500);
+                            GUI_Score(200, score, global_language);
+                            GUI_Warning(global_language.text.global.success, 1500, scene);
                           }, 1500);
                         }
                       }
@@ -128,15 +131,26 @@ function rollingBallOb20(ob20, scene, solved, score, obstacle_objects, forcefiel
                 } else {
                 // fail condition
                   playSound("negative", 3000, scene);
-                  GUI_Warning("You have failed. Try again.", 2500);
+                  GUI_Warning(global_language.text.global.fail, 2500, scene);
                   ob20.bulb_counter = 0;
                   ob20.bulb_colors = [];
                   let bulb1 = scene.getMeshByName("bulb1Ob20");
                   let bulb2 = scene.getMeshByName("bulb2Ob20");
                   let bulb3 = scene.getMeshByName("bulb3Ob20");
+                  bulb1.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+                  bulb1.material.specularColor = new Color3(0.55, 0.48, 0.48);
                   bulb1.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+                  bulb1.material.ambientColor = new Color3(0.55, 0.48, 0.48);
+
+                  bulb2.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+                  bulb2.material.specularColor = new Color3(0.55, 0.48, 0.48);
                   bulb2.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+                  bulb2.material.ambientColor = new Color3(0.55, 0.48, 0.48);
+                                    
+                  bulb3.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
+                  bulb3.material.specularColor = new Color3(0.55, 0.48, 0.48);
                   bulb3.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
+                  bulb3.material.ambientColor = new Color3(0.55, 0.48, 0.48);
                 }
               }
             }, 1200);
