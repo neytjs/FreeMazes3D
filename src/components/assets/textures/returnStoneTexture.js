@@ -4,6 +4,9 @@ function returnStoneTexture(texture_name, scene) {
   let texture = {};
 
   switch (texture_name) {
+    case "rock":
+      texture = new Texture("./textures/stone/rock.png", scene);
+    break;
     case "stone":
       texture = new Texture("./textures/stone/stone.png", scene);
     break;

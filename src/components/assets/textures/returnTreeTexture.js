@@ -10,6 +10,12 @@ function returnTreeTexture(texture_name, scene) {
     case "bark_alpine":
       texture = new Texture("./textures/trees/bark_alpine.png", scene);
     break;
+    case "bark_pine_big":
+      texture = new Texture("./textures/trees/bark_pine_big.png", scene);
+    break;
+    case "bark_pine_big_haunted":
+      texture = new Texture("./textures/trees/bark_pine_big_haunted.png", scene);
+    break;
     case "bark_wasteland":
       texture = new Texture("./textures/trees/bark_wasteland.png", scene);
     break;
@@ -39,6 +45,12 @@ function returnTreeTexture(texture_name, scene) {
     break;
     case "needles_wasteland":
       texture = new Texture("./textures/trees/needles_wasteland.png", scene);
+    break;
+    case "needles_pine":
+      texture = new Texture("./textures/trees/needles_pine.png", scene);
+    break;
+    case "needles_pine_haunted":
+      texture = new Texture("./textures/trees/needles_pine_haunted.png", scene);
     break;
   }
 

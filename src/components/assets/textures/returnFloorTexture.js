@@ -7,11 +7,20 @@ function returnFloorTexture(texture_name, scene) {
     case "grass":
       texture = new Texture("./textures/floors/grass.png", scene);
     break;
+    case "lava":
+      texture = new Texture("./textures/floors/lava.png", scene);
+    break;
+    case "sand":
+      texture = new Texture("./textures/floors/sand.png", scene);
+    break;
     case "snow":
       texture = new Texture("./textures/floors/snow.png", scene);
     break;
     case "soil":
       texture = new Texture("./textures/floors/soil.png", scene);
+    break;
+    case "soil_haunted":
+      texture = new Texture("./textures/floors/soil_haunted.png", scene);
     break;
     case "stone_slabs_black":
       texture = new Texture("./textures/floors/stone_slabs_black.png", scene);
@@ -51,6 +60,9 @@ function returnFloorTexture(texture_name, scene) {
     break;
     case "stone_slabs_tomb":
       texture = new Texture("./textures/floors/stone_slabs_tomb.png", scene);
+    break;
+    case "stone_slabs_white":
+      texture = new Texture("./textures/floors/stone_slabs_white.png", scene);
     break;
     case "wasteland":
       texture = new Texture("./textures/floors/wasteland.png", scene);
