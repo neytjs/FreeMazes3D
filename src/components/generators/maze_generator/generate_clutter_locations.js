@@ -57,27 +57,29 @@ function generateClutterLocations(start_pos, exit_pos, keys, gem, doors, map_are
     }
   }
 
-// get a set of random tile pos
-  let set = new Set();
-  let size = clutter_amount - 1; // minus one, because the first clutter is always for underneath the first key.
-  function fillSet() {
-    let rand = Math.floor(Math.random() * available.length);
-    set.add(available[rand]);
-
-    if (set.size < size) {
-      fillSet();
-    }
-  }
-  fillSet();
-
 // first insert the clutter for the first key
   clutter.push({pos: {x: keys[0].pos.x, y: keys[0].pos.y}});
 
-  function insertClutterLocations(value) {
-    clutter.push({ pos: value });
+// get a set of random tile pos
+  let set = new Set();
+  let size = clutter_amount - 1; // minus one, because the first clutter is always for underneath the first key.
+  if (size > 0) {
+    function fillSet() {
+      let rand = Math.floor(Math.random() * available.length);
+      set.add(available[rand]);
+
+      if (set.size < size) {
+        fillSet();
+      }
+    }
+    fillSet();
+
+    function insertClutterLocations(value) {
+      clutter.push({ pos: value });
+    }
+  // insert the random set of pos into the clutter array
+    set.forEach(insertClutterLocations);
   }
-// insert the random set of pos into the clutter array
-  set.forEach(insertClutterLocations);
 
   return clutter;
 }

@@ -26,9 +26,9 @@ function setMapSize(size) {
   }
   switch (size) {
     case "small":
-    length = 4;
-    width = 4;
-    total_areas = 2;
+      length = 4;
+      width = 4;
+      total_areas = 2;
     break;
     case "medium":
       length = 5;

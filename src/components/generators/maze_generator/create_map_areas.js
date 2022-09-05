@@ -104,7 +104,7 @@ function createMapAreas(areas) {
       // if the common entrance piece value is three
         if (map[map_areas[i].entrance.pos.x][map_areas[i].entrance.pos.y].value === 3) {
         // if either has a pieces length of one... and their combined length is not too big
-          let combined = map_areas[i].area_pieces.length + map_areas[j].area_pieces.length;
+          let combined = map_areas[i].area_pieces.length + map_areas[j].area_pieces.length + 1;
           if ((map_areas[i].area_pieces.length === 1 || map_areas[j].area_pieces.length === 1) && (combined <= max_area_size)) {
           // add their pieces together + their entrance piece.
             let new_pieces = map_areas[i].area_pieces.concat(map_areas[j].area_pieces);
