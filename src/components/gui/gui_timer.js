@@ -8,7 +8,7 @@ function calcTime(time) {
   return minutes + ":" + seconds;
 }
 
-function setTimer(timer, map_size, puzzles) {
+function setTimer(timer, map_size, puzzles, global_language) {
   if (timer.setTimer === false) {
     timer.setTimer = true;
 
@@ -17,7 +17,7 @@ function setTimer(timer, map_size, puzzles) {
     function getPuzzleTimes() {
       const puzzle = {
         coin_match: 60,
-        bulb_match: 120,
+        bulb_match: 180,
         sphere_agents: 120,
         move_bridges: 60,
         ghost_button: 60,
@@ -35,7 +35,11 @@ function setTimer(timer, map_size, puzzles) {
         potion_cauldron: 60,
         crystal_temple: 180,
         crystal_shards: 60,
-        rolling_pipes: 180
+        rolling_pipes: 180,
+        run_machine: 120,
+        purify_garden: 120,
+        purify_maze: 120,
+        lava_room: 120
       };
       total_puzzle_time = puzzle[puzzles[puzzle_counter]] + total_puzzle_time;
       puzzle_counter = puzzle_counter + 1;
@@ -66,7 +70,7 @@ function setTimer(timer, map_size, puzzles) {
         break;
       }
     }
-    document.getElementById("timer").innerHTML = "Time: " + calcTime(timer.counter);
+    document.getElementById("timer").innerHTML = global_language.text.menu.ingame.timer + calcTime(timer.counter);
   }
 }
 
@@ -106,12 +110,12 @@ function stopStartTimer(key, timer, map_size) {
   }
 }
 
-function displayTime(timer) {
+function displayTime(timer, global_language) {
   if (timer.time !== timer.prev_time) {
     if (timer.counter >= 0) {
       let current = timer.time;
       timer.prev_time = current;
-      document.getElementById("timer").innerHTML = "Time: " + current;
+      document.getElementById("timer").innerHTML = global_language.text.menu.ingame.timer + current;
     }
   }
 }

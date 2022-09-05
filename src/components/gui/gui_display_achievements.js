@@ -1,4 +1,4 @@
-function GUI_DisplayAchievements(achievements) {
+function GUI_DisplayAchievements(achievements, global_language) {
   let text = "";
   let completionist_counter = 0;
   for (let i = 0, length = achievements.length; i < length; i++) {
@@ -16,9 +16,9 @@ function GUI_DisplayAchievements(achievements) {
     let bottom = achievements[i].completed ? '' : '<br><br>';
     if (achievements[i].status) {
       let status_completed = (achievements[i].id === 13) ? achievements[i].status.completed : Object.keys(achievements[i].status.completed).length;
-      text += achieved + "<b>" + achievements[i].name + "</b><br><i>" + achievements[i].description + "</i><br> Progress: " + status_completed + " of " +  achievements[i].status.total + ".<br>" + (achievements[i].date_accomplished !== 0 ? ("<br>" + achievements[i].date_accomplished.toLocaleDateString("en-US", {year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric"})) : "<br>") + bottom + "</td>";
+      text += achieved + "<b>" + global_language.text.menu.achievements.achieves[i].name + "</b><br><i>" + global_language.text.menu.achievements.achieves[i].description + "</i><br>" + global_language.text.menu.achievements.progress.part1 + status_completed + global_language.text.menu.achievements.progress.part2 +  achievements[i].status.total + ".<br>" + (achievements[i].date_accomplished !== 0 ? ("<br>" + achievements[i].date_accomplished.toLocaleDateString("en-US", {year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric"})) : "<br>") + bottom + "</td>";
     } else {
-      text += achieved + "<b>" + achievements[i].name + "</b><br><i>" + achievements[i].description + "</i><br>" + (achievements[i].date_accomplished !== 0 ? ("<br>" + achievements[i].date_accomplished.toLocaleDateString("en-US", {year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric"})) : "") + bottom + "</td>";
+      text += achieved + "<b>" + global_language.text.menu.achievements.achieves[i].name + "</b><br><i>" + global_language.text.menu.achievements.achieves[i].description + "</i><br>" + (achievements[i].date_accomplished !== 0 ? ("<br>" + achievements[i].date_accomplished.toLocaleDateString("en-US", {year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric"})) : "") + bottom + "</td>";
     }
   }
   document.getElementById("achieves_list").innerHTML = text;
