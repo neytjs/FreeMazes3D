@@ -5,7 +5,7 @@ import {stopStartTimer} from "../gui/gui_timer.js";
 import {stopStartMusic} from "../gui/gui_music.js";
 import {playSound} from "../assets/playSound.js";
 
-function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClose, scene, resetGlobals, reStart, timer, score, maze, sound_track) {
+function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, saveScoreAndClose, scene, resetGlobals, reStart, timer, score, maze, sound_track, global_language) {
   let key = event.keyCode;
   let menu = document.getElementById("menu");
   let menu_left = parseInt(window.getComputedStyle(menu).left);
@@ -51,50 +51,63 @@ function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, sa
       playSound("cloth_inventory", 3000, scene);
     }
   }
-// F1 / ESC
+
+// ESC / F1
   if (maze.loaded && ((key === 112 || key === 27) && warn_left < 0)) {
     if (this.state.start) {
       if (menu_left === 0 || difficulty_left === 0 || key_controls_left === 0 || scores_left === 0 || achievements_left === 0 || credits_left === 0) {
         if (menu_left === 0) {
           document.getElementById("menu").style.left = -10000;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "none";
           menu_gui.counter = 0;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
           menu_gui.toggle = false;
         }
         if (difficulty_left === 0) {
           document.getElementById("difficulty").style.left = -10000;
           document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#FF0000";
+          document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.textShadow = "none";
           menu_gui.difficulty_counter = 0;
           document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#00FF00";
+          document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
           menu_gui.toggle = false;
         }
         if (key_controls_left === 0) {
           document.getElementById("key_controls").style.left = -10000;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "none";
           menu_gui.counter = 0;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
           menu_gui.toggle = false;
         }
         if (scores_left === 0) {
           document.getElementById("scores").style.left = -10000;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "none";
           menu_gui.counter = 0;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
           menu_gui.toggle = false;
         }
         if (achievements_left === 0) {
           document.getElementById("achieves").style.left = -10000;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "none";
           menu_gui.counter = 0;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
           menu_gui.toggle = false;
         }
         if (credits_left === 0) {
           document.getElementById("credits_list").style.left = -10000;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "none";
           menu_gui.counter = 0;
           document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+          document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
           menu_gui.toggle = false;
         }
       } else {
@@ -102,7 +115,7 @@ function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, sa
         menu_gui.toggle = true;
       }
       stopStartTimer(key, timer, map_size);
-      stopStartMusic(key, sound_track);
+      stopStartMusic(key, sound_track, scene);
     }
   }
   if ((key === 112 || key === 27) && results_left === 0) {
@@ -119,14 +132,18 @@ function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, sa
       if (menu_left === 0) {
         playSound("misc_menu_3", 2000, scene);
         document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+        document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "none";
         menu_gui.counter = menu_gui.counter > 0 ? menu_gui.counter - 1 : 0;
         document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+        document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
       }
       if (difficulty_left === 0) {
         playSound("misc_menu_3", 2000, scene);
         document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#FF0000";
+        document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.textShadow = "none";
         menu_gui.difficulty_counter = menu_gui.difficulty_counter > 0 ? menu_gui.difficulty_counter - 1 : 0;
         document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#00FF00";
+        document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
       }
     }
   }
@@ -136,14 +153,18 @@ function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, sa
       if (menu_left === 0) {
         playSound("misc_menu_3", 2000, scene);
         document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#FF0000";
+        document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "none";
         menu_gui.counter = menu_gui.counter < (menu_gui.options.length - 1) ? menu_gui.counter + 1 : (menu_gui.options.length - 1);
         document.getElementById(menu_gui.options[menu_gui.counter]).style.color = "#00FF00";
+        document.getElementById(menu_gui.options[menu_gui.counter]).style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
       }
       if (difficulty_left === 0) {
         playSound("misc_menu_3", 2000, scene);
         document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#FF0000";
+        document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.textShadow = "none";
         menu_gui.difficulty_counter = menu_gui.difficulty_counter < (menu_gui.difficulty_options.length - 1) ? menu_gui.difficulty_counter + 1 : (menu_gui.difficulty_options.length - 1);
         document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#00FF00";
+        document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
       }
     }
   }
@@ -151,18 +172,18 @@ function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, sa
   if (key === 39) {
     if (warn_left > 0) {
       playSound("misc_menu_3", 2000, scene);
-      document.getElementById(menu_gui.warn_options[menu_gui.warn_counter]).style.background = "#FF0000";
+      document.getElementById(menu_gui.warn_options[menu_gui.warn_counter]).style.backgroundImage = "url(./textures/crystals/gem_red.png)";
       menu_gui.warn_counter = menu_gui.warn_counter > 0 ? menu_gui.warn_counter - 1 : 0;
-      document.getElementById(menu_gui.warn_options[menu_gui.warn_counter]).style.background = "#00FF00";
+      document.getElementById(menu_gui.warn_options[menu_gui.warn_counter]).style.backgroundImage = "url(./textures/crystals/gem_green.png)";
     }
   }
 // arrow left
   if (key === 37) {
     if (warn_left > 0) {
       playSound("misc_menu_3", 2000, scene);
-      document.getElementById(menu_gui.warn_options[menu_gui.warn_counter]).style.background = "#FF0000";
+      document.getElementById(menu_gui.warn_options[menu_gui.warn_counter]).style.backgroundImage = "url(./textures/crystals/gem_red.png)";
       menu_gui.warn_counter = menu_gui.warn_counter < (menu_gui.warn_options.length - 1) ? menu_gui.warn_counter + 1 : (menu_gui.warn_options.length - 1);
-      document.getElementById(menu_gui.warn_options[menu_gui.warn_counter]).style.background = "#00FF00";
+      document.getElementById(menu_gui.warn_options[menu_gui.warn_counter]).style.backgroundImage = "url(./textures/crystals/gem_green.png)";
     }
   }
 // space/enter
@@ -247,22 +268,24 @@ function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, sa
         startNewGame();
       } else {
         if (menu_gui.press_counter === 0) {
-          GUI_Warn("Warning, starting a new game will result in losing all progress in the current maze and will reset your score to zero.");
+          GUI_Warn(global_language.text.menu.warn.restart);
         }
         menu_gui.press_counter = menu_gui.press_counter + 1;
       // if they click okay...
         if (menu_gui.press_counter === 2 && menu_gui.warn_options[menu_gui.warn_counter] === "okay") {
-          document.getElementById("okay").style.background = "#FF0000";
-          document.getElementById("cancel").style.background = "#00FF00";
+          document.getElementById("okay").style.backgroundImage = "url(./textures/crystals/gem_red.png)";
+          document.getElementById("cancel").style.backgroundImage = "url(./textures/crystals/gem_green.png)";
           menu_gui.press_counter = 0;
           menu_gui.warn_counter = 0;
           document.getElementById("warn").style.left = -10000;
           document.getElementById("loading").style.left = 0;
           document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#FF0000";
-          document.getElementById("easy").style.color = "#00FF00";
+          document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.textShadow = "none";
+          document.getElementById("back").style.color = "#00FF00";
+          document.getElementById("back").style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
           menu_gui.difficulty_counter = 0;
           score.total = 0;
-          GUI_Score(0, score);
+          GUI_Score(0, score, global_language);
           this.resetGlobals();
           startNewGame();
         }
@@ -312,7 +335,9 @@ function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, sa
       }
       if (this.state.start === false || menu_gui.difficulty_options[menu_gui.difficulty_counter] === "back") {
         document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.color = "#FF0000";
-        document.getElementById("easy").style.color = "#00FF00";
+        document.getElementById(menu_gui.difficulty_options[menu_gui.difficulty_counter]).style.textShadow = "none";
+        document.getElementById("back").style.color = "#00FF00";
+        document.getElementById("back").style.textShadow = "1px 1px 10px #00FF00, 1px 1px 10px #00FF00";
         menu_gui.difficulty_counter = 0;
       }
     }
@@ -350,7 +375,7 @@ function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, sa
       if (menu_left === 0) {
         if (this.state.start) {
           if (menu_gui.press_counter === 0) {
-            GUI_Warn("Warning, exiting will result in losing all progress in the current maze and will reset your score to zero.");
+            GUI_Warn(global_language.text.menu.warn.exit);
           }
           menu_gui.press_counter = menu_gui.press_counter + 1;
         // if they click okay...
@@ -370,9 +395,9 @@ function keyUp(global_keys, menu_gui, map_size, inventory, inventory_tracker, sa
     }
   }
 // FOR TESTING ONLY... (g)
-  if (key === 71) {
+  /*if (key === 71) {
     this.camera.applyGravity = true;
-  }
+  }*/
 }
 
 export {keyUp};

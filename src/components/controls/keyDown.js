@@ -1,6 +1,7 @@
 function keyDown() {
   let key = event.keyCode;
   let ctrl = event.ctrlKey;
+
 // disable F11
   if (key === 122) {
     event.preventDefault();
