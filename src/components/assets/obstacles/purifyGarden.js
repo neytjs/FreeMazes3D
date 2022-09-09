@@ -185,18 +185,20 @@ function purifyGarden(x, z, scene, global_objects, item_id, camera, global_langu
     hole.material = new StandardMaterial('texture1', scene);
     hole.material.diffuseColor = new Color3(0, 0, 0);
 
+    let drain = Mesh.MergeMeshes([rim, hole], true, true, undefined, false, true);
+    drain.position.z = z;
+    drain.rotation.x = 0;
+
     let barrier = MeshBuilder.CreateBox("box", {width: 5, height: 9, depth: 5}, scene);
     barrier.position.y = 5;
+    barrier.position.z = z;
+    barrier.rotation.x = 0;
     barrier.material = new StandardMaterial('texture1', scene);
     barrier.material.diffuseColor = new Color3(0.29, 0.18, 0.07);
     barrier.material.alpha = 0;
-
-    let drain = Mesh.MergeMeshes([rim, hole, barrier], true, true, undefined, false, true);
-    drain.position.z = z;
-    drain.rotation.x = 0;
-    drain.physicsImpostor = new PhysicsImpostor(barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
-    drain.checkCollisions = true;
-    drain.name = drain_name;
+    barrier.physicsImpostor = new PhysicsImpostor(barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+    barrier.checkCollisions = true;
+    barrier.name = drain_name;
   }
   generateGardenDrain(1035, "drainOb22a");
   generateGardenDrain(965, "drainOb22b");
@@ -410,7 +412,6 @@ function purifyGarden(x, z, scene, global_objects, item_id, camera, global_langu
   buttonBarrierVisible.position.z = 1000;
   buttonBarrierVisible.material = new StandardMaterial('texture1', scene);
   buttonBarrierVisible.material.diffuseTexture = returnLiquidTexture("acid_purple", scene);
-  //buttonBarrierVisible.material.alpha = 0.8;
   buttonBarrierVisible.physicsImpostor = new PhysicsImpostor(buttonBarrierVisible, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   buttonBarrierVisible.checkCollisions = true;
   buttonBarrierVisible.name = "finalButtonBarrierVisibleOb22";
