@@ -82,12 +82,16 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
     rim1.position.x = 10;
     rim1.material = new StandardMaterial('texture1', scene);
     rim1.material.diffuseTexture = returnMetalTexture("silver", scene);
+    rim1.material.diffuseTexture.uScale = 4;
+    rim1.material.diffuseTexture.vScale = 1;
 
     let rim2 = MeshBuilder.CreateTorus("torus", {diameter: 4, thickness: 0.5}, scene);
     rim2.position.y = 0;
     rim2.position.x = -10;
     rim2.material = new StandardMaterial('texture1', scene);
     rim2.material.diffuseTexture = returnMetalTexture("silver", scene);
+    rim2.material.diffuseTexture.uScale = 4;
+    rim2.material.diffuseTexture.vScale = 1;
 
     let rim3 = MeshBuilder.CreateTorus("torus", {diameter: 4, thickness: 0.5}, scene);
     rim3.position.y = 8.2;
@@ -95,6 +99,8 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
     rim3.position.x = -5.5;
     rim3.material = new StandardMaterial('texture1', scene);
     rim3.material.diffuseTexture = returnMetalTexture("silver", scene);
+    rim3.material.diffuseTexture.uScale = 4;
+    rim3.material.diffuseTexture.vScale = 1;
 
     let rim4 = MeshBuilder.CreateTorus("torus", {diameter: 4, thickness: 0.5}, scene);
     rim4.position.y = 8.2;
@@ -102,6 +108,8 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
     rim4.position.x = 5.5;
     rim4.material = new StandardMaterial('texture1', scene);
     rim4.material.diffuseTexture = returnMetalTexture("silver", scene);
+    rim4.material.diffuseTexture.uScale = 4;
+    rim4.material.diffuseTexture.vScale = 1;
 
     let hole1 = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.9, height: 0.1, tessellation: 20}, scene);
     hole1.position.x = 10;
@@ -150,6 +158,8 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
   rim5.position.z = z - 25;
   rim5.material = new StandardMaterial('texture1', scene);
   rim5.material.diffuseTexture = returnMetalTexture("silver", scene);
+  rim5.material.diffuseTexture.uScale = 4;
+  rim5.material.diffuseTexture.vScale = 1;
 
   let rim6 = MeshBuilder.CreateTorus("torus", {diameter: 4, thickness: 0.5}, scene);
   rim6.position.y = 3.5;
@@ -157,6 +167,8 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
   rim6.position.z = z - 20.2;
   rim6.material = new StandardMaterial('texture1', scene);
   rim6.material.diffuseTexture = returnMetalTexture("silver", scene);
+  rim6.material.diffuseTexture.uScale = 4;
+  rim6.material.diffuseTexture.vScale = 1;
 
   let hole3 = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.9, height: 0.1, tessellation: 20}, scene);
   hole3.rotation.x = 1.57;
@@ -223,6 +235,8 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
   rim7.position.z = z;
   rim7.material = new StandardMaterial('texture1', scene);
   rim7.material.diffuseTexture = returnMetalTexture("silver", scene);
+  rim7.material.diffuseTexture.uScale = 4;
+  rim7.material.diffuseTexture.vScale = 1;
 
   let hole5 = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.9, height: 0.1, tessellation: 20}, scene);
   hole5.position.x = x;
@@ -236,6 +250,8 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
   rim8.position.z = z;
   rim8.material = new StandardMaterial('texture1', scene);
   rim8.material.diffuseTexture = returnMetalTexture("silver", scene);
+  rim8.material.diffuseTexture.uScale = 4;
+  rim8.material.diffuseTexture.vScale = 1;
 
   let hole6 = MeshBuilder.CreateCylinder("cylinder", {diameter: 3.9, height: 0.1, tessellation: 20}, scene);
   hole6.position.y = 7;
