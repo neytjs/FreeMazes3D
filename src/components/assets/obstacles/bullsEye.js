@@ -180,21 +180,21 @@ function bullsEye(x, z, scene, global_objects, item_id, camera, global_language)
   canRim1.position.y = 3;
   canRim1.material = new StandardMaterial('texture1', scene);
   canRim1.material.diffuseTexture = returnCrystalTexture("gem_green", scene);
-  canRim1.material.diffuseTexture.uScale = 3.5;
+  canRim1.material.diffuseTexture.uScale = 3;
   canRim1.material.diffuseTexture.vScale = 1;
 
   let canRim2 = MeshBuilder.CreateTorus("torus", {diameter: 2.5, thickness: 0.25});
   canRim2.position.y = 1.625;
   canRim2.material = new StandardMaterial('texture1', scene);
   canRim2.material.diffuseTexture = returnCrystalTexture("gem_green", scene);
-  canRim2.material.diffuseTexture.uScale = 3.5;
+  canRim2.material.diffuseTexture.uScale = 3;
   canRim2.material.diffuseTexture.vScale = 1;
 
   let canRim3 = MeshBuilder.CreateTorus("torus", {diameter: 2.5, thickness: 0.25});
   canRim3.position.y = 0.125;
   canRim3.material = new StandardMaterial('texture1', scene);
   canRim3.material.diffuseTexture = returnCrystalTexture("gem_green", scene);
-  canRim3.material.diffuseTexture.uScale = 3.5;
+  canRim3.material.diffuseTexture.uScale = 3;
   canRim3.material.diffuseTexture.vScale = 1;
 
   let canTop = MeshBuilder.CreateCylinder("cylinder", {diameter: 2.5, height: 0.025, tessellation: 20}, scene);
