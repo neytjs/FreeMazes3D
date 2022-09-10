@@ -199,7 +199,7 @@ function tightRope(x, z, scene, global_objects, item_id, camera, global_language
   bubble1.material.diffuseTexture = returnLiquidTexture(acidColors[0].acid_color, scene);
 
   let bubble1Particles = new ParticleSystem("particles", 2000);
-  bubble1Particles.particleTexture = new Texture("./imgs/circle.png");
+  bubble1Particles.particleTexture = new Texture("./imgs/circle_light.png");
   bubble1Particles.emitter = bubble1;
   bubble1Particles.addColorGradient(0, acidColors[0].bubble_color);
   bubble1Particles.start();
@@ -212,7 +212,7 @@ function tightRope(x, z, scene, global_objects, item_id, camera, global_language
   bubble2.material.diffuseTexture = returnLiquidTexture(acidColors[0].acid_color, scene);
 
   let bubble2Particles = new ParticleSystem("particles", 2000);
-  bubble2Particles.particleTexture = new Texture("./imgs/circle.png");
+  bubble2Particles.particleTexture = new Texture("./imgs/circle_light.png");
   bubble2Particles.emitter = bubble2;
   bubble2Particles.addColorGradient(0, acidColors[0].bubble_color);
   bubble2Particles.start();
@@ -225,7 +225,7 @@ function tightRope(x, z, scene, global_objects, item_id, camera, global_language
   bubble3.material.diffuseTexture = returnLiquidTexture(acidColors[0].acid_color, scene);
 
   let bubble3Particles = new ParticleSystem("particles", 2000);
-  bubble3Particles.particleTexture = new Texture("./imgs/circle.png");
+  bubble3Particles.particleTexture = new Texture("./imgs/circle_light.png");
   bubble3Particles.emitter = bubble3;
   bubble3Particles.addColorGradient(0, acidColors[0].bubble_color);
   bubble3Particles.start();
