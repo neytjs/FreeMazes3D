@@ -1,6 +1,6 @@
 {
   "name": "FreeMazes3D",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A maze generator with retro-themed, labyrinth-style adventure and puzzle solving.",
   "main": "main.js",
   "scripts": {
