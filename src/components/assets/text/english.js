@@ -1,7 +1,7 @@
 let english = {
   menu: {
     title: "<b><i>FreeMazes3D</i></b>",
-    version: "Version 0.7",
+    version: "Version 0.7.1",
     main: {
       new_game: "New Game",
       controls: "Controls",
