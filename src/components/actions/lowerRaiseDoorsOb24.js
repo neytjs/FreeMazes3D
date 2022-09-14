@@ -10,7 +10,7 @@ function lowerRaiseDoorsOb24(scene, solved, ob24) {
       door = scene.getMeshByName("teleporterOb24b");
     }
 
-    if (ob24.playing_door_sound === false) {
+    if (ob24.playing_door_sound === false && (ob24.raise_doors === true || (ob24.lower_doors === true && ob24.liquid_status === ""))) {
       ob24.playing_door_sound = true;
       let doorSound = new Sound("doorSoundOb22", "./sound/engine.mp3", scene, null, { loop: true, autoplay: true, volume: 0.5, maxDistance: 80 });
       doorSound.attachToMesh(door);
@@ -26,7 +26,7 @@ function lowerRaiseDoorsOb24(scene, solved, ob24) {
     }
     const rate = 0.08;
 
-    if (ob24.lower_doors === true) {
+    if (ob24.lower_doors === true && ob24.liquid_status === "") {
       let doorOb24_a = scene.getMeshByName("doorOb24_a");
       let doorOb24_b = scene.getMeshByName("doorOb24_b");
       let doorOb24_c = scene.getMeshByName("doorOb24_c");
