@@ -8,6 +8,7 @@ function acidDeath(obstacle_objects, colMesh, camera, scene, player) {
       if (player.dying === false) {
         player.health = 0;
         player.dying = true;
+        player.softLanded = true;
         playSound("aargh2", 1000, scene);
         revivingPlayer();
         movePlayer(camera, 10000, 10000, 0);
