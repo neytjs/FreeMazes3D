@@ -444,7 +444,7 @@ class Canvas extends Component {
 
     this.camera.setTarget(Vector3.Zero());
 
-    this.camera.applyGravity = true;
+    //this.camera.applyGravity = true;
 
     this.camera.ellipsoid = new Vector3(1.5, 2, 1.5);
 
@@ -462,7 +462,7 @@ class Canvas extends Component {
   // call the sceneGenerator to create the map and generate the maze.
     sceneGenerator(this.scene, this.camera, door_objects, forcefield_objects, key_objects, portal_objects, gem_objects, treasure_objects, treasure_stats, obstacle_objects, secret_walls, secret_data, map_size, puzzles, global_language, exclusions, app_data);
     this.updateEventListener();
-
+console.log("canvas-component: " + JSON.stringify(puzzles))
     setTimer(timer, map_size, puzzles, global_language);
 
     let buttons = {
@@ -739,7 +739,11 @@ class Canvas extends Component {
       radius1: 10,
       radius2: 5,
       rate1: 0.2,
-      rate2: 0.03
+      rate2: 0.03,
+      hintBulbs: {
+        bulb2: false,
+        bulb3: false
+      }
     };
     let ob21 = {
       rotating: false,
@@ -1576,6 +1580,7 @@ class Canvas extends Component {
 
               if (hit) {
                 if (hit.pickedMesh && hit.pickedMesh.name) {
+console.log("canvas-component hit.pickedMesh.name: " + hit.pickedMesh.name)
                 // for doors/gates
                   openGate(hit, door_objects, inventory, inventory_tracker, this.scene, global_language);
                 // for exit portal
