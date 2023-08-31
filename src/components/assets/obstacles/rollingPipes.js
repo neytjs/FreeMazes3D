@@ -401,8 +401,9 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
   generatePole((x - 17), 0.5, (z - 17), "bulb2Ob20", new Color3(0.55, 0.48, 0.48));
   generatePole((x - 23), 0.5, (z - 17), "bulb3Ob20", new Color3(0.55, 0.48, 0.48));
 
-  generatePole(x, 0, (z - 10), "hintBulb", m_colors[0]);
-  generatePole(x, 0, (z + 10), "hintBulb", m_colors[1]);
+  generatePole(x, 0, (z - 10), "hintBulb1", m_colors[0]);
+  generatePole((x + 10), 0, z, "hintBulb2", new Color3(0.55, 0.48, 0.48));
+  generatePole(x, 0, (z + 10), "hintBulb3", new Color3(0.55, 0.48, 0.48));
 
   let hintBulb1Barrier = MeshBuilder.CreateBox("hintBulb1Ob20", {width: 2, height: 10, depth: 2}, scene);
   hintBulb1Barrier.position.y = 5;
@@ -415,12 +416,21 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
 
   let hintBulb2Barrier = MeshBuilder.CreateBox("hintBulb2Ob20", {width: 2, height: 10, depth: 2}, scene);
   hintBulb2Barrier.position.y = 5;
-  hintBulb2Barrier.position.x = x;
-  hintBulb2Barrier.position.z = z + 10;
+  hintBulb2Barrier.position.x = x + 10;
+  hintBulb2Barrier.position.z = z;
   hintBulb2Barrier.material = new StandardMaterial('texture1', scene);
   hintBulb2Barrier.material.alpha = 0;
   hintBulb2Barrier.physicsImpostor = new PhysicsImpostor(hintBulb2Barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
   hintBulb2Barrier.checkCollisions = true;
+
+  let hintBulb3Barrier = MeshBuilder.CreateBox("hintBulb2Ob20", {width: 2, height: 10, depth: 2}, scene);
+  hintBulb3Barrier.position.y = 5;
+  hintBulb3Barrier.position.x = x;
+  hintBulb3Barrier.position.z = z + 10;
+  hintBulb3Barrier.material = new StandardMaterial('texture1', scene);
+  hintBulb3Barrier.material.alpha = 0;
+  hintBulb3Barrier.physicsImpostor = new PhysicsImpostor(hintBulb3Barrier, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
+  hintBulb3Barrier.checkCollisions = true;
 
   let controlBase4 = MeshBuilder.CreateBox("box", {width: 2, height: 0.2, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 0.1, 1, 0.1, 1, 0.1, 1, 0.1, 1, 1, 1, 1])}, scene);
   controlBase4.position.y = 0.1;
@@ -431,10 +441,17 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
 
   let controlBase5 = MeshBuilder.CreateBox("box", {width: 2, height: 0.2, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 0.1, 1, 0.1, 1, 0.1, 1, 0.1, 1, 1, 1, 1])}, scene);
   controlBase5.position.y = 0.1;
-  controlBase5.position.x = x;
-  controlBase5.position.z = z + 10;
+  controlBase5.position.x = x + 10;
+  controlBase5.position.z = z;
   controlBase5.material = new StandardMaterial('texture1', scene);
   controlBase5.material.diffuseTexture = returnMetalTexture("iron", scene);
+
+  let controlBase6 = MeshBuilder.CreateBox("box", {width: 2, height: 0.2, depth: 2, wrap: true, faceUV: genCubeFaceUV([1, 0.1, 1, 0.1, 1, 0.1, 1, 0.1, 1, 1, 1, 1])}, scene);
+  controlBase6.position.y = 0.1;
+  controlBase6.position.x = x;
+  controlBase6.position.z = z + 10;
+  controlBase6.material = new StandardMaterial('texture1', scene);
+  controlBase6.material.diffuseTexture = returnMetalTexture("iron", scene);
 
   let wire5 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 10, 0.1, 0.1])}, scene);
   wire5.position.y = 0.05;
@@ -452,6 +469,15 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
   wire6.material = new StandardMaterial('texture1', scene);
   wire6.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
 
+  let wire7 = MeshBuilder.CreateCylinder("cylinder", {diameter: 0.1, height: 10, tessellation: 8, faceUV: genCylinderFaceUV([0.1, 0.1, 0.2, 10, 0.1, 0.1])}, scene);
+  wire7.position.y = 0.05;
+  wire7.position.x = x + 15;
+  wire7.position.z = z;
+  wire7.rotation.x = Math.PI / 2;
+  wire7.rotation.y = Math.PI / 2;
+  wire7.material = new StandardMaterial('texture1', scene);
+  wire7.material.diffuseTexture = returnMetalTexture("iron_dark", scene);
+
   let connectBox1 = MeshBuilder.CreateBox("box", {width: 0.5, height: 0.3, depth: 0.5, wrap: true, faceUV: genCubeFaceUV([0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.5, 0.5, 0.5])}, scene);
   connectBox1.position.y = 0.15;
   connectBox1.position.x = x;
@@ -465,6 +491,13 @@ function rollingPipes(x, z, scene, global_objects, item_id, camera, global_langu
   connectBox2.position.z = z + 20;
   connectBox2.material = new StandardMaterial('texture1', scene);
   connectBox2.material.diffuseTexture = returnMetalTexture("iron", scene);
+
+  let connectBox3 = MeshBuilder.CreateBox("box", {width: 0.5, height: 0.3, depth: 0.5, wrap: true, faceUV: genCubeFaceUV([0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.5, 0.5, 0.5])}, scene);
+  connectBox3.position.y = 0.15;
+  connectBox3.position.x = x + 20;
+  connectBox3.position.z = z;
+  connectBox3.material = new StandardMaterial('texture1', scene);
+  connectBox3.material.diffuseTexture = returnMetalTexture("iron", scene);
 }
 
 export {rollingPipes};
