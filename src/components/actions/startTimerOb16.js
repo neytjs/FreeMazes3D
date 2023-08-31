@@ -68,10 +68,10 @@ function startTimerOb16(ob16, scene, obstacle_objects, forcefield_objects, score
           bulb4.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
           bulb4.material.specularColor = new Color3(0.55, 0.48, 0.48);
           bulb4.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
-          bulb4.material.ambientColor = new Color3(0.55, 0.48, 0.48);           
+          bulb4.material.ambientColor = new Color3(0.55, 0.48, 0.48);
         }
       }
-    }, 1200);
+    }, 1050);
   }
   innerFunction();
 }

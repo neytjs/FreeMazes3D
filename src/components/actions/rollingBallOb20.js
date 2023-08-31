@@ -109,6 +109,19 @@ function rollingBallOb20(ob20, scene, solved, score, obstacle_objects, forcefiel
             bulb.material.specularColor = ob20.bulb_color;
             bulb.material.emissiveColor = ob20.bulb_color;
             bulb.material.ambientColor = ob20.bulb_color;
+          // logic for lighting up hint bulb colors if necessary
+            if (ob20.bulb_counter === 2 || ob20.bulb_counter === 3) {
+              if (ob20.bulb_colors[1] === masterColors[1] && ob20.hintBulbs.bulb2 === false) {
+                ob20.hintBulbs.bulb2 = true;
+                let hint_bulb = scene.getMeshByName("hintBulb2");
+                hint_bulb.material.emissiveColor = ob20.bulb_color;
+              }
+              if (ob20.bulb_colors[2] === masterColors[2] && ob20.hintBulbs.bulb3 === false) {
+                ob20.hintBulbs.bulb3 = true;
+                let hint_bulb = scene.getMeshByName("hintBulb3");
+                hint_bulb.material.emissiveColor = ob20.bulb_color;
+              }
+            }
             setTimeout(() => {
               if (ob20.bulb_counter === 3) {
                 if (ob20.bulb_colors[0] === masterColors[0] && ob20.bulb_colors[1] === masterColors[1] && ob20.bulb_colors[2] === masterColors[2]) {
@@ -146,7 +159,7 @@ function rollingBallOb20(ob20, scene, solved, score, obstacle_objects, forcefiel
                   bulb2.material.specularColor = new Color3(0.55, 0.48, 0.48);
                   bulb2.material.emissiveColor = new Color3(0.55, 0.48, 0.48);
                   bulb2.material.ambientColor = new Color3(0.55, 0.48, 0.48);
-                                    
+
                   bulb3.material.diffuseColor = new Color3(0.55, 0.48, 0.48);
                   bulb3.material.specularColor = new Color3(0.55, 0.48, 0.48);
                   bulb3.material.emissiveColor = new Color3(0.55, 0.48, 0.48);

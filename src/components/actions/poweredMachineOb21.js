@@ -56,22 +56,22 @@ function poweredMachineOb21(ob21, solved, obstacle_objects, forcefield_objects, 
 
       setTimeout(() => {
         ob21["liquid" + nums[0]].emptying = true;
-      }, getRandomInt(1000, 3500));
+      }, getRandomInt(1000, 3000));
       setTimeout(() => {
         ob21["liquid" + nums[1]].emptying = true;
-      }, getRandomInt(6000, 9000));
+      }, getRandomInt(4000, 7000));
       setTimeout(() => {
         ob21["liquid" + nums[2]].emptying = true;
-      }, getRandomInt(10000, 13000));
+      }, getRandomInt(8000, 10000));
       setTimeout(() => {
         ob21["liquid" + nums[3]].emptying = true;
-      }, getRandomInt(15000, 19000));
+      }, getRandomInt(11000, 14000));
       setTimeout(() => {
         ob21["liquid" + nums[4]].emptying = true;
-      }, getRandomInt(19500, 22000));
+      }, getRandomInt(15000, 17000));
       setTimeout(() => {
         ob21["liquid" + nums[5]].emptying = true;
-      }, getRandomInt(23000, 24500));
+      }, getRandomInt(19000, 21500));
 
       setTimeout(() => {
         const final_level = 55;
@@ -111,7 +111,7 @@ function poweredMachineOb21(ob21, solved, obstacle_objects, forcefield_objects, 
             powerDownSound = null;
           }, 3000);
         }
-      }, 36000);
+      }, 25000);
     }
     innerFunction();
   }
