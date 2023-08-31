@@ -444,7 +444,7 @@ class Canvas extends Component {
 
     this.camera.setTarget(Vector3.Zero());
 
-    //this.camera.applyGravity = true;
+    this.camera.applyGravity = true;
 
     this.camera.ellipsoid = new Vector3(1.5, 2, 1.5);
 
