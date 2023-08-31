@@ -28,7 +28,13 @@ const masterColorsBase = [
   ["red", "blue", "blue"],
   ["green", "blue", "blue"],
   ["blue", "red", "blue"],
-  ["blue", "green", "blue"]
+  ["blue", "green", "blue"],
+  ["blue", "green", "red"],
+  ["blue", "red", "green"],
+  ["green", "blue", "red"],
+  ["green", "red", "blue"],
+  ["red", "green", "blue"],
+  ["red", "blue", "green"]
 ];
 
 let masterColors = [];
